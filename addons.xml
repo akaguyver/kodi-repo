@@ -14,7 +14,7 @@
     <platform>all</platform>
   </extension>
 </addon>
-<addon id="script.kodisorter" name="Kodi Sorter" version="1.16.1" provider-name="akaguyver">
+<addon id="script.kodisorter" name="Kodi Sorter" version="1.17.0" provider-name="akaguyver">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
   </requires>
