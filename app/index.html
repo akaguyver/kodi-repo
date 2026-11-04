@@ -6,11 +6,14 @@ a.b{display:inline-block;padding:14px 22px;background:#1F6FB2;color:#fff;border-
 <body>
 <h1>Kodi Sorter companion</h1>
 <p>Android app that shares your phone's Download folder with Kodi Sorter on your Xbox (or any Kodi) over the phone's hotspot. No Termux needed.</p>
-<p><a class="b" href="KodiSorterCompanion.apk">Download the app (version 0.1.1)</a></p>
+<p><a class="b" href="KodiSorterCompanion.apk">Download the app (version 0.1.2)</a></p>
 <ol>
-<li>Open the downloaded file. If Android asks, allow your browser to install apps.</li>
-<li>Open <b>Kodi Sorter companion</b> and tap through <b>Phone settings</b>.</li>
+<li><b>Allow installing it</b> (it isn't from the Play Store). Settings &gt; Apps &gt; Special access &gt; <b>Install unknown apps</b> &gt; your browser (or My Files) &gt; Allow.
+Samsung phones: also turn off <b>Auto Blocker</b> (Settings &gt; Security and privacy &gt; Auto Blocker) - you can turn it back on after installing. If Play Protect warns, choose More details &gt; Install anyway.</li>
+<li>Download the app above and open the downloaded file.</li>
+<li>Open Kodi Sorter companion and allow the <b>Phone settings</b> first (all files access, notifications, run in the background).</li>
 <li>Turn on the Mobile hotspot, connect the Xbox, tap <b>Start sharing</b>.</li>
-<li>In Kodi Sorter on the Xbox choose <i>My phone over Wi-Fi</i> and type the password the app shows.</li>
+<li>In Kodi Sorter on the Xbox choose My phone over Wi-Fi and type the password the app shows.</li>
 </ol>
+<p>Used xbox-share in Termux before? Keep its password: in Termux type <code>xbox-share password</code>, then in the app tap <b>Change password</b> and type it.</p>
 </body></html>
