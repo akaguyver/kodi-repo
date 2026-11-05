@@ -2,6 +2,11 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 1.41 – YouTube test
+- **1.41.0**
+  - **Test YouTube without a phone**, in *Help & settings*. It checks whether this device could download from YouTube by itself, and downloads no videos.
+  - **The guide now points to the right cookie extension,** cookies.txt 1.0, which is marked for Firefox on Android.
+
 ## 1.40 – Easier to read, more options
 - **1.40.0**
   - **A full window for messages, and a guide that scrolls slowly by itself**, one line at a time, so you never lose your place. OK pauses, Up and Down move, and Left and Right change the speed. The guide is now split into topics.
@@ -70,10 +75,10 @@ Newest first. Each line says what the update changed for you.
   - **Tidy my TV folder / Tidy my Movies folder:** puts what's already there into the folders and names Kodi expects. You see the full list first, and nothing is replaced without asking.
 
 ## 1.33 – Comics
-- **1.33.1** **Remove wrong movie entries:** under *Kodi library* on the start menu. It finds movies that are really TV episodes, for example "Cesium Fallout" left behind after the whole drive was scanned as Movies. It shows the list and removes them all at once. Only the library entries are removed, never the files, and a library backup is made first. The start menu item is now called "Kodi library: back up, restore, remove wrong movies".
-  - The Comics "tidy the folder" line no longer names Hellsing. It only ever moves what's out of place.
+- **1.33.1** **Remove wrong movie entries:** under *Kodi library* on the start menu. It finds movies that are really TV episodes, for example "Cesium Hollow" left behind after the whole drive was scanned as Movies. It shows the list and removes them all at once. Only the library entries are removed, never the files, and a library backup is made first. The start menu item is now called "Kodi library: back up, restore, remove wrong movies".
+  - The Comics "tidy the folder" line no longer names Ironclad. It only ever moves what's out of place.
 - **1.33.0** New start menu item: **Comics: tidy folders, convert .cbr to .cbz, turn pages**.
-  - **Tidy the folder:** loose comics go into their series folder, and near-duplicate folders like "Hellsing (2)" are merged into "Hellsing". PDFs that an old version filed in Comics (bills, manuals) can be moved to a Documents folder. You see the list first.
+  - **Tidy the folder:** loose comics go into their series folder, and near-duplicate folders like "Ironclad (2)" are merged into "Ironclad". PDFs that an old version filed in Comics (bills, manuals) can be moved to a Documents folder. You see the list first.
   - **Convert .cbr to .cbz:** Kodi opens a .cbz by itself, page by page. A .cbr needs the Archive support add-on to unpack it first, which is slow and sometimes fails. The .cbr is deleted only after the new .cbz checks out. New .cbr comics are converted while sorting (you can turn this off).
   - **Turn pages for a monitor on its side:** each JPEG page gets an orientation tag, so Kodi shows it turned. Nothing is re-encoded, and "Upright" undoes it. Try one comic first.
 
@@ -135,7 +140,7 @@ Newest first. Each line says what the update changed for you.
 
 ## 1.27 – Use your existing library folders
 - **1.27.0** Each kind (TV, Movies, Comics, Tutorials) can go into **a folder you already have**, with any name on any drive. You choose them on the welcome screen or under Help → My library folders. Nothing already in them is moved.
-  - New files reuse your **existing show, season and movie folders**: *Bobs Burgers* → your *Bob's Burgers*, *Season 01* → your *Season 1*, *Matrix 1999* → your *The Matrix (1999)*.
+  - New files reuse your **existing show, season and movie folders**: *Sams Sandwiches* → your *Sam's Sandwiches*, *Season 01* → your *Season 1*, *Matrix 1999* → your *The Matrix (1999)*.
   - Years must agree, so *Doctor Who (2005)* never lands in *Doctor Who (1963)*.
 
 ## 1.26 – Welcome screen and Help
@@ -166,7 +171,7 @@ Newest first. Each line says what the update changed for you.
 ## 1.21 – Cleaner leftovers, English titles
 - **1.21.3** `.nomedia` in `_Unpacked`, `_Replaced` and `_No English`, so Kodi's library scan skips them.
 - **1.21.2** Exact duplicates of library files and junk files are cleared. URL-style names (`%5b…`) are decoded. Every action is counted in the report.
-- **1.21.1** English titles for Russian movie names written in Latin letters (e.g. *Superpolicejskie 3* → *Super Troopers 3*).
+- **1.21.1** English titles for Russian movie names written in Latin letters (e.g. *Bolshoi Gorod 3* → *Road Deputies 3*).
 - **1.21.0** Option to remove empty folders from the source. It now says when movie titles weren't checked, and offers to set up the TMDb key.
 
 ## 1.20 – Subtitle languages
@@ -220,6 +225,6 @@ Newest first. Each line says what the update changed for you.
 
 ## 1.0 – 1.3 – First versions
 - **1.3.1** Version number shown in the dialog titles.
-- **1.3.0** Fansub anime names (*Deadman Wonderland*, *Parasyte*) sort correctly. The add-on and the command-line tool share the same naming rules.
+- **1.3.0** Fansub anime names (*Tinman Meadow*, *Paragon*) sort correctly. The add-on and the command-line tool share the same naming rules.
 - **1.2.1** First Kodi add-on for the Xbox: TV, Movies and Comics with a preview, English-audio check and duplicate handling.
 - Command-line `kodi_sort.py` with tests.
