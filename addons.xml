@@ -14,7 +14,7 @@
     <platform>all</platform>
   </extension>
 </addon>
-<addon id="script.kodisorter" name="Sortovia" version="1.41.0" provider-name="akaguyver">
+<addon id="script.kodisorter" name="Sortovia" version="1.42.0" provider-name="akaguyver">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
   </requires>
@@ -30,6 +30,7 @@
     <website>https://akaguyver.github.io/kodi-repo/</website>
     <assets>
       <icon>icon.png</icon>
+      <fanart>resources/media/fanart.png</fanart>
     </assets>
   </extension>
 </addon>
