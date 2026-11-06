@@ -2,6 +2,15 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 1.48 – Downloads and quicker tag fixes
+- **1.48.0**
+  - **Downloads** now holds **Transfer and sort**, YouTube and Real-Debrid.
+  - **Fix music tags** moves to **File**, because it changes your files, and you can pick whole artists as well as single albums.
+  - **Quick scan** doesn't ask your drive about files it already knows, so repeat runs are much faster. **Full scan** checks every file.
+  - **Hold down an artist in Kodi's music library** to fix that artist's tags. Restart Kodi once if the option doesn't appear.
+  - **Clean the library**, in *Library*, lets you pick TV, Movies or Music.
+  - **All settings are now in Sortovia's Settings menu.** Kodi's separate settings page for Sortovia is gone.
+
 ## 1.47 – A tidier menu
 - **1.47.0**
   - **The menu is reorganised:** Sort my downloads, YouTube, Real-Debrid, File, Library, Settings, Help. **File** works on your files, and **Library** works on what Kodi lists.
