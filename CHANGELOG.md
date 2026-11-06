@@ -3,6 +3,7 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.45 – Music tags
+- **1.45.2** **Send the music library to my phone**, in *Kodi library*, to help track down a music library problem.
 - **1.45.1**
   - **Restore the music library**, in *Kodi library*. It puts back a saved copy of Kodi's music library. No music files change.
   - After **Fix music tags**, Sortovia can update Kodi's library for you. It rescans only the folders that changed, removes songs whose files are gone, and sets album art from folders. It stops before removing anything if the library shrank.
