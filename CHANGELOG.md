@@ -3,6 +3,7 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.45 – Music tags
+- **1.45.5** After a music update, Sortovia checks art only on the albums that need it and shows progress, so the result appears much sooner.
 - **1.45.4** **Rescan one album**, in *Kodi library*, brings one album's tag changes into the library without a full scan. **Set album art from folders** now shows progress while it checks your albums.
 - **1.45.3** Safer music updates: Sortovia saves a copy of the music library before a rescan, and notices if Kodi can no longer show songs that are still in its database.
 - **1.45.2** **Send the music library to my phone**, in *Kodi library*, to help track down a music library problem.
