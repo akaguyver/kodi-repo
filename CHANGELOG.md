@@ -2,6 +2,14 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 1.49 – Every setting in one place
+- **1.49.0**
+  - **Every setting is now on Kodi's settings page for Sortovia.** **Settings** in Sortovia's menu opens it. Restart Kodi once if its labels look blank.
+  - **Fix music tags** asks whether to choose by **Artist** or **Album**. A quick scan starts from Kodi's own list and reads only what you pick, so a big library doesn't slow it down.
+  - Holding down an artist now reads only that artist's music. A new setting in *Music* skips the question.
+  - **Set artist art from folders**, in *Library*, uses pictures such as `Music\Artist\artist.jpg` and `fanart.jpg`.
+  - If Kodi's picture cache is set to a folder on your drive that doesn't exist, Sortovia creates it.
+
 ## 1.48 – Downloads and quicker tag fixes
 - **1.48.0**
   - **Downloads** now holds **Transfer and sort**, YouTube and Real-Debrid.
@@ -9,7 +17,6 @@ Newest first. Each line says what the update changed for you.
   - **Quick scan** doesn't ask your drive about files it already knows, so repeat runs are much faster. **Full scan** checks every file.
   - **Hold down an artist in Kodi's music library** to fix that artist's tags. Restart Kodi once if the option doesn't appear.
   - **Clean the library**, in *Library*, lets you pick TV, Movies or Music.
-  - **All settings are now in Sortovia's Settings menu.** Kodi's separate settings page for Sortovia is gone.
 
 ## 1.47 – A tidier menu
 - **1.47.0**
