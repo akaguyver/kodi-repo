@@ -2,6 +2,11 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 1.44 – Music
+- **1.44.0**
+  - **Sortovia now sorts music.** Songs go to `Music\Artist\Album\03 - Title.mp3`, using the file's own tags, then its folders. Albums by several artists stay together under Various Artists, and cover art goes with the album. Podcasts, audiobooks, recordings and songs with no artist are left where they are. *Tidy my Music folder* sorts music you already have.
+  - **The drive letter fix now includes your music library.** If you ran it on 1.43, run it again to bring your music over.
+
 ## 1.43 – Drive letter changes
 - **1.43.0** **Drive letter changed? Fix the library**, in *Kodi library*. If your drive's letter changes, for example from E: to D:, Sortovia checks your files are on the new letter, saves a library backup for each letter, and points Kodi and Sortovia at the new one. Your shows, watched marks and resume points stay, and no videos are moved. Run it again whenever the letter changes.
 

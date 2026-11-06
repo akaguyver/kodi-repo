@@ -15,6 +15,7 @@ E:\
 ├── TV\Show Name (Year)\Season 01\Show Name (Year) S01E02.mkv
 ├── Movies\Movie Name (Year)\Movie Name (Year).mkv
 ├── Comics\Series\<original file>.cbz
+├── Music\Artist\Album\03 - Title.mp3
 └── Tutorials\AutoCAD\<original file>.mp4
 ```
 
@@ -80,6 +81,7 @@ Kodi only lists folders you've added as sources. Add **each folder on its own**.
 | `Movies` | Videos → Files → Add videos | Movies |
 | `Tutorials` | Videos → Files → Add videos | None |
 | `Comics` | Pictures | (not asked) |
+| `Music` | Music → Files → Add music | (not asked) |
 
 > **Don't add a whole drive (such as `E:\`) as one source with a content type.** It overrides the folders inside it, and
 > Kodi can remove your shows from the library and scan them as movies.
@@ -90,7 +92,7 @@ Kodi only lists folders you've added as sources. Add **each folder on its own**.
 win-lib://removable/E:\TV\
 ```
 
-**If your drive's letter changes** (for example, plugging in or removing a USB stick turns `E:` into `D:`), your files are safe and don't need downloading again. Don't run Clean library. Instead, open **Kodi library → Drive letter changed? Fix the library**. Sortovia checks your files really are on the new letter, saves a library backup for each letter in `_Kodi library backups`, and points Kodi and Sortovia at the new letter. Then restart Kodi. Run it again whenever the letter changes.
+**If your drive's letter changes** (for example, plugging in or removing a USB stick turns `E:` into `D:`), your files are safe and don't need downloading again. Don't run Clean library. Instead, open **Kodi library → Drive letter changed? Fix the library**. Sortovia checks your files really are on the new letter, saves a library backup for each letter in `_Kodi library backups`, and points Kodi's video and music libraries and Sortovia at the new letter. Then restart Kodi. Run it again whenever the letter changes.
 
 ---
 
@@ -286,6 +288,7 @@ saved details and enter them again, and your files aren't affected. Without a pa
 - Movies (a title plus a year) go to `Movies\Title (Year)\`. With a TMDb key, a movie named in another
   language can be renamed to your language, including Russian titles written in Latin letters. You can turn this off in Settings.
 - OVAs, specials, and opening/ending credits clips go to Season 00, which is Kodi's Specials.
+- Music (`.mp3`, `.flac`, `.m4a`, `.ogg`, `.opus` and more) goes to `Music\Artist\Album\`, named from the file's tags, then its folders. Albums by several artists go under `Various Artists`, and cover art moves with the album. Podcasts, audiobooks, recordings and songs with no artist are left alone. Add `Music` to Kodi under **Music → Files → Add music**.
 - Comics (`.cbz/.cbr/.cb7/.cbt`, plus PDFs/EPUBs inside a "Comics" or "Manga" folder) go to `Comics\Series\`.
   `.cbr` comics become `.cbz`, which Kodi opens much faster. The Comics menu also tidies an existing Comics folder and
   can turn pages for a monitor stood on its side.
