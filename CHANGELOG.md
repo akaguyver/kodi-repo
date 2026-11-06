@@ -2,18 +2,24 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 1.47 – A tidier menu
+- **1.47.0**
+  - **The menu is reorganised:** Sort my downloads, YouTube, Real-Debrid, File, Library, Settings, Help. **File** works on your files, and **Library** works on what Kodi lists.
+  - **Organise my folders**, in *File*, replaces the separate tidy items. Tick TV, Movies, Music or Comics.
+  - **Library** is split into Video, Music and Backups.
+  - **Settings and Help are now separate,** and every setting is in Settings.
+
 ## 1.46 – Faster music fixes
 - **1.46.0**
   - **Fix music tags** now asks once at the start, then runs tags, rescan, clean-up and album art on one progress bar.
   - **Files that haven't changed aren't read again,** so later runs are faster.
-  - **Fixed songs appearing twice after a tag fix.** **Remove duplicate songs**, in *Kodi library*, repairs a library that already has them.
+  - **Fixed songs appearing twice after a tag fix.**
   - A track with no year, or a year of 0000, takes its album's year.
 
 ## 1.45 – Music tags
 - **1.45.5** After a music update, Sortovia checks art only on the albums that need it and shows progress, so the result appears much sooner.
 - **1.45.4** **Rescan one album**, in *Kodi library*, brings one album's tag changes into the library without a full scan. **Set album art from folders** now shows progress while it checks your albums.
 - **1.45.3** Safer music updates: Sortovia saves a copy of the music library before a rescan, and notices if Kodi can no longer show songs that are still in its database.
-- **1.45.2** **Send the music library to my phone**, in *Kodi library*, to help track down a music library problem.
 - **1.45.1**
   - **Restore the music library**, in *Kodi library*. It puts back a saved copy of Kodi's music library. No music files change.
   - After **Fix music tags**, Sortovia can update Kodi's library for you. It rescans only the folders that changed, removes songs whose files are gone, and sets album art from folders. It stops before removing anything if the library shrank.
@@ -47,7 +53,6 @@ Newest first. Each line says what the update changed for you.
 
 ## 1.41 – YouTube test
 - **1.41.0**
-  - **Test YouTube without a phone**, in *Help & settings*. It checks whether this device could download from YouTube by itself, and downloads no videos.
   - **The guide now points to the right cookie extension,** cookies.txt 1.0, which is marked for Firefox on Android.
 
 ## 1.40 – Easier to read, more options
