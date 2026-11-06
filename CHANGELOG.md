@@ -3,6 +3,9 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.44 – Music
+- **1.44.3**
+  - **Music already in folders under an artist now stays where it is,** such as `Music\Artist\Singles\2014 - Title\`. Dates at the start of a folder name are no longer mistaken for an artist.
+  - **Check music art**, in *Kodi library*. It lists albums with no cover art and compares them with your backup from before a drive letter switch. It changes nothing.
 - **1.44.2**
   - **Clean music library**, in *Kodi library*. It removes songs whose files are gone, and won't run while your drive looks missing.
   - The menu now comes back by itself after an update, instead of a blank screen.
