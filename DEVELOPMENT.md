@@ -65,3 +65,5 @@ The Xbox assigns removable drive letters by what's plugged in, so a USB stick ca
 `id3write.py` rebuilds a tag as ID3v2.4 and leaves the audio bytes alone. Renames always fail on Xbox removable drives, so a file can't be swapped in atomically. `_write_checked` keeps a verified full copy beside the file until the overwritten file reads back identical. Each file's old tag is saved first, so a run can be undone. Artist splitting happens per file rather than through Kodi's global separators, so a band with `&` in its name stays whole when its name is a folder.
 
 Kodi 21 on an Xbox has been seen to rebuild the music `path` table during a full `AudioLibrary.Scan` while songs keep their old `idPath`. The library then looks empty with the song count unchanged, so checks count songs joined to `path`. The cause isn't known yet. Folder records exist in two forms for one folder there (`...\\Album\` and `...\\Album/`).
+
+A rescan must use the folder address Kodi already stores. Kodi on an Xbox treats `...\\\\Album\\` and `...\\\\Album/` as different folders, so scanning the other form adds every song again, and a clean can't remove them because the files exist.

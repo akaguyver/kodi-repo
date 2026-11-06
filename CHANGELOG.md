@@ -2,6 +2,13 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 1.46 – Faster music fixes
+- **1.46.0**
+  - **Fix music tags** now asks once at the start, then runs tags, rescan, clean-up and album art on one progress bar.
+  - **Files that haven't changed aren't read again,** so later runs are faster.
+  - **Fixed songs appearing twice after a tag fix.** **Remove duplicate songs**, in *Kodi library*, repairs a library that already has them.
+  - A track with no year, or a year of 0000, takes its album's year.
+
 ## 1.45 – Music tags
 - **1.45.5** After a music update, Sortovia checks art only on the albums that need it and shows progress, so the result appears much sooner.
 - **1.45.4** **Rescan one album**, in *Kodi library*, brings one album's tag changes into the library without a full scan. **Set album art from folders** now shows progress while it checks your albums.
