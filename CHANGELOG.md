@@ -3,6 +3,7 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.44 – Music
+- **1.44.4** Better artist folders: a song credited to several artists goes under the first one, and an album with a guest on each track stays under its main artist instead of Various Artists. **Check music art** now names any image it finds in an album's folder.
 - **1.44.3**
   - **Music already in folders under an artist now stays where it is,** such as `Music\Artist\Singles\2014 - Title\`. Dates at the start of a folder name are no longer mistaken for an artist.
   - **Check music art**, in *Kodi library*. It lists albums with no cover art and compares them with your backup from before a drive letter switch. It changes nothing.
