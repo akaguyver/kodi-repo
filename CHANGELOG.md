@@ -3,6 +3,10 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.45 – Music tags
+- **1.45.1**
+  - **Restore the music library**, in *Kodi library*. It puts back a saved copy of Kodi's music library. No music files change.
+  - After **Fix music tags**, Sortovia can update Kodi's library for you. It rescans only the folders that changed, removes songs whose files are gone, and sets album art from folders. It stops before removing anything if the library shrank.
+  - **Fix music tags** shows progress while it finds your files, and **Check music art** also reports how much is in Kodi's music library.
 - **1.45.0**
   - **Fix music tags (MP3)**, in *Kodi library*. It updates tags to ID3v2.4, joins albums Kodi shows as several, and links collaborations to each artist. You see every change first and pick the albums, the audio stays the same, and files stay where they are. You can undo it.
   - **Set album art from folders.** It uses the picture in an album's folder when Kodi shows no art, whatever the picture is called.
