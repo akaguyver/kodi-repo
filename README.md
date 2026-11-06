@@ -289,6 +289,7 @@ saved details and enter them again, and your files aren't affected. Without a pa
   language can be renamed to your language, including Russian titles written in Latin letters. You can turn this off in Settings.
 - OVAs, specials, and opening/ending credits clips go to Season 00, which is Kodi's Specials.
 - Music (`.mp3`, `.flac`, `.m4a`, `.ogg`, `.opus` and more) goes to `Music\Artist\Album\`, named from the file's tags, then its folders. Albums by several artists go under `Various Artists`, and cover art moves with the album. Songs already in folders inside an artist's folder, podcasts, audiobooks, recordings and songs with no artist are left alone. Add `Music` to Kodi under **Music → Files → Add music**.
+- **Fix music tags (MP3)**, in *Kodi library*, updates tags to ID3v2.4 and gives each album one album artist and each collaboration an `ARTISTS` tag. Then Kodi shows one album, listed under each artist if **Settings → Media → Music → Show song and album artists** is on. You see every change first, and can undo it. **Set album art from folders** uses the picture in an album's folder when Kodi shows no art.
 - Comics (`.cbz/.cbr/.cb7/.cbt`, plus PDFs/EPUBs inside a "Comics" or "Manga" folder) go to `Comics\Series\`.
   `.cbr` comics become `.cbz`, which Kodi opens much faster. The Comics menu also tidies an existing Comics folder and
   can turn pages for a monitor stood on its side.

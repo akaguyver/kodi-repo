@@ -2,6 +2,13 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 1.45 – Music tags
+- **1.45.0**
+  - **Fix music tags (MP3)**, in *Kodi library*. It updates tags to ID3v2.4, joins albums Kodi shows as several, and links collaborations to each artist. You see every change first and pick the albums, the audio stays the same, and files stay where they are. You can undo it.
+  - **Set album art from folders.** It uses the picture in an album's folder when Kodi shows no art, whatever the picture is called.
+  - **Check music art** now shows progress, and clicking twice no longer starts it twice. It also lists albums Kodi shows as more than one.
+  - The menu now stays on screen during an update, with no blank flash.
+
 ## 1.44 – Music
 - **1.44.4** Better artist folders: a song credited to several artists goes under the first one, and an album with a guest on each track stays under its main artist instead of Various Artists. **Check music art** now names any image it finds in an album's folder.
 - **1.44.3**

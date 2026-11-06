@@ -59,3 +59,7 @@ settings and the link on the web page that Kodi reads.
 ## Drive letters on the Xbox
 
 The Xbox assigns removable drive letters by what's plugged in, so a USB stick can turn E: into D:. Kodi stores full addresses, in mixed forms (`E:/TV/...`, `E:\\Movies\...`, and URL-encoded inside artwork addresses). `drive_letter.py` confirms the files by listing folders on the new letter, because the Xbox reports a missing file as size 0. It then rewrites every text column of the video and music databases, each in one SQLite transaction, so a failure leaves the library as it was. A backup for each letter is saved under `_Kodi library backups/Drive X/`.
+
+## Rewriting music tags
+
+`id3write.py` rebuilds a tag as ID3v2.4 and leaves the audio bytes alone. Renames always fail on Xbox removable drives, so a file can't be swapped in atomically. `_write_checked` keeps a verified full copy beside the file until the overwritten file reads back identical. Each file's old tag is saved first, so a run can be undone. Artist splitting happens per file rather than through Kodi's global separators, so a band with `&` in its name stays whole when its name is a folder.
