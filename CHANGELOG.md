@@ -3,6 +3,10 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.44 – Music
+- **1.44.2**
+  - **Clean music library**, in *Kodi library*. It removes songs whose files are gone, and won't run while your drive looks missing.
+  - The menu now comes back by itself after an update, instead of a blank screen.
+  - The drive letter fix says when an up-to-date backup already exists, and doesn't make another. On an Xbox it now tells you how to restart Kodi from the Xbox menu.
 - **1.44.1** Better music folders: a folder named after an artist now counts as the artist, not an album, and collaborations stay in that artist's folder.
 - **1.44.0**
   - **Sortovia now sorts music.** Songs go to `Music\Artist\Album\03 - Title.mp3`, using the file's own tags, then its folders. Albums by several artists stay together under Various Artists, and cover art goes with the album. Podcasts, audiobooks, recordings and songs with no artist are left where they are. *Tidy my Music folder* sorts music you already have.
