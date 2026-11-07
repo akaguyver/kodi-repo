@@ -67,3 +67,11 @@ The Xbox assigns removable drive letters by what's plugged in, so a USB stick ca
 Kodi 21 on an Xbox has been seen to rebuild the music `path` table during a full `AudioLibrary.Scan` while songs keep their old `idPath`. The library then looks empty with the song count unchanged, so checks count songs joined to `path`. The cause isn't known yet. Folder records exist in two forms for one folder there (`...\\Album\` and `...\\Album/`).
 
 A rescan must use the folder address Kodi already stores. Kodi on an Xbox treats `...\\\\Album\\` and `...\\\\Album/` as different folders, so scanning the other form adds every song again, and a clean can't remove them because the files exist.
+
+## Choosing genres
+
+`genretag.py` looks up genres and `screens.pick_genres` shows them. The sources only suggest, because a test on 54 real tracks showed none of them could be trusted alone: Last.fm had tags for 2 of the tracks, Discogs styles describe a whole release, and neither used narrow genres like Riddim. So a person chooses per artist, with a per-track exception.
+
+Python can't change a Kodi button's picture once it's made, so each chip is a `ControlImage` under a clear `ControlButton`, and turning a genre on swaps the image. `tools/make_chip_images.py` draws the images.
+
+Nothing writes genre tags yet. DJ software may not read multi-value tags the way Kodi does, and that has to be tested in rekordbox and Serato before the format is chosen.

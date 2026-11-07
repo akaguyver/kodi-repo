@@ -2,6 +2,12 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 1.50 – Choose genres for your music
+- **1.50.0**
+  - **Find genres (dry run)**, in *File*, looks up the tracks you pick on Discogs and Last.fm, then shows a screen of your genres for each artist. Orange came from Discogs, teal from Last.fm, and half of each from both. Genres found on both start on. A filled genre is on, and an outline is off.
+  - Your choices are saved, and **Change one track** gives a single track its own genres. The report then shows what each track would get. **This version doesn't change your music files.**
+  - Add your Discogs token, Last.fm key and genre list in *Settings > Music genres*.
+
 ## 1.49 – Every setting in one place
 - **1.49.0**
   - **Every setting is now on Kodi's settings page for Sortovia.** **Settings** in Sortovia's menu opens it. Restart Kodi once if its labels look blank.
