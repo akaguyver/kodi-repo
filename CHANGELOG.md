@@ -2,6 +2,15 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 1.53 – Genres for each track
+- **1.53.0**
+  - **Find genres** by **Album** now shows a screen for **each track**, so a crossover track can have different genres from its artist. Choosing by Artist works as before, with **Change one track** for single tracks.
+  - Genres found that **aren't on your list** now show on the screen too, after yours. When you choose any, Sortovia offers to add them to your list.
+  - Genres already in a track's tags start **ticked**.
+  - Tracks with a featured or collaborating artist ("A feat. B", "A & B") also suggest the genres you chose for that artist, and start with them ticked.
+  - Genres are now also looked up on **Apple Music**, **Deezer** and **Audius**, with no keys needed. Apple Music allows about 20 searches a minute, so a first look-up takes longer. Lookups are remembered, so repeat runs are quick.
+  - **DJ and playlists** has two new orders: **Live set** (warms up, peaks about three quarters of the way through, then cools down) and **Peaks and valleys** (harder, then softer, again and again).
+
 ## 1.52 – DJ tools on the Xbox
 - **1.52.0**
   - **DJ and playlists**, in *Library*, is a new menu.
