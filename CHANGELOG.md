@@ -2,6 +2,10 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 1.51 – Play this music on your phone
+- **1.51.0**
+  - **Play this music on your phone**, in *Library*, lets the Sortovia phone app play and mix the songs in this music library over Wi-Fi. It turns on Kodi's web server with your phone share's password, then shows what to type in the app. If the web server is already on, its settings stay as they are.
+
 ## 1.50 – Choose genres for your music
 - **1.50.0**
   - **Find genres (dry run)**, in *File*, looks up the tracks you pick on Discogs and Last.fm, then shows a screen of your genres for each artist. Orange came from Discogs, teal from Last.fm, and half of each from both. Genres found on both start on. A filled genre is on, and an outline is off.
