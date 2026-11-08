@@ -2,6 +2,15 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 1.52 – DJ tools on the Xbox
+- **1.52.0**
+  - **DJ and playlists**, in *Library*, is a new menu.
+  - **Play a playlist in mixing order** puts a saved playlist, or the music playing now, in **Key order**, **Build up** (softest first) or **Wind down**. Each song is in a key that mixes into the next. It can play the result now, save it as a new playlist, or both.
+  - **What mixes after the song playing now** lists songs in a key next to it and within 6% of its tempo. Pick one and it plays next. **Hold down a song** in the music library for the same list. Restart Kodi once if the option doesn't appear.
+  - **Crossfade between songs** switches Kodi's own crossfade on or off. Kodi can't match beats; the phone app's DJ mix can.
+  - **Make a Kodi playlist from another playlist** reads a CSV export (Spotify through Exportify or TuneMyMusic), an M3U, a typed list or a Deezer link. It uses the songs you have, can put them in mixing order, and lists the ones you don't have.
+  - Keys, tempos and energy come from the tags Mixed In Key (or rekordbox, Serato, Traktor) wrote. Sortovia reads them once. After retagging, use **Read keys and tempos again**.
+
 ## 1.51 – Play this music on your phone
 - **1.51.0**
   - **Play this music on your phone**, in *Library*, lets the Sortovia phone app play and mix the songs in this music library over Wi-Fi. It turns on Kodi's web server with your phone share's password, then shows what to type in the app. If the web server is already on, its settings stay as they are.

@@ -14,7 +14,7 @@
     <platform>all</platform>
   </extension>
 </addon>
-<addon id="script.kodisorter" name="Sortovia" version="1.51.0" provider-name="akaguyver">
+<addon id="script.kodisorter" name="Sortovia" version="1.52.0" provider-name="akaguyver">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
   </requires>
@@ -26,6 +26,10 @@
       <item library="context.py">
         <label>32090</label>
         <visible>String.IsEqual(ListItem.DBTYPE,artist)</visible>
+      </item>
+      <item library="context_mix.py">
+        <label>32091</label>
+        <visible>String.IsEqual(ListItem.DBTYPE,song)</visible>
       </item>
     </menu>
   </extension>
