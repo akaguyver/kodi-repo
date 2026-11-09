@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addons>
-<addon id="script.kodisorter" name="Sortovia" version="1.53.0" provider-name="akaguyver">
+<addon id="script.kodisorter" name="Sortovia" version="1.54.0" provider-name="akaguyver">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
   </requires>
@@ -12,6 +12,10 @@
       <item library="context.py">
         <label>32090</label>
         <visible>String.IsEqual(ListItem.DBTYPE,artist)</visible>
+      </item>
+      <item library="context_playlist.py">
+        <label>32092</label>
+        <visible>String.IsEqual(ListItem.DBTYPE,song) | String.IsEqual(ListItem.DBTYPE,album)</visible>
       </item>
       <item library="context_mix.py">
         <label>32091</label>

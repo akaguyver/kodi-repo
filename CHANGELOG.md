@@ -2,6 +2,14 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 1.54 – Write your genres, playlists that show, and tags from the phone
+- **1.54.0**
+  - **Find genres** now writes the genres you chose into your MP3s, after you've seen what each track would get and said yes. Several genres go in as one text, such as "Dubstep / Riddim": Kodi lists each genre, and rekordbox and Serato show the whole text. Each file's old tag is saved first, so **File > Undo the last music tag fix** puts them back. Other formats, such as FLAC, aren't written yet.
+  - **Playlists** that Sortovia makes are now saved as .m3u, which Kodi's **Music > Playlists** shows. Ones saved before as .m3u8 are renamed.
+  - **Hold down a song or an album > Add to a playlist (Sortovia)** adds it to one of your playlists, or a new one. Restart Kodi once if the option doesn't appear.
+  - **Library > Get tags from the phone** writes the keys, tempos, energy and genres the Sortovia phone app worked out into your MP3s. Kodi on the Xbox can't listen to music itself, so the phone does it over Wi-Fi. It only fills in what's missing unless you choose to replace, and the old tags can be put back.
+  - In **DJ and playlists**, mixing order is better at finding the sections of a track.
+
 ## 1.53 – Genres for each track
 - **1.53.0**
   - **Find genres** by **Album** now shows a screen for **each track**, so a crossover track can have different genres from its artist. Choosing by Artist works as before, with **Change one track** for single tracks.
