@@ -2,6 +2,15 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 1.55 – Every genre in a tag, and clearer DJ tools
+- **1.55.0**
+  - **Find genres** now reads every genre in a track's tag. A track tagged "Dubstep" and "Trap" shows both, at the start of the screen, and the screen's top line says what each artist or track is tagged with now.
+  - The genre screen's colour key now names every source: release info from Discogs, Apple Music and Deezer, and tags from Last.fm and Audius.
+  - After a look-up, the summary says how many tracks each source found, so a source that knew none of them (Audius often doesn't) is easy to see.
+  - **Crossfade between songs** now also turns on crossfading between songs from the same album, and says that Kodi crossfades as a song ends on its own.
+  - **Play a playlist in mixing order** now puts songs within 6% of each other's tempo next to each other before it looks at the key, counting half and double time (75 and 150 BPM match).
+  - Where a song has no key, Sortovia now says the phone app can work it out: **Analyse the Xbox's music**, then **Send tags to the Xbox**, then **Library > Get tags from the phone**.
+
 ## 1.54 – Write your genres, playlists that show, and tags from the phone
 - **1.54.0**
   - **Find genres** now writes the genres you chose into your MP3s, after you've seen what each track would get and said yes. Several genres go in as one text, such as "Dubstep / Riddim": Kodi lists each genre, and rekordbox and Serato show the whole text. Each file's old tag is saved first, so **File > Undo the last music tag fix** puts them back. Other formats, such as FLAC, aren't written yet.
