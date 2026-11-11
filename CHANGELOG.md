@@ -3,6 +3,10 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.58 – File-host links, and torrents on the phone or your own client
+- **1.58.4**
+  - **Downloads on the phone** now says which folder a finished download is in: Download/Real-Debrid or Download/Torrents. Before, it always said Torrents.
+  - **Sort the finished downloads** sorts whichever folder has something in it, and asks only when both do.
+  - A torrent that's still finding peers to get its details now reads that way, instead of "[METADATA]...".
 - **1.58.3**
   - Sending torrents to **the phone** now tries **Real-Debrid first**: what Real-Debrid can get, the phone downloads through Real-Debrid, and only the ones it can't get are downloaded as torrents on the phone. You can still pick **This Xbox through Real-Debrid**, **Torrent only** on the phone, or one of your own torrent clients.
   - When Real-Debrid can't get a torrent, it now goes straight to the phone by default, with no question. **Indexes and categories > Torrent clients** can change that.
