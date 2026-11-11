@@ -73,5 +73,5 @@ if (exec 3<>/dev/tcp/127.0.0.1/$PORT) 2>/dev/null; then
   echo " To restart it: type  kodi-share stop  then  kodi-share"
   exit 1
 fi
-rclone serve webdav "$DIR" --addr ":$PORT" --user kodi --pass "$PASS" \
+rclone serve webdav "$DIR" --addr ":$PORT" --user kodi --pass "$PASS" --realm rclone \
   --dir-cache-time 5s --poll-interval 0 --log-level NOTICE

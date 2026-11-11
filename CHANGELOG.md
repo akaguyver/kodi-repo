@@ -3,6 +3,8 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.55 – Every genre in a tag, and clearer DJ tools
+- **1.55.1**
+  - An opening or ending credits clip whose name doesn't say which show it's from (such as "NCOP One Reason.mkv") is now left where it is. Before, a clip in a download folder like **Videos** became a new show called "Videos", and Kodi's look-up turned that into a show you don't have.
 - **1.55.0**
   - **Find genres** now reads every genre in a track's tag. A track tagged "Dubstep" and "Trap" shows both, at the start of the screen, and the screen's top line says what each artist or track is tagged with now.
   - The genre screen's colour key now names every source: release info from Discogs, Apple Music and Deezer, and tags from Last.fm and Audius.
