@@ -3,6 +3,9 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.58 – File-host links, and torrents on the phone or your own client
+- **1.58.3**
+  - Sending torrents to **the phone** now tries **Real-Debrid first**: what Real-Debrid can get, the phone downloads through Real-Debrid, and only the ones it can't get are downloaded as torrents on the phone. You can still pick **This Xbox through Real-Debrid**, **Torrent only** on the phone, or one of your own torrent clients.
+  - When Real-Debrid can't get a torrent, it now goes straight to the phone by default, with no question. **Indexes and categories > Torrent clients** can change that.
 - **1.58.2**
   - **Downloads on the phone > Sort the finished downloads** now says when nothing has finished downloading yet. Before, it said it couldn't reach the phone.
 - **1.58.1**
