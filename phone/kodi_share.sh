@@ -59,19 +59,21 @@ echo " Keep Termux open while files copy. Ctrl+C stops sharing."
 echo " YouTube downloads: Sortovia > Download from YouTube (port 8081)."
 echo " (The NOTICE lines below are normal - it is working.)"
 echo "============================================"
-# YouTube downloads for the add-on (port 8081, same password): see yt_helper.py
-HELPER="$(dirname "$(readlink -f "$0")")/yt_helper.py"
-if [ -f "$HELPER" ] && [ "$DIR" = "/storage/emulated/0/Download" ]; then
-  YT_SHARE="$DIR" python3 "$HELPER" &
-  HPID=$!
-  trap 'kill $HPID 2>/dev/null' EXIT INT TERM
-fi
 if (exec 3<>/dev/tcp/127.0.0.1/$PORT) 2>/dev/null; then
   echo
   echo " Port $PORT is already in use: kodi-share is already running (maybe in another Termux"
   echo " session), or the companion app is sharing. Kodi can already reach the phone."
   echo " To restart it: type  kodi-share stop  then  kodi-share"
   exit 1
+fi
+# YouTube and torrent downloads for the add-on (port 8081, same password): see yt_helper.py.
+# A helper left over from before (an older copy, or one started elsewhere) is replaced, so it can't hold the port.
+HELPER="$(dirname "$(readlink -f "$0")")/yt_helper.py"
+if [ -f "$HELPER" ] && [ "$DIR" = "/storage/emulated/0/Download" ]; then
+  pkill -f "python3? .*yt_helper\.py$" 2>/dev/null && sleep 1
+  YT_SHARE="$DIR" python3 "$HELPER" &
+  HPID=$!
+  trap 'kill $HPID 2>/dev/null' EXIT INT TERM
 fi
 rclone serve webdav "$DIR" --addr ":$PORT" --user kodi --pass "$PASS" --realm rclone \
   --dir-cache-time 5s --poll-interval 0 --log-level NOTICE
