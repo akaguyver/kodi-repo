@@ -3,6 +3,8 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.58 – File-host links, and torrents on the phone or your own client
+- **1.58.2**
+  - **Downloads on the phone > Sort the finished downloads** now says when nothing has finished downloading yet. Before, it said it couldn't reach the phone.
 - **1.58.1**
   - **Pause a Real-Debrid download** on the Xbox and carry on later. While one runs, Sortovia's menu has **pause** (or **carry on**) next to **Stop**. The half-done file is kept and it carries on from where it got to.
   - **Real-Debrid > Download on**: choose whether the phone or this Xbox downloads what Real-Debrid unlocks. It starts on the phone, which is faster here, and you can also choose each time. On the phone, files go to Download/Real-Debrid.

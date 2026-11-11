@@ -915,6 +915,8 @@ def main():
     if os.path.getsize(TOR_SESSION) if os.path.exists(TOR_SESSION) else 0:
         aria_start()  # torrents that were going when the phone stopped carry on
     threading.Thread(target=tor_watch, daemon=True).start()
+    for kind in KINDS:  # so Sortovia can open them before anything has finished downloading
+        os.makedirs(os.path.join(SHARE, kind), exist_ok=True)
     ThreadingHTTPServer(("0.0.0.0", PORT), Handler).serve_forever()
 
 
