@@ -14,7 +14,7 @@
     <platform>all</platform>
   </extension>
 </addon>
-<addon id="script.kodisorter" name="Sortovia" version="1.55.2" provider-name="akaguyver">
+<addon id="script.kodisorter" name="Sortovia" version="1.56.0" provider-name="akaguyver">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
   </requires>
@@ -30,6 +30,10 @@
       <item library="context_playlist.py">
         <label>32092</label>
         <visible>String.IsEqual(ListItem.DBTYPE,song) | String.IsEqual(ListItem.DBTYPE,album)</visible>
+      </item>
+      <item library="context_youtube.py">
+        <label>32093</label>
+        <visible>!ListItem.IsFolder + [String.Contains(ListItem.Path,Tutorials) | String.Contains(ListItem.Path,DJing) | String.Contains(ListItem.Path,YouTube)]</visible>
       </item>
       <item library="context_mix.py">
         <label>32091</label>

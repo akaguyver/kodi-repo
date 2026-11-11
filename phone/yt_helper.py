@@ -41,6 +41,7 @@ TMP = os.path.expanduser("~/.cache/xbox-share/yt")  # half-done files stay out o
 COOKIES = os.path.join(CONF, "youtube-cookies.txt")
 JOBS_FILE = os.path.join(CONF, "yt-jobs.json")
 SETTINGS_FILE = os.path.join(CONF, "yt-settings.json")
+META_FILE = os.path.join(CONF, "yt-meta.json")  # channel, upload date ... of each downloaded video, by file name
 
 # Download quality (Sortovia > YouTube > Download quality). Each is "the best up to this",
 # preferring H.264/AAC in .mp4, which every Kodi plays; 4K on YouTube is VP9/AV1 only.
@@ -363,6 +364,8 @@ def run_job(job):
                                "|%(progress.fragment_index)s|%(progress.fragment_count)s|%(progress.downloaded_bytes)s",
         "--print", "before_dl:KSTITLE %(title)s",
         "--print", "after_move:KSFILE %(filepath)s",
+        "--print", "after_move:KSMETA %(.{" + ",".join(META_FIELDS) + "})j",
+        "--embed-metadata",  # channel, upload date and link go into the file itself too
         job["url"],
     ]
     log("downloading %s" % job["url"])
@@ -392,6 +395,11 @@ def run_job(job):
                 job["title"] = line[8:]
             elif line.startswith("KSFILE "):
                 job["file"] = line[7:]
+            elif line.startswith("KSMETA "):
+                try:
+                    job["meta"] = trim_meta(json.loads(line[7:]))
+                except ValueError:
+                    pass
     proc.wait()
     t.join(5)
     with LOCK:
@@ -405,6 +413,8 @@ def run_job(job):
             name = publish(job["file"])
             with LOCK:
                 job["state"], job["pct"], job["file"] = "done", 100.0, name
+                if job.get("meta"):
+                    remember_meta(name, job["meta"])
             log("done: %s" % name)
         except OSError as e:
             with LOCK:
@@ -464,6 +474,85 @@ def worker():
                 save_jobs()
 
 
+# ---------- what's known about each video (channel, upload date, series) ----------
+META_FIELDS = ["id", "webpage_url", "title", "uploader", "channel", "channel_url", "uploader_url", "upload_date",
+               "playlist_title", "playlist_id", "playlist_index", "playlist_count", "categories", "duration"]
+META = {}
+META_STATE = {"busy": False, "left": 0, "done": 0, "failed": 0}
+
+
+def trim_meta(m):
+    out = dict((k, m.get(k)) for k in META_FIELDS if m.get(k) not in (None, "", [], "NA"))
+    if out.get("playlist_id") and out.get("playlist_id") == out.get("id"):
+        for k in ("playlist_title", "playlist_id", "playlist_index", "playlist_count"):
+            out.pop(k, None)  # a single video "playlist" isn't a series
+    return out
+
+
+def load_meta():
+    try:
+        with open(META_FILE) as f:
+            META.update(json.load(f))
+    except (OSError, ValueError):
+        pass
+
+
+def remember_meta(name, meta):
+    META[name] = meta
+    os.makedirs(CONF, exist_ok=True)
+    tmp = META_FILE + ".tmp"
+    with open(tmp, "w") as f:
+        json.dump(META, f, indent=1, sort_keys=True)
+    os.replace(tmp, META_FILE)
+
+
+def _key(name):
+    stem = re.sub(r"\.(mp4|mkv|webm|m4a|mp3)$", "", name, flags=re.I)
+    stem = re.sub(r" \(\d+\)$", "", stem)
+    return re.sub(r"[\W_]+", "", stem, flags=re.U).lower()
+
+
+def fetch_meta(url):
+    p = subprocess.run(base_cmd() + ["-j", "--skip-download", "--no-playlist", url],
+                       capture_output=True, text=True, timeout=180)
+    if p.returncode != 0:
+        raise RuntimeError(explain(p.stderr))
+    return trim_meta(json.loads(p.stdout))
+
+
+def find_url(name):
+    """The YouTube link of a downloaded video, from the download list or else a search for its title."""
+    k = _key(name)
+    for j in JOBS:
+        if j.get("url") and k in (_key(j.get("file") or ""), _key(j.get("title") or "")):
+            return j["url"]
+    title = re.sub(r"\.(mp4|mkv|webm)$", "", name, flags=re.I)
+    title = re.sub(r" \(\d+\)$", "", title)
+    for r in search(title, 5):
+        if _key(r.get("title") or "") == k:
+            return r["url"]
+    return None
+
+
+def look_up(names):
+    """Fill in what's known for files that don't have it yet (a few seconds each)."""
+    todo = [n for n in names if not any(_key(n) == _key(have) for have in META)]
+    META_STATE.update(busy=True, left=len(todo), done=0, failed=0)
+    for n in todo:
+        try:
+            url = find_url(n)
+            if not url:
+                raise RuntimeError("not found on YouTube")
+            remember_meta(n, fetch_meta(url))
+            META_STATE["done"] += 1
+        except Exception as e:
+            log("no details for %s: %s" % (n, e))
+            META_STATE["failed"] += 1
+        META_STATE["left"] -= 1
+    META_STATE["busy"] = False
+    log("video details: %d found, %d not found" % (META_STATE["done"], META_STATE["failed"]))
+
+
 # ---------- HTTP ----------
 class Handler(BaseHTTPRequestHandler):
     server_version = "SortoviaYT/1"
@@ -518,6 +607,8 @@ class Handler(BaseHTTPRequestHandler):
         if u.path == "/yt/jobs":
             with LOCK:
                 return self._send({"jobs": JOBS})
+        if u.path == "/yt/meta":
+            return self._send(dict(META_STATE, meta=META))
         self._send({"error": "not found"}, 404)
 
     def do_POST(self):
@@ -574,6 +665,16 @@ class Handler(BaseHTTPRequestHandler):
             # "Import cookies now": look in Download right away and say what happened
             st = cookies_status()
             return self._send({"cookies": st})
+        if u.path == "/yt/meta":
+            # look up the channel and upload date of videos downloaded before this was saved
+            names = [n for n in (b.get("files") or []) if isinstance(n, str)]
+            if b.get("all"):
+                names += [f for f in os.listdir(OUT) if re.search(r"\.(mp4|mkv|webm)$", f, re.I)] if os.path.isdir(OUT) else []
+                names += [j["file"] for j in JOBS if j.get("state") == "done" and j.get("file")]
+            if not META_STATE["busy"]:
+                threading.Thread(target=look_up, args=(sorted(set(names)),), daemon=True).start()
+                META_STATE["busy"] = True
+            return self._send(dict(META_STATE, meta=META))
         if u.path == "/yt/clear":
             with LOCK:
                 JOBS[:] = [j for j in JOBS if j["state"] in ("queued", "downloading", "paused")]
@@ -588,6 +689,7 @@ def main():
     if not tool("yt-dlp"):
         log("yt-dlp is missing: in plain Termux run  pkg install yt-dlp ffmpeg nodejs")
     load_jobs()
+    load_meta()
     st = cookies_status()
     log("YouTube downloads on port %d -> %s (cookies: %s)" % (
         PORT, OUT, "OK" if st.get("present") else "none yet - export cookies.txt into Download"))

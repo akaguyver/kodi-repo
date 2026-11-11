@@ -2,6 +2,17 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 1.56 – Quicker library backups, and YouTube videos sorted by what they are
+- **1.56.0**
+  - **Library backups** now save only what changed: each movie, show and episode that was added, changed (such as a watched mark) or removed, plus a copy of Kodi's library database. That takes seconds. Kodi's own full export, which is slow, now runs once a week, or when you choose **Kodi library backup > Full backup now**. When nothing in the library changed, no backup is made at all.
+  - A backup's progress now shows in the **top-right corner**, and **Back up the library now** runs in the background, so you can keep using Kodi. Cleaning the library says that Kodi's own progress is in the corner too.
+  - **YouTube downloads about music and DJing** (beatmatching, beat grids, rekordbox, Serato, Mixed In Key, song structure, Ableton and so on) now go to a new **Music and DJing** folder, in **DJing**, **Making music**, **Music videos** or **DJ sets and mixes**. Add that folder in Kodi as a source to see it.
+  - Many more YouTube lessons are now recognised ("How to...", "Explained", "Tips", reviews and demos), with new **Claude** and **Closet design** folders in Tutorials.
+  - Before sorting YouTube downloads, the videos that still don't look like lessons or music are listed: tick any to sort anyway, and choose where they go (a Tutorials program, a Music and DJing kind, or **YouTube videos**).
+  - New YouTube downloads keep their **channel, upload date and link**, inside the file and in Sortovia. **Download from YouTube > Look up channel and upload date for videos already downloaded** finds them for the videos you already have, and writes a small .nfo next to each one.
+  - **Hold down a video in Tutorials or Music and DJing > YouTube video (Sortovia)** shows its channel and upload date, lists **more from that channel** to download, and finds **the rest of its series** (its playlist, or the channel's videos named the same way, such as "Step 1" to "Step 6"). Restart Kodi once if the option doesn't appear. The phone's YouTube service needs a restart too: stop kodi-share and start it again.
+  - Fixed: sorting could stop with an error on a separate audio track (such as an .mka) whose language Sortovia couldn't read.
+
 ## 1.55 – Every genre in a tag, and clearer DJ tools
 - **1.55.2**
   - **Library > Clean the library > TV** now finds a show Kodi made out of your whole TV folder (its episodes repeat your real shows') and offers to take just that entry out of the library. Your files and your other shows stay as they are.
