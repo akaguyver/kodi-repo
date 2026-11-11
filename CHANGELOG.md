@@ -3,6 +3,10 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.58 – File-host links, and torrents on the phone or your own client
+- **1.58.1**
+  - **Pause a Real-Debrid download** on the Xbox and carry on later. While one runs, Sortovia's menu has **pause** (or **carry on**) next to **Stop**. The half-done file is kept and it carries on from where it got to.
+  - **Real-Debrid > Download on**: choose whether the phone or this Xbox downloads what Real-Debrid unlocks. It starts on the phone, which is faster here, and you can also choose each time. On the phone, files go to Download/Real-Debrid.
+  - **Downloads on the phone** (it was Torrents on the phone) shows torrents and Real-Debrid files together, and sorts either folder when they're done.
 - **1.58.0**
   - **Real-Debrid > Get links from a web page**: give it a forum post, blog or release page, and it finds every Rapidgator, Nitroflare or other file-host link Real-Debrid can unlock. Tick them and they download to the drive. It uses Real-Debrid's own list of supported hosts, so new hosts work by themselves.
   - Download sites' **RSS feeds** work in **Search torrents** too. Add one under **Indexes and categories**; its posts show as "file-host links", and ticking one unlocks the links in the post, or on the page it links to.

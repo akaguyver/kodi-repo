@@ -556,7 +556,7 @@ def look_up(names):
 
 # ---------- torrents on the phone (aria2), for what Real-Debrid can't get ----------
 TOR_WORK = os.path.expanduser("~/.cache/xbox-share/torrents")  # half-done downloads stay out of the share
-TOR_OUT = os.path.join(SHARE, "Torrents")
+TOR_OUT = os.path.join(SHARE, "Torrents")  # (and Download/Real-Debrid for unlocked links)
 TOR_SESSION = os.path.join(CONF, "aria2-session.txt")
 TOR_PORT = 6801
 TOR = {"proc": None, "moved": set()}
@@ -609,30 +609,46 @@ def _tor_name(d):
     return bt.get("name") or (os.path.basename(path) if path else "") or "Getting the torrent's details..."
 
 
-def _tor_top(d):
-    """The file or folder the download made, directly inside TOR_WORK."""
+KINDS = ("Torrents", "Real-Debrid")  # Download/Torrents for torrents, Download/Real-Debrid for unlocked links
+
+
+def _tor_rel(d):
+    """[kind, ...path] of a download's first file, relative to TOR_WORK."""
     files = d.get("files") or []
     if not files or not files[0].get("path"):
         return None
-    rel = os.path.relpath(files[0]["path"], d.get("dir") or TOR_WORK)
-    return os.path.join(d.get("dir") or TOR_WORK, rel.split(os.sep)[0])
+    rel = os.path.relpath(files[0]["path"], TOR_WORK).split(os.sep)
+    return rel if rel[0] in KINDS and len(rel) > 1 else ["Torrents"] + rel
+
+
+def _into_share(src, final):
+    """Move src to final through a hidden name, so Sortovia never sees half of it. Returns the name used."""
+    base, n = final, 2
+    stem, ext = os.path.splitext(base)
+    while os.path.exists(final):
+        final = "%s (%d)%s" % (stem, n, ext)
+        n += 1
+    os.makedirs(os.path.dirname(final), exist_ok=True)
+    hidden = os.path.join(os.path.dirname(final), "." + os.path.basename(final) + ".part")
+    shutil.move(src, hidden)
+    os.replace(hidden, final)
+    return final
 
 
 def tor_publish(d):
-    """A finished download goes into Download/Torrents under a hidden name first, then its real one."""
-    top = _tor_top(d)
-    if not top or not os.path.exists(top):
+    """A finished torrent goes into Download/Torrents whole; an unlocked file into Download/Real-Debrid/<group>."""
+    rel = _tor_rel(d)
+    if not rel:
         return
-    os.makedirs(TOR_OUT, exist_ok=True)
-    name = os.path.basename(top)
-    final, n = os.path.join(TOR_OUT, name), 2
-    while os.path.exists(final):
-        final = os.path.join(TOR_OUT, "%s (%d)" % (name, n))
-        n += 1
-    hidden = os.path.join(TOR_OUT, "." + os.path.basename(final) + ".part")
-    shutil.move(top, hidden)
-    os.replace(hidden, final)
-    log("torrent done: %s" % os.path.basename(final))
+    kind = rel[0]
+    if kind == "Torrents":
+        src = os.path.join(TOR_WORK, *rel[:2]) if os.path.exists(os.path.join(TOR_WORK, *rel[:2])) else os.path.join(TOR_WORK, rel[1])
+        final = os.path.join(SHARE, "Torrents", os.path.basename(src))
+    else:
+        src = os.path.join(TOR_WORK, *rel)
+        final = os.path.join(SHARE, *rel)
+    if os.path.exists(src):
+        log("download done: %s" % os.path.basename(_into_share(src, final)))
 
 
 FIELDS = ["gid", "status", "totalLength", "completedLength", "downloadSpeed", "files", "bittorrent", "dir",
@@ -656,7 +672,8 @@ def tor_jobs():
                 tor_publish(d)
             except OSError as e:
                 log("couldn't move a finished torrent into Download/Torrents: %s" % e)
-        out.append({"id": d["gid"], "name": _tor_name(d), "state": state, "size": total,
+        rel = _tor_rel(d)
+        out.append({"id": d["gid"], "name": _tor_name(d), "kind": rel[0] if rel else "Torrents", "state": state, "size": total,
                     "pct": round(100.0 * done / total, 1) if total else 0.0, "speed": speed,
                     "eta": int((total - done) / speed) if speed and total else 0,
                     "seeds": int(d.get("numSeeders") or 0), "peers": int(d.get("connections") or 0),
@@ -846,7 +863,12 @@ class Handler(BaseHTTPRequestHandler):
                     uri = (b.get("uri") or "").strip()
                     if not re.match(r"^(magnet:\?|https?://)", uri):
                         return self._send({"error": "that isn't a magnet link or a torrent address"}, 400)
-                    gid = aria("aria2.addUri", [uri], {"dir": TOR_WORK})
+                    kind = "Real-Debrid" if b.get("kind") == "Real-Debrid" else "Torrents"
+                    sub = re.sub(r'[\\/:*?"<>|]+', " ", b.get("group") or "").strip()
+                    opts = {"dir": os.path.join(TOR_WORK, kind, sub) if sub else os.path.join(TOR_WORK, kind)}
+                    if b.get("out"):
+                        opts["out"] = re.sub(r'[\\/:*?"<>|]+', " ", b["out"]).strip()
+                    gid = aria("aria2.addUri", [uri], opts)
                     log("torrent added: %s" % (b.get("name") or uri[:60]))
                     return self._send({"id": gid})
                 gids = [j["id"] for j in tor_jobs()] if b.get("all") else [b.get("id")]
