@@ -3,6 +3,9 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.57 – Torrent search, folders from your searches, and the TV library fixed for good
+- **1.57.1**
+  - **Indexes and categories > Add an index: a site's RSS feed** now takes a site's ordinary feed address. Sortovia reads the whole feed and keeps the items whose titles have your search words. A search feed with {q} where the words go still works too.
+  - The feeds you added under **Real-Debrid > Add a feed** are searched too: in **Everything**, and in their own category, **My feeds**.
 - **1.57.0**
   - **Search torrents** (Downloads, and in Real-Debrid): search many indexes at once by category, such as Music, Music videos, Movies, TV or Anime. Built in: Knaben, which searches many trackers at once, plus The Pirate Bay, Nyaa, Torrents-CSV and YTS. Tick results and Real-Debrid fetches them; then they download by themselves.
   - **Indexes and categories**: turn any index off, and add your own: Jackett or Prowlarr (Torznab), which reach almost any tracker, private ones too, or a tracker's search RSS address. Make your own categories (such as **My releases**) and choose which indexes each one searches.
