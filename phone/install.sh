@@ -19,7 +19,7 @@ fi
 if [ -z "$KS_NO_PKG" ]; then
   say "1/4  Installing programs (a few minutes the first time)..."
   pkg update -y
-  pkg install -y rclone python yt-dlp ffmpeg nodejs termux-tools
+  pkg install -y rclone python yt-dlp ffmpeg nodejs termux-tools aria2
 else
   say "1/4  Skipping program install (KS_NO_PKG set)"
 fi

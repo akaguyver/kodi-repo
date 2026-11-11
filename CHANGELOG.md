@@ -2,6 +2,15 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 1.58 – File-host links, and torrents on the phone or your own client
+- **1.58.0**
+  - **Real-Debrid > Get links from a web page**: give it a forum post, blog or release page, and it finds every Rapidgator, Nitroflare or other file-host link Real-Debrid can unlock. Tick them and they download to the drive. It uses Real-Debrid's own list of supported hosts, so new hosts work by themselves.
+  - Download sites' **RSS feeds** work in **Search torrents** too. Add one under **Indexes and categories**; its posts show as "file-host links", and ticking one unlocks the links in the post, or on the page it links to.
+  - **Torrents on the phone** (Downloads): when Real-Debrid can't get a torrent, the phone can download it, using aria2 in Termux. It's saved into Download/Torrents. Kodi shows progress, lets you pause, carry on or remove each one, and sorts the finished ones into your library. The phone needs aria2 once: in Termux type **pkg install aria2**.
+  - **Your own torrent client**: add Transmission, qBittorrent, aria2, or BiglyBT or Vuze (they use the Transmission-style remote) on the phone or your network, under **Indexes and categories > Torrent clients**.
+  - Search results can now go to Real-Debrid, the phone, or any client you added.
+  - When Real-Debrid can't get a torrent, Sortovia asks where to download it instead. You can make it send it by itself to the phone or a client, or do nothing. Torrents it couldn't get in the background wait under **Real-Debrid > Couldn't get on Real-Debrid**.
+
 ## 1.57 – Torrent search, folders from your searches, and the TV library fixed for good
 - **1.57.1**
   - **Indexes and categories > Add an index: a site's RSS feed** now takes a site's ordinary feed address. Sortovia reads the whole feed and keeps the items whose titles have your search words. A search feed with {q} where the words go still works too.

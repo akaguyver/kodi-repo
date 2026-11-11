@@ -23,6 +23,7 @@ HTTP on port 8081, same user/password as kodi-share (Basic auth):
 import base64
 import glob
 import json
+import urllib.request
 import os
 import re
 import shutil
@@ -553,6 +554,127 @@ def look_up(names):
     log("video details: %d found, %d not found" % (META_STATE["done"], META_STATE["failed"]))
 
 
+# ---------- torrents on the phone (aria2), for what Real-Debrid can't get ----------
+TOR_WORK = os.path.expanduser("~/.cache/xbox-share/torrents")  # half-done downloads stay out of the share
+TOR_OUT = os.path.join(SHARE, "Torrents")
+TOR_SESSION = os.path.join(CONF, "aria2-session.txt")
+TOR_PORT = 6801
+TOR = {"proc": None, "moved": set()}
+
+
+def aria(method, *params):
+    """One call to the phone's own aria2 (localhost only, with the kodi-share password as its secret)."""
+    body = json.dumps({"jsonrpc": "2.0", "id": "s", "method": method,
+                       "params": ["token:" + password()] + list(params)}).encode()
+    req = urllib.request.Request("http://127.0.0.1:%d/jsonrpc" % TOR_PORT, data=body,
+                                 headers={"Content-Type": "application/json"})
+    with urllib.request.urlopen(req, timeout=10) as r:
+        out = json.loads(r.read().decode("utf-8"))
+    if out.get("error"):
+        raise RuntimeError(out["error"].get("message") or "aria2 said no")
+    return out.get("result")
+
+
+def aria_start():
+    """aria2 running in the background, started the first time it's needed. False when it isn't installed."""
+    if TOR["proc"] and TOR["proc"].poll() is None:
+        return True
+    exe = tool("aria2c")
+    if not exe:
+        return False
+    os.makedirs(TOR_WORK, exist_ok=True)
+    os.makedirs(CONF, exist_ok=True)
+    if not os.path.exists(TOR_SESSION):
+        open(TOR_SESSION, "a").close()
+    TOR["proc"] = subprocess.Popen([
+        exe, "--enable-rpc", "--rpc-listen-all=false", "--rpc-listen-port=%d" % TOR_PORT,
+        "--rpc-secret=" + password(), "--dir=" + TOR_WORK, "--seed-time=0", "--continue=true",
+        "--max-concurrent-downloads=2", "--bt-save-metadata=false", "--follow-torrent=mem",
+        "--input-file=" + TOR_SESSION, "--save-session=" + TOR_SESSION, "--save-session-interval=20",
+        "--force-save=false", "--quiet=true"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    for _ in range(30):
+        try:
+            aria("aria2.getVersion")
+            log("torrent downloads ready (aria2), saving into %s" % TOR_OUT)
+            return True
+        except Exception:
+            time.sleep(0.3)
+    return False
+
+
+def _tor_name(d):
+    bt = (d.get("bittorrent") or {}).get("info") or {}
+    files = d.get("files") or []
+    path = files[0].get("path") if files else ""
+    return bt.get("name") or (os.path.basename(path) if path else "") or "Getting the torrent's details..."
+
+
+def _tor_top(d):
+    """The file or folder the download made, directly inside TOR_WORK."""
+    files = d.get("files") or []
+    if not files or not files[0].get("path"):
+        return None
+    rel = os.path.relpath(files[0]["path"], d.get("dir") or TOR_WORK)
+    return os.path.join(d.get("dir") or TOR_WORK, rel.split(os.sep)[0])
+
+
+def tor_publish(d):
+    """A finished download goes into Download/Torrents under a hidden name first, then its real one."""
+    top = _tor_top(d)
+    if not top or not os.path.exists(top):
+        return
+    os.makedirs(TOR_OUT, exist_ok=True)
+    name = os.path.basename(top)
+    final, n = os.path.join(TOR_OUT, name), 2
+    while os.path.exists(final):
+        final = os.path.join(TOR_OUT, "%s (%d)" % (name, n))
+        n += 1
+    hidden = os.path.join(TOR_OUT, "." + os.path.basename(final) + ".part")
+    shutil.move(top, hidden)
+    os.replace(hidden, final)
+    log("torrent done: %s" % os.path.basename(final))
+
+
+FIELDS = ["gid", "status", "totalLength", "completedLength", "downloadSpeed", "files", "bittorrent", "dir",
+          "errorMessage", "followedBy", "numSeeders", "connections"]
+
+
+def tor_jobs():
+    if not aria_start():
+        return []
+    out = []
+    for d in (aria("aria2.tellActive", FIELDS) + aria("aria2.tellWaiting", 0, 100, FIELDS) +
+              aria("aria2.tellStopped", 0, 100, FIELDS)):
+        if d.get("followedBy"):
+            continue  # a magnet's first step (its details); the real download follows it
+        total, done = int(d.get("totalLength") or 0), int(d.get("completedLength") or 0)
+        speed = int(d.get("downloadSpeed") or 0)
+        state = d["status"]
+        if state == "complete" and d["gid"] not in TOR["moved"]:
+            TOR["moved"].add(d["gid"])
+            try:
+                tor_publish(d)
+            except OSError as e:
+                log("couldn't move a finished torrent into Download/Torrents: %s" % e)
+        out.append({"id": d["gid"], "name": _tor_name(d), "state": state, "size": total,
+                    "pct": round(100.0 * done / total, 1) if total else 0.0, "speed": speed,
+                    "eta": int((total - done) / speed) if speed and total else 0,
+                    "seeds": int(d.get("numSeeders") or 0), "peers": int(d.get("connections") or 0),
+                    "error": d.get("errorMessage") or ""})
+    return out
+
+
+def tor_watch():
+    """Moves finished torrents into the share even when nobody is looking."""
+    while True:
+        time.sleep(15)
+        if TOR["proc"] and TOR["proc"].poll() is None:
+            try:
+                tor_jobs()
+            except Exception:
+                pass
+
+
 # ---------- copies into the phone's Music folder ----------
 MUSIC_DIR = os.environ.get("PHONE_MUSIC", "/storage/emulated/0/Music")
 
@@ -645,6 +767,11 @@ class Handler(BaseHTTPRequestHandler):
                 return self._send({"jobs": JOBS})
         if u.path == "/yt/meta":
             return self._send(dict(META_STATE, meta=META))
+        if u.path == "/tor/jobs":
+            try:
+                return self._send({"installed": bool(tool("aria2c")), "jobs": tor_jobs(), "folder": TOR_OUT})
+            except Exception as e:
+                return self._send({"installed": bool(tool("aria2c")), "jobs": [], "error": str(e)})
         self._send({"error": "not found"}, 404)
 
     def do_POST(self):
@@ -711,6 +838,36 @@ class Handler(BaseHTTPRequestHandler):
                 threading.Thread(target=look_up, args=(sorted(set(names)),), daemon=True).start()
                 META_STATE["busy"] = True
             return self._send(dict(META_STATE, meta=META))
+        if u.path.startswith("/tor/"):
+            if not aria_start():
+                return self._send({"error": "aria2 isn't installed on the phone: in Termux type  pkg install aria2"}, 400)
+            try:
+                if u.path == "/tor/add":
+                    uri = (b.get("uri") or "").strip()
+                    if not re.match(r"^(magnet:\?|https?://)", uri):
+                        return self._send({"error": "that isn't a magnet link or a torrent address"}, 400)
+                    gid = aria("aria2.addUri", [uri], {"dir": TOR_WORK})
+                    log("torrent added: %s" % (b.get("name") or uri[:60]))
+                    return self._send({"id": gid})
+                gids = [j["id"] for j in tor_jobs()] if b.get("all") else [b.get("id")]
+                method = {"/tor/pause": "aria2.forcePause", "/tor/resume": "aria2.unpause",
+                          "/tor/remove": "aria2.forceRemove"}.get(u.path)
+                if not method:
+                    return self._send({"error": "not found"}, 404)
+                done = 0
+                for g in gids:
+                    try:
+                        aria(method, g)
+                        done += 1
+                    except Exception:
+                        try:
+                            aria("aria2.removeDownloadResult", g)  # finished or failed: just off the list
+                            done += 1
+                        except Exception:
+                            pass
+                return self._send({"ok": done})
+            except Exception as e:
+                return self._send({"error": str(e)}, 502)
         if u.path == "/phone/music":
             # Sortovia moving music off the phone: keep a copy in the phone's own Music folder first
             return self._send(copy_to_music(b.get("files") or []))
@@ -733,6 +890,9 @@ def main():
     log("YouTube downloads on port %d -> %s (cookies: %s)" % (
         PORT, OUT, "OK" if st.get("present") else "none yet - export cookies.txt into Download"))
     threading.Thread(target=worker, daemon=True).start()
+    if os.path.getsize(TOR_SESSION) if os.path.exists(TOR_SESSION) else 0:
+        aria_start()  # torrents that were going when the phone stopped carry on
+    threading.Thread(target=tor_watch, daemon=True).start()
     ThreadingHTTPServer(("0.0.0.0", PORT), Handler).serve_forever()
 
 
