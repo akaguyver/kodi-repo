@@ -3,6 +3,8 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.55 – Every genre in a tag, and clearer DJ tools
+- **1.55.2**
+  - **Library > Clean the library > TV** now finds a show Kodi made out of your whole TV folder (its episodes repeat your real shows') and offers to take just that entry out of the library. Your files and your other shows stay as they are.
 - **1.55.1**
   - An opening or ending credits clip whose name doesn't say which show it's from (such as "NCOP One Reason.mkv") is now left where it is. Before, a clip in a download folder like **Videos** became a new show called "Videos", and Kodi's look-up turned that into a show you don't have.
 - **1.55.0**
