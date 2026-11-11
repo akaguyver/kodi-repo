@@ -553,6 +553,42 @@ def look_up(names):
     log("video details: %d found, %d not found" % (META_STATE["done"], META_STATE["failed"]))
 
 
+# ---------- copies into the phone's Music folder ----------
+MUSIC_DIR = os.environ.get("PHONE_MUSIC", "/storage/emulated/0/Music")
+
+
+def _inside(base, rel):
+    """base/rel, or None when rel would leave base (.. or an absolute path)."""
+    if not isinstance(rel, str) or not rel or rel.startswith(("/", "\\")):
+        return None
+    path = os.path.realpath(os.path.join(base, rel))
+    return path if path.startswith(os.path.realpath(base) + os.sep) else None
+
+
+def copy_to_music(files):
+    """[{"from": path in the shared folder, "to": "Artist/Album/03 - Title.mp3"}]: each copied into Music,
+    unless the same file is already there. Done before Sortovia moves them, so it replies when finished."""
+    copied, same, failed = 0, 0, []
+    for f in files:
+        src, dst = _inside(SHARE, f.get("from")), _inside(MUSIC_DIR, f.get("to"))
+        if not src or not dst or not os.path.isfile(src):
+            failed.append(f.get("from") or "?")
+            continue
+        try:
+            if os.path.exists(dst) and os.path.getsize(dst) == os.path.getsize(src):
+                same += 1
+                continue
+            os.makedirs(os.path.dirname(dst), exist_ok=True)
+            shutil.copyfile(src, dst + ".part")
+            os.replace(dst + ".part", dst)
+            copied += 1
+        except OSError as e:
+            log("music copy failed: %s (%s)" % (f.get("from"), e))
+            failed.append(f.get("from") or "?")
+    log("copied %d music file(s) into the phone's Music folder (%d already there)" % (copied, same))
+    return {"copied": copied, "already": same, "failed": failed}
+
+
 # ---------- HTTP ----------
 class Handler(BaseHTTPRequestHandler):
     server_version = "SortoviaYT/1"
@@ -675,6 +711,9 @@ class Handler(BaseHTTPRequestHandler):
                 threading.Thread(target=look_up, args=(sorted(set(names)),), daemon=True).start()
                 META_STATE["busy"] = True
             return self._send(dict(META_STATE, meta=META))
+        if u.path == "/phone/music":
+            # Sortovia moving music off the phone: keep a copy in the phone's own Music folder first
+            return self._send(copy_to_music(b.get("files") or []))
         if u.path == "/yt/clear":
             with LOCK:
                 JOBS[:] = [j for j in JOBS if j["state"] in ("queued", "downloading", "paused")]

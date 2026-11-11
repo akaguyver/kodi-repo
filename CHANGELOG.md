@@ -2,6 +2,20 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 1.57 – Torrent search, folders from your searches, and the TV library fixed for good
+- **1.57.0**
+  - **Search torrents** (Downloads, and in Real-Debrid): search many indexes at once by category, such as Music, Music videos, Movies, TV or Anime. Built in: Knaben, which searches many trackers at once, plus The Pirate Bay, Nyaa, Torrents-CSV and YTS. Tick results and Real-Debrid fetches them; then they download by themselves.
+  - **Indexes and categories**: turn any index off, and add your own: Jackett or Prowlarr (Torznab), which reach almost any tracker, private ones too, or a tracker's search RSS address. Make your own categories (such as **My releases**) and choose which indexes each one searches.
+  - **Download new torrents by themselves** (Real-Debrid): anything added to your account, from the phone, the website or another app, downloads as soon as Real-Debrid has it.
+  - The phone app can now take **magnet links**: tap one anywhere on the phone, choose Sortovia, and it goes to Real-Debrid.
+  - **Download from YouTube** is now always in Downloads. Before, it only showed when the welcome screen's phone question had been answered yes.
+  - **Music and DJing** is now a folder inside **Tutorials**.
+  - YouTube videos you download from a search go into a folder named after the search: "how to build a house" goes to **Tutorials/House building**. If a folder that means the same is already there, it's used instead, and a video Sortovia already recognises (a program, or a kind of music video) goes where it always did.
+  - YouTube's **Downloads** list now shows the one downloading first, then the waiting ones in order, then the finished ones, newest first.
+  - **TV library**: when Kodi scans your TV folder twice under two spellings (such as D:\\TV and D:/TV), every episode is listed twice and the whole folder can become one show with a wrong name, such as "TV Animal Farm". **Clean the library > TV** now stops the second scan, so this doesn't come back, and takes the wrong show out by itself. Sortovia also checks for this each time it opens. Only library entries change, never your files.
+  - When you sort music from the phone, Sortovia asks whether to keep a copy in the phone's **Music** folder too (Music/Artist/Album).
+  - **Library > Get tags from the phone** now asks which parts to write (key, tempo, genre, energy), and for each one whether to keep what a track's tag already has or replace it. It then lists every change before anything is written.
+
 ## 1.56 – Quicker library backups, and YouTube videos sorted by what they are
 - **1.56.0**
   - **Library backups** now save only what changed: each movie, show and episode that was added, changed (such as a watched mark) or removed, plus a copy of Kodi's library database. That takes seconds. Kodi's own full export, which is slow, now runs once a week, or when you choose **Kodi library backup > Full backup now**. When nothing in the library changed, no backup is made at all.
