@@ -20,6 +20,15 @@ if [ "$1" = "password" ] || [ "$1" = "pass" ]; then
   echo "kodi-share password: $PASS   (user name: kodi)"
   exit 0
 fi
+if [ "$1" = "log" ]; then
+  tail -n 40 "$CONF/share.log" 2>/dev/null || echo "No log yet."
+  exit 0
+fi
+if [ "$1" = "restart" ]; then
+  bash "$0" stop
+  sleep 1
+  exec bash "$0"
+fi
 if [ "$1" = "stop" ]; then
   # only the share itself (anchored, so it can't match this script); the YouTube helper
   # keeps running, so Sortovia's YouTube downloads still work with the companion app
@@ -55,9 +64,12 @@ fi
 echo
 echo " In Kodi: Sortovia > Sort my downloads > Choose folders >"
 echo "   My phone over Wi-Fi - phone storage"
-echo " Keep Termux open while files copy. Ctrl+C stops sharing."
+echo " It runs in the background, so you can keep typing here."
+echo "   kodi-share stop     stop sharing"
+echo "   kodi-share restart  stop and start again (after an update)"
+echo "   kodi-share log      see what it's doing"
+echo " Keep Termux running (it can be in the background) while files copy."
 echo " YouTube downloads: Sortovia > Download from YouTube (port 8081)."
-echo " (The NOTICE lines below are normal - it is working.)"
 echo "============================================"
 if (exec 3<>/dev/tcp/127.0.0.1/$PORT) 2>/dev/null; then
   echo
@@ -71,9 +83,16 @@ fi
 HELPER="$(dirname "$(readlink -f "$0")")/yt_helper.py"
 if [ -f "$HELPER" ] && [ "$DIR" = "/storage/emulated/0/Download" ]; then
   pkill -f "python3? .*yt_helper\.py$" 2>/dev/null && sleep 1
-  YT_SHARE="$DIR" python3 "$HELPER" &
-  HPID=$!
-  trap 'kill $HPID 2>/dev/null' EXIT INT TERM
+  YT_SHARE="$DIR" nohup python3 "$HELPER" >>"$CONF/helper.log" 2>&1 </dev/null &
 fi
-rclone serve webdav "$DIR" --addr ":$PORT" --user kodi --pass "$PASS" --realm rclone \
-  --dir-cache-time 5s --poll-interval 0 --log-level NOTICE
+# In the background (with its own log), so the terminal stays free to type in.
+nohup rclone serve webdav "$DIR" --addr ":$PORT" --user kodi --pass "$PASS" --realm rclone \
+  --dir-cache-time 5s --poll-interval 0 --log-level NOTICE >"$CONF/share.log" 2>&1 </dev/null &
+SPID=$!
+command -v termux-wake-lock >/dev/null && termux-wake-lock 2>/dev/null
+sleep 2
+if kill -0 $SPID 2>/dev/null; then
+  echo " Sharing now. Type  kodi-share stop  to stop."
+else
+  echo " Sharing didn't start:"; tail -n 5 "$CONF/share.log"; exit 1
+fi
