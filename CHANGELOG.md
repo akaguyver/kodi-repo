@@ -3,6 +3,9 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.58 – File-host links, and torrents on the phone or your own client
+- **1.58.5**
+  - Moving music off the phone now offers **Also keep a copy in the phone's Music folder** for albums that came packed in an archive (.rar or .zip) too. Before, it only asked for plain files, so a packed album never asked. The Xbox unpacks the songs and sends them to Music/Artist/Album on the phone. On the phone, run **kodi-share stop**, then **kodi-share**, once to get this.
+  - In the phone app, **Copy music from the Xbox** now puts songs straight into Music/Artist, with no From the Xbox folder. **Tidy up From the Xbox** moves copies you already have there (including a From the Xbox inside From the Xbox) up to their artist's folder and keeps their analysis.
 - **1.58.4**
   - **Downloads on the phone** now says which folder a finished download is in: Download/Real-Debrid or Download/Torrents. Before, it always said Torrents.
   - **Sort the finished downloads** sorts whichever folder has something in it, and asks only when both do.

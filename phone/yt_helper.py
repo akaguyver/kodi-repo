@@ -728,6 +728,36 @@ def copy_to_music(files):
     return {"copied": copied, "already": same, "failed": failed}
 
 
+def save_to_music(rel, size, stream):
+    """One file sent by the Xbox (music it unpacked from an archive), saved in Music as rel unless the same
+    size is already there. {"copied": 1} / {"already": 1} / {"error"}."""
+    dst = _inside(MUSIC_DIR, rel)
+    if not dst:
+        return {"error": "not a path inside Music"}
+    if size <= 0:
+        return {"error": "nothing was sent"}
+    if os.path.exists(dst) and os.path.getsize(dst) == size:
+        return {"already": 1}
+    try:
+        os.makedirs(os.path.dirname(dst), exist_ok=True)
+        left = size
+        with open(dst + ".part", "wb") as out:
+            while left > 0:
+                part = stream.read(min(left, 1 << 20))
+                if not part:
+                    raise OSError("the Xbox stopped sending")
+                out.write(part)
+                left -= len(part)
+        os.replace(dst + ".part", dst)
+    except OSError as e:
+        if os.path.exists(dst + ".part"):
+            os.remove(dst + ".part")
+        log("music file from the Xbox failed: %s (%s)" % (rel, e))
+        return {"error": str(e)}
+    log("saved %s into the phone's Music folder" % rel)
+    return {"copied": 1}
+
+
 # ---------- HTTP ----------
 class Handler(BaseHTTPRequestHandler):
     server_version = "SortoviaYT/1"
@@ -789,6 +819,15 @@ class Handler(BaseHTTPRequestHandler):
                 return self._send({"installed": bool(tool("aria2c")), "jobs": tor_jobs(), "folder": TOR_OUT})
             except Exception as e:
                 return self._send({"installed": bool(tool("aria2c")), "jobs": [], "error": str(e)})
+        self._send({"error": "not found"}, 404)
+
+    def do_PUT(self):
+        if not self._authed():
+            return
+        u = urlparse(self.path)
+        if u.path == "/phone/music/file":
+            rel = parse_qs(u.query).get("to", [""])[0]
+            return self._send(save_to_music(rel, int(self.headers.get("Content-Length") or 0), self.rfile))
         self._send({"error": "not found"}, 404)
 
     def do_POST(self):
