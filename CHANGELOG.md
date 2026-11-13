@@ -2,6 +2,14 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 1.60 – The phone's download queue keeps moving
+- **1.60.0**
+  - The phone downloads **8 at a time** instead of 2, so one slow torrent can't hold up the queue.
+  - A torrent with no data for **5 minutes** goes to the back of the queue. After its first go and 3 more, it moves to a new **Failed - tried 3x** list in **Downloads**, where **Try again** (one or all) puts it back on the queue later, carrying on from what it has.
+  - Torrents find peers faster: 12 of the steadiest free public trackers are added to every one, along with peers on your own network.
+  - Search results sent to the phone always try **Real-Debrid first** when you're signed in; the phone downloads as a torrent only what Real-Debrid can't get.
+  - Needs the phone helper updated: run the phone installer again (Downloads tells you if it's older).
+
 ## 1.59 – Downloads you can sort, resume and retry
 - **1.59.0**
   - **Downloads** has buttons for each kind: **Waiting for peers**, **Downloading**, **Queued**, **Paused**, **Failed** and **Done**, each with how many. "Waiting" was the queue: the phone runs two at a time, and a torrent with no peers kept its place forever. Now one with no peers for 5 minutes moves to the back, so the others get going.

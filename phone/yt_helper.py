@@ -560,6 +560,16 @@ TOR_OUT = os.path.join(SHARE, "Torrents")  # (and Download/Real-Debrid for unloc
 TOR_SESSION = os.path.join(CONF, "aria2-session.txt")
 TOR_PORT = 6801
 TOR = {"proc": None, "moved": set()}
+TOR_AT_ONCE = 8  # downloads running together; one with no peers can't hold up the rest
+# The steadiest free public trackers (ngosang/trackerslist "best", checked 2026-11-13), added to every torrent.
+TRACKERS = [
+    "udp://tracker.opentrackr.org:1337/announce", "udp://open.stealth.si:80/announce",
+    "udp://tracker.torrent.eu.org:451/announce", "udp://open.demonii.com:1337/announce",
+    "udp://open.tracker.cl:1337/announce", "udp://exodus.desync.com:6969/announce",
+    "udp://explodie.org:6969/announce", "udp://tracker.qu.ax:6969/announce",
+    "udp://tracker-udp.gbitt.info:80/announce", "udp://tracker.tryhackx.org:6969/announce",
+    "http://tracker.renfei.net:8080/announce", "http://tracker.dler.org:6969/announce",
+]
 
 
 def aria(method, *params):
@@ -589,7 +599,9 @@ def aria_start():
     TOR["proc"] = subprocess.Popen([
         exe, "--enable-rpc", "--rpc-listen-all=false", "--rpc-listen-port=%d" % TOR_PORT,
         "--rpc-secret=" + password(), "--dir=" + TOR_WORK, "--seed-time=0", "--continue=true",
-        "--max-concurrent-downloads=2", "--bt-save-metadata=false", "--follow-torrent=mem",
+        "--max-concurrent-downloads=%d" % TOR_AT_ONCE, "--bt-save-metadata=false", "--follow-torrent=mem",
+        # More places to find peers: public trackers on top of each torrent's own, DHT and the local network.
+        "--bt-tracker=" + ",".join(TRACKERS), "--enable-dht=true", "--bt-enable-lpd=true", "--enable-peer-exchange=true",
         "--input-file=" + TOR_SESSION, "--save-session=" + TOR_SESSION, "--save-session-interval=20",
         # The hotspot / mobile data drops out now and then: keep trying for about ten minutes before a
         # download counts as failed (the part on the phone is kept either way, for Try again).
@@ -662,7 +674,7 @@ def tor_jobs():
     if not aria_start():
         return []
     out = []
-    for d in (aria("aria2.tellActive", FIELDS) + aria("aria2.tellWaiting", 0, 100, FIELDS) +
+    for d in (aria("aria2.tellActive", FIELDS) + aria("aria2.tellWaiting", 0, 1000, FIELDS) +
               aria("aria2.tellStopped", 0, 100, FIELDS)):
         if d.get("followedBy"):
             continue  # a magnet's first step (its details); the real download follows it
@@ -681,6 +693,10 @@ def tor_jobs():
                     "eta": int((total - done) / speed) if speed and total else 0,
                     "seeds": int(d.get("numSeeders") or 0), "peers": int(d.get("connections") or 0),
                     "error": d.get("errorMessage") or ""})
+    for h, item in _gave_up()["items"].items():
+        out.append({"id": "gaveup:" + h, "name": item["name"], "kind": "Torrents", "state": "gaveup", "size": 0,
+                    "pct": 0.0, "speed": 0, "eta": 0, "seeds": 0, "peers": 0, "when": item.get("when", 0),
+                    "error": "no peers after %d tries" % (STALL_TRIES + 1)})
     return out
 
 
@@ -745,33 +761,90 @@ def tor_retry_all():
 
 
 STALL = {}         # gid -> when a running torrent was first seen with nothing coming in
-STALL_AFTER = 300  # seconds with nothing coming in before it gives its place to a queued one
+STALL_AFTER = 300  # seconds with nothing coming in before it counts as a dead try
+STALL_TRIES = 3    # goes to the back of the queue this many times, then it's put aside as "tried 3x"
+GAVE_UP = os.path.join(CONF, "tor-gave-up.json")  # {"tries": {hash: n}, "items": {hash: {name, uri, dir, when}}}
+
+
+def _gave_up():
+    try:
+        with open(GAVE_UP) as f:
+            st = json.load(f)
+        return {"tries": st.get("tries") or {}, "items": st.get("items") or {}}
+    except (OSError, ValueError):
+        return {"tries": {}, "items": {}}
+
+
+def _gave_up_save(st):
+    tmp = GAVE_UP + ".tmp"
+    with open(tmp, "w") as f:
+        json.dump(st, f)
+    os.replace(tmp, GAVE_UP)
+
+
+def tor_give_up(gid, st):
+    """Off the queue for good (the part downloaded stays), kept in the "tried 3x" list to try again by hand."""
+    d = aria("aria2.tellStatus", gid, FIELDS)
+    h = d["infoHash"]
+    st["items"][h] = {"name": _tor_name(d), "uri": retry_uri(d), "dir": d.get("dir") or TOR_WORK, "when": int(time.time())}
+    st["tries"].pop(h, None)
+    aria("aria2.forceRemove", gid)
+    for _ in range(10):  # off the list too, so it shows only under "tried 3x"
+        time.sleep(0.3)
+        try:
+            aria("aria2.removeDownloadResult", gid)
+            break
+        except Exception:
+            pass
+    log("no peers after %d tries, put aside: %s" % (STALL_TRIES + 1, _tor_name(d)))
+
+
+def tor_try_gave_up(h):
+    """A put-aside torrent back on the queue, carrying on from the part it has. Returns its new id or None."""
+    st = _gave_up()
+    item = st["items"].pop(h, None)
+    if not item:
+        return None
+    gid = aria("aria2.addUri", [item["uri"]], {"dir": item["dir"]})
+    _gave_up_save(st)
+    log("trying again: %s" % item["name"])
+    return gid
 
 
 def tor_rotate(now=None):
-    """aria2 runs two downloads at a time and the rest wait. A torrent nobody is sending to would hold its place
-    for good, with everything behind it stuck on "queued": after five minutes of nothing, and only when
-    something is queued behind it, it goes to the back of the queue. Returns the ids moved."""
+    """A torrent nobody is sending to would hold its place for good. After five minutes of nothing it goes to the
+    back of the queue; after the first go and three more like that it is put aside in "tried 3x".
+    Returns the ids moved or put aside."""
     now = time.time() if now is None else now
     active = aria("aria2.tellActive", ["gid", "downloadSpeed", "infoHash"])
-    queued = [w for w in aria("aria2.tellWaiting", 0, 100, ["gid", "status"]) if w.get("status") == "waiting"]
+    queued = [w for w in aria("aria2.tellWaiting", 0, 1000, ["gid", "status"]) if w.get("status") == "waiting"]
     moved = []
     for gid in list(STALL):
         if gid not in [d["gid"] for d in active]:
             del STALL[gid]
+    st = None
     for d in active:
         gid = d["gid"]
         if int(d.get("downloadSpeed") or 0) > 0 or not d.get("infoHash"):
             STALL.pop(gid, None)  # a plain file that stalls fails by itself (and can be tried again)
             continue
-        if now - STALL.setdefault(gid, now) < STALL_AFTER or not queued or moved:
-            continue  # one at a time, so the queue isn't shuffled
-        aria("aria2.forcePause", gid)
-        aria("aria2.changePosition", gid, 0, "POS_END")
-        aria("aria2.unpause", gid)
+        if now - STALL.setdefault(gid, now) < STALL_AFTER:
+            continue
         del STALL[gid]
-        moved.append(gid)
-        log("a torrent with no peers went to the back of the queue so the next one can start")
+        st = st or _gave_up()
+        h = d["infoHash"]
+        st["tries"][h] = st["tries"].get(h, 0) + 1
+        if st["tries"][h] > STALL_TRIES:
+            tor_give_up(gid, st)
+            moved.append(gid)
+        elif queued:
+            moved.append(gid)
+            aria("aria2.forcePause", gid)
+            aria("aria2.changePosition", gid, 0, "POS_END")
+            aria("aria2.unpause", gid)
+            log("no peers for 5 min (try %d of %d), to the back of the queue" % (st["tries"][h], STALL_TRIES + 1))
+    if st is not None:
+        _gave_up_save(st)
     return moved
 
 
@@ -1037,9 +1110,20 @@ class Handler(BaseHTTPRequestHandler):
                     gid = aria("aria2.addUri", [uri], opts)
                     log("torrent added: %s" % (b.get("name") or uri[:60]))
                     return self._send({"id": gid})
+                if u.path == "/tor/retry" and b.get("gaveup"):  # every "tried 3x" one back on the queue
+                    return self._send({"ok": sum(1 for h in list(_gave_up()["items"]) if tor_try_gave_up(h))})
+                if str(b.get("id") or "").startswith("gaveup:"):
+                    h = b["id"][len("gaveup:"):]
+                    if u.path == "/tor/retry":
+                        return self._send({"ok": int(bool(tor_try_gave_up(h)))})
+                    if u.path == "/tor/remove":
+                        st = _gave_up()
+                        n = int(st["items"].pop(h, None) is not None)
+                        _gave_up_save(st)
+                        return self._send({"ok": n})
                 if u.path == "/tor/retry":  # failed downloads again, from the part already on the phone
                     return self._send({"ok": tor_retry_all() if b.get("all") else int(bool(tor_retry(b.get("id"))))})
-                gids = [j["id"] for j in tor_jobs()] if b.get("all") else [b.get("id")]
+                gids = [j["id"] for j in tor_jobs() if j["state"] != "gaveup"] if b.get("all") else [b.get("id")]
                 method = {"/tor/pause": "aria2.forcePause", "/tor/resume": "aria2.unpause",
                           "/tor/remove": "aria2.forceRemove"}.get(u.path)
                 if not method:
