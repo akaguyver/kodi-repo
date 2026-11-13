@@ -2,6 +2,16 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 1.59 – Downloads you can sort, resume and retry
+- **1.59.0**
+  - **Downloads** has buttons for each kind: **Waiting for peers**, **Downloading**, **Queued**, **Paused**, **Failed** and **Done**, each with how many. "Waiting" was the queue: the phone runs two at a time, and a torrent with no peers kept its place forever. Now one with no peers for 5 minutes moves to the back, so the others get going.
+  - **Try again** on any failed download, and **Retry all failed**. Downloads that failed because the connection dropped are tried again by themselves, up to 3 times.
+  - **Real-Debrid on the Xbox** keeps what it has downloaded when the connection or the phone's share goes down, and carries on from there. Downloads cut off by Kodi closing come back when you next open Sortovia.
+  - A Real-Debrid download that finishes smaller than Real-Debrid said shows as **Failed**, so you can get it again.
+  - **Packed albums** (one archive with a whole album) sent to the phone are unpacked into their folder before sorting. .rar needs Kodi's Archive support add-on; the screen says so if it's missing.
+  - **Real-Debrid**: a whole album packed into one archive now says **packed: all N files** and downloads all of it, instead of showing as one song. When picking files, choose **Download all**, **Pick the ones I want** or **Pick the ones I don't want**, then one OK. Each torrent is checked right after sending, so a dead one is reported at once.
+  - On the phone, run **kodi-share stop**, then **kodi-share**, once to get the new helper.
+
 ## 1.58 – File-host links, and torrents on the phone or your own client
 - **1.58.5**
   - Moving music off the phone now offers **Also keep a copy in the phone's Music folder** for albums that came packed in an archive (.rar or .zip) too. Before, it only asked for plain files, so a packed album never asked. The Xbox unpacks the songs and sends them to Music/Artist/Album on the phone. On the phone, run **kodi-share stop**, then **kodi-share**, once to get this.

@@ -591,6 +591,9 @@ def aria_start():
         "--rpc-secret=" + password(), "--dir=" + TOR_WORK, "--seed-time=0", "--continue=true",
         "--max-concurrent-downloads=2", "--bt-save-metadata=false", "--follow-torrent=mem",
         "--input-file=" + TOR_SESSION, "--save-session=" + TOR_SESSION, "--save-session-interval=20",
+        # The hotspot / mobile data drops out now and then: keep trying for about ten minutes before a
+        # download counts as failed (the part on the phone is kept either way, for Try again).
+        "--max-tries=30", "--retry-wait=20", "--connect-timeout=30", "--timeout=60",
         "--force-save=false", "--quiet=true"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
     for _ in range(30):
         try:
@@ -652,7 +655,7 @@ def tor_publish(d):
 
 
 FIELDS = ["gid", "status", "totalLength", "completedLength", "downloadSpeed", "files", "bittorrent", "dir",
-          "errorMessage", "followedBy", "numSeeders", "connections"]
+          "errorMessage", "errorCode", "followedBy", "numSeeders", "connections", "infoHash"]
 
 
 def tor_jobs():
@@ -681,15 +684,139 @@ def tor_jobs():
     return out
 
 
+def retry_uri(d):
+    """The address to ask for a failed download again: a torrent's magnet link (from its hash, with the trackers
+    it knew), or a plain file's own address. "" when neither was kept."""
+    if d.get("infoHash"):
+        bt = d.get("bittorrent") or {}
+        uri = "magnet:?xt=urn:btih:" + d["infoHash"]
+        name = (bt.get("info") or {}).get("name")
+        if name:
+            uri += "&dn=" + urllib.parse.quote(name)
+        for tier in (bt.get("announceList") or [])[:20]:
+            for tr in tier[:1]:
+                uri += "&tr=" + urllib.parse.quote(tr, safe="")
+        return uri
+    for f in d.get("files") or []:
+        for u in f.get("uris") or []:
+            if u.get("uri"):
+                return u["uri"]
+    return ""
+
+
+def tor_retry(gid):
+    """Start a failed (or stopped) download again into the same folder, so it carries on from the part already
+    there. Returns the new download's id, or None when that one hasn't failed."""
+    d = aria("aria2.tellStatus", gid, FIELDS)
+    if d.get("status") not in ("error", "removed"):
+        return None
+    uri = retry_uri(d)
+    if not uri:
+        raise RuntimeError("its address wasn't kept - add it again")
+    opts = {"dir": d.get("dir") or TOR_WORK}
+    if not d.get("infoHash"):
+        try:
+            out = aria("aria2.getOption", gid).get("out")
+        except Exception:
+            out = ""
+        files = d.get("files") or []
+        out = out or (os.path.relpath(files[0]["path"], opts["dir"]) if files and files[0].get("path") else "")
+        if out and not out.startswith(".."):
+            opts["out"] = out
+    new = aria("aria2.addUri", [uri], opts)
+    try:
+        aria("aria2.removeDownloadResult", gid)
+    except Exception:
+        pass
+    log("trying again: %s" % _tor_name(d))
+    return new
+
+
+def tor_retry_all():
+    """Every failed download started again. Returns how many."""
+    n = 0
+    for d in aria("aria2.tellStopped", 0, 100, ["gid", "status", "followedBy"]):
+        if d.get("status") == "error" and not d.get("followedBy"):
+            try:
+                n += 1 if tor_retry(d["gid"]) else 0
+            except Exception as e:
+                log("couldn't try %s again: %s" % (d["gid"], e))
+    return n
+
+
+STALL = {}         # gid -> when a running torrent was first seen with nothing coming in
+STALL_AFTER = 300  # seconds with nothing coming in before it gives its place to a queued one
+
+
+def tor_rotate(now=None):
+    """aria2 runs two downloads at a time and the rest wait. A torrent nobody is sending to would hold its place
+    for good, with everything behind it stuck on "queued": after five minutes of nothing, and only when
+    something is queued behind it, it goes to the back of the queue. Returns the ids moved."""
+    now = time.time() if now is None else now
+    active = aria("aria2.tellActive", ["gid", "downloadSpeed", "infoHash"])
+    queued = [w for w in aria("aria2.tellWaiting", 0, 100, ["gid", "status"]) if w.get("status") == "waiting"]
+    moved = []
+    for gid in list(STALL):
+        if gid not in [d["gid"] for d in active]:
+            del STALL[gid]
+    for d in active:
+        gid = d["gid"]
+        if int(d.get("downloadSpeed") or 0) > 0 or not d.get("infoHash"):
+            STALL.pop(gid, None)  # a plain file that stalls fails by itself (and can be tried again)
+            continue
+        if now - STALL.setdefault(gid, now) < STALL_AFTER or not queued or moved:
+            continue  # one at a time, so the queue isn't shuffled
+        aria("aria2.forcePause", gid)
+        aria("aria2.changePosition", gid, 0, "POS_END")
+        aria("aria2.unpause", gid)
+        del STALL[gid]
+        moved.append(gid)
+        log("a torrent with no peers went to the back of the queue so the next one can start")
+    return moved
+
+
+NET_ERRORS = ("2", "6", "19")  # aria2's codes for: timed out, network problem, name not found
+AUTO = {"tries": {}, "last": 0.0}
+AUTO_EVERY = 300  # seconds between goes
+AUTO_TRIES = 3
+
+
+def tor_auto_retry(now=None):
+    """Downloads that failed because the connection went are tried again by themselves, every five minutes,
+    three times each; after that they stay Failed for the person to try again. Returns how many."""
+    now = time.time() if now is None else now
+    if now - AUTO["last"] < AUTO_EVERY:
+        return 0
+    n = 0
+    for d in aria("aria2.tellStopped", 0, 100, ["gid", "status", "errorCode", "followedBy"]):
+        gid = d["gid"]
+        tries = AUTO["tries"].get(gid, 0)
+        if d.get("status") != "error" or d.get("followedBy") or str(d.get("errorCode")) not in NET_ERRORS \
+                or tries >= AUTO_TRIES:
+            continue
+        AUTO["last"] = now
+        try:
+            new = tor_retry(gid)
+        except Exception:
+            new = None
+        AUTO["tries"].pop(gid, None)
+        if new:
+            AUTO["tries"][new] = tries + 1
+            n += 1
+    return n
+
+
 def tor_watch():
-    """Moves finished torrents into the share even when nobody is looking."""
+    """Moves finished torrents into the share even when nobody is looking, keeps the queue moving past
+    torrents with no peers, and tries again what failed when the connection dropped."""
     while True:
         time.sleep(15)
         if TOR["proc"] and TOR["proc"].poll() is None:
-            try:
-                tor_jobs()
-            except Exception:
-                pass
+            for job in (tor_jobs, tor_rotate, tor_auto_retry):
+                try:
+                    job()
+                except Exception:
+                    pass
 
 
 # ---------- copies into the phone's Music folder ----------
@@ -910,6 +1037,8 @@ class Handler(BaseHTTPRequestHandler):
                     gid = aria("aria2.addUri", [uri], opts)
                     log("torrent added: %s" % (b.get("name") or uri[:60]))
                     return self._send({"id": gid})
+                if u.path == "/tor/retry":  # failed downloads again, from the part already on the phone
+                    return self._send({"ok": tor_retry_all() if b.get("all") else int(bool(tor_retry(b.get("id"))))})
                 gids = [j["id"] for j in tor_jobs()] if b.get("all") else [b.get("id")]
                 method = {"/tor/pause": "aria2.forcePause", "/tor/resume": "aria2.unpause",
                           "/tor/remove": "aria2.forceRemove"}.get(u.path)
