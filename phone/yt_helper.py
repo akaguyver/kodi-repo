@@ -560,7 +560,7 @@ TOR_OUT = os.path.join(SHARE, "Torrents")  # (and Download/Real-Debrid for unloc
 TOR_SESSION = os.path.join(CONF, "aria2-session.txt")
 TOR_PORT = 6801
 TOR = {"proc": None, "moved": set()}
-TOR_AT_ONCE = 8  # downloads running together; one with no peers can't hold up the rest
+TOR_AT_ONCE = 12  # downloads running together; one with no peers can't hold up the rest
 # The steadiest free public trackers (ngosang/trackerslist "best", checked 2026-11-13), added to every torrent.
 TRACKERS = [
     "udp://tracker.opentrackr.org:1337/announce", "udp://open.stealth.si:80/announce",
@@ -600,6 +600,8 @@ def aria_start():
         exe, "--enable-rpc", "--rpc-listen-all=false", "--rpc-listen-port=%d" % TOR_PORT,
         "--rpc-secret=" + password(), "--dir=" + TOR_WORK, "--seed-time=0", "--continue=true",
         "--max-concurrent-downloads=%d" % TOR_AT_ONCE, "--bt-save-metadata=false", "--follow-torrent=mem",
+        # Space is used as the data arrives, not reserved up front: many downloads at once can't fill the phone.
+        "--file-allocation=none",
         # More places to find peers: public trackers on top of each torrent's own, DHT and the local network.
         "--bt-tracker=" + ",".join(TRACKERS), "--enable-dht=true", "--bt-enable-lpd=true", "--enable-peer-exchange=true",
         "--input-file=" + TOR_SESSION, "--save-session=" + TOR_SESSION, "--save-session-interval=20",
@@ -613,7 +615,7 @@ def aria_start():
             # An aria2 left running by an older helper holds the port, so the one above can't start and
             # the old settings (e.g. 2 at a time) would stay. Set them on whichever aria2 answered.
             aria("aria2.changeGlobalOption", {"max-concurrent-downloads": str(TOR_AT_ONCE),
-                                              "bt-tracker": ",".join(TRACKERS)})
+                                              "bt-tracker": ",".join(TRACKERS), "file-allocation": "none"})
             log("torrent downloads ready (aria2, %d at a time), saving into %s" % (TOR_AT_ONCE, TOR_OUT))
             return True
         except Exception:
@@ -1112,7 +1114,10 @@ class Handler(BaseHTTPRequestHandler):
                     opts = {"dir": os.path.join(TOR_WORK, kind, sub) if sub else os.path.join(TOR_WORK, kind)}
                     if b.get("out"):
                         opts["out"] = re.sub(r'[\\/:*?"<>|]+', " ", b["out"]).strip()
-                    gid = aria("aria2.addUri", [uri], opts)
+                    if kind == "Real-Debrid":  # a plain file from a server: never waits behind torrents with no peers
+                        gid = aria("aria2.addUri", [uri], opts, 0)  # front of the queue
+                    else:
+                        gid = aria("aria2.addUri", [uri], opts)
                     log("torrent added: %s" % (b.get("name") or uri[:60]))
                     return self._send({"id": gid})
                 if u.path == "/tor/retry" and b.get("gaveup"):  # every "tried 3x" one back on the queue

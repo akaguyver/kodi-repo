@@ -3,6 +3,10 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.64 – Finished downloads go to the Xbox even with Sortovia closed
+- **1.64.2**
+  - The phone no longer reserves a download's full size before it arrives, so many downloads at once can't fill the phone. It now runs 12 at a time.
+  - Real-Debrid files go to the front of the phone's queue, so they don't wait behind torrents that have no peers.
+  - Needs the phone helper updated: in Termux, kodi-share stop, then kodi-share.
 - **1.64.1**
   - A torrent Real-Debrid has been fetching for 30 minutes with no progress is taken off Real-Debrid and downloaded as a torrent instead (BiglyBT or the phone), so it can't sit at "Real-Debrid is fetching it" for ever.
   - Real-Debrid downloads going to the phone no longer wait behind one downloading on the Xbox: the phone runs several at once. The waiting line shows a download that's moving rather than a stuck one.
