@@ -3,6 +3,9 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.65 – A downloads screen with buttons, and moving one download at a time
+- **1.65.3**
+  - Fixed: Kodi closed while unpacking a .rar. The archive was saved on the Xbox under a garbled name ("%20" for spaces), so Kodi couldn't open it, and then Kodi crashed on a second, older way of opening it. The name is right now, and the older way isn't tried any more.
+  - If Kodi ever closes while opening an archive, that archive is skipped from then on and left on the phone to unpack there, so one bad file can't keep crashing Kodi.
 - **1.65.2**
   - Each step with an archive (copying it to the Xbox, opening it) is written to the log first, so if Kodi closes while unpacking, the log shows which archive and which step.
 - **1.65.1**
