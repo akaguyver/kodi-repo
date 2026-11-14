@@ -3,6 +3,8 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.64 – Finished downloads go to the Xbox even with Sortovia closed
+- **1.64.3**
+  - Every picture in an album's folder now moves with the music, whatever it's called (before, only cover/folder/front/album.jpg did, so pictures like "cover (1).jpg" were left behind). When an album has no cover.jpg, its main picture becomes cover.jpg, so Kodi shows it as the album art.
 - **1.64.2**
   - The phone no longer reserves a download's full size before it arrives, so many downloads at once can't fill the phone. It now runs 12 at a time.
   - Real-Debrid files go to the front of the phone's queue, so they don't wait behind torrents that have no peers.
