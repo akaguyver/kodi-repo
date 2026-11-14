@@ -3,6 +3,8 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.65 – A downloads screen with buttons, and moving one download at a time
+- **1.65.2**
+  - Each step with an archive (copying it to the Xbox, opening it) is written to the log first, so if Kodi closes while unpacking, the log shows which archive and which step.
 - **1.65.1**
   - Copying an archive from the phone shows its progress in a corner (MB copied of the total), so a slow copy no longer looks like Kodi froze. It copies in chunks, which can't hang at the end of a file the way Kodi's own copy can on the Xbox.
   - The phone never fills up with downloads: below 5 GB free, the phone pauses its torrent and Real-Debrid downloads and holds new YouTube ones, and carries on once there's 7 GB free. Downloads says so at the top. Needs the phone helper updated: in Termux, kodi-share stop, then kodi-share.
