@@ -2,6 +2,11 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 1.64 – Finished downloads go to the Xbox even with Sortovia closed
+- **1.64.0**
+  - Moving finished downloads to the Xbox now runs as a Kodi background service: it starts with Kodi and keeps going while you watch something, with no need to open Sortovia. It looks at the phone every ten minutes, and every two minutes while something is downloading. If the phone isn't around, it waits and looks again later.
+  - The switch is still **Downloads > Move finished downloads to the Xbox by themselves**.
+
 ## 1.63 – Finished downloads go to the Xbox by themselves
 - **1.63.0**
   - While Sortovia is open, the Xbox looks at the phone every two minutes. When a torrent or a Real-Debrid download has finished, it's sorted onto the Xbox with the settings of your last sort, in the background. A Real-Debrid album waits until all of its files are there. Anything already in your library is kept, never replaced. Each download is tried once, so something the sort leaves behind isn't tried over and over.

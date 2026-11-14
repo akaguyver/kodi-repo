@@ -14,13 +14,14 @@
     <platform>all</platform>
   </extension>
 </addon>
-<addon id="script.kodisorter" name="Sortovia" version="1.63.0" provider-name="akaguyver">
+<addon id="script.kodisorter" name="Sortovia" version="1.64.0" provider-name="akaguyver">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
   </requires>
   <extension point="xbmc.python.pluginsource" library="default.py">
     <provides>executable</provides>
   </extension>
+  <extension point="xbmc.service" library="service.py" start="login"/>
   <extension point="kodi.context.item">
     <menu id="kodi.core.main">
       <item library="context.py">
