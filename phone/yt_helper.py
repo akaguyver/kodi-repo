@@ -610,7 +610,11 @@ def aria_start():
     for _ in range(30):
         try:
             aria("aria2.getVersion")
-            log("torrent downloads ready (aria2), saving into %s" % TOR_OUT)
+            # An aria2 left running by an older helper holds the port, so the one above can't start and
+            # the old settings (e.g. 2 at a time) would stay. Set them on whichever aria2 answered.
+            aria("aria2.changeGlobalOption", {"max-concurrent-downloads": str(TOR_AT_ONCE),
+                                              "bt-tracker": ",".join(TRACKERS)})
+            log("torrent downloads ready (aria2, %d at a time), saving into %s" % (TOR_AT_ONCE, TOR_OUT))
             return True
         except Exception:
             time.sleep(0.3)
@@ -692,9 +696,10 @@ def tor_jobs():
                     "pct": round(100.0 * done / total, 1) if total else 0.0, "speed": speed,
                     "eta": int((total - done) / speed) if speed and total else 0,
                     "seeds": int(d.get("numSeeders") or 0), "peers": int(d.get("connections") or 0),
-                    "error": d.get("errorMessage") or ""})
+                    "error": d.get("errorMessage") or "", "uri": retry_uri(d) if d.get("infoHash") else ""})
     for h, item in _gave_up()["items"].items():
         out.append({"id": "gaveup:" + h, "name": item["name"], "kind": "Torrents", "state": "gaveup", "size": 0,
+                    "uri": item.get("uri") or "",
                     "pct": 0.0, "speed": 0, "eta": 0, "seeds": 0, "peers": 0, "when": item.get("when", 0),
                     "error": "no peers after %d tries" % (STALL_TRIES + 1)})
     return out

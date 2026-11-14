@@ -2,6 +2,14 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 1.61 – Real-Debrid for the queue, BiglyBT, several torrents at once
+- **1.61.0**
+  - **Downloads** has **Real-Debrid takes the ones it already has**: it checks the torrents waiting on the phone, and the ones Real-Debrid already has download from Real-Debrid instead. The rest stay on the phone's queue.
+  - **Real-Debrid > My torrents**: tick several and they all download at once, each in its own folder. Ones Real-Debrid hasn't finished download by themselves when they're ready.
+  - Sending search results now offers **Real-Debrid first, and what it can't get goes to** each torrent client you added, such as BiglyBT.
+  - **Torrent clients > Test a torrent client**: says whether it answers, and why not (for BiglyBT: turn on remote access, port 9091). A new client is tested as soon as you add it, and you can fix its address or password there.
+  - The phone now really downloads 8 at a time: an aria2 left running by the older helper is switched over too, along with the public trackers.
+
 ## 1.60 – The phone's download queue keeps moving
 - **1.60.0**
   - The phone downloads **8 at a time** instead of 2, so one slow torrent can't hold up the queue.
