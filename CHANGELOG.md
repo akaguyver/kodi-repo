@@ -3,6 +3,9 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.65 – A downloads screen with buttons, and moving one download at a time
+- **1.65.1**
+  - Copying an archive from the phone shows its progress in a corner (MB copied of the total), so a slow copy no longer looks like Kodi froze. It copies in chunks, which can't hang at the end of a file the way Kodi's own copy can on the Xbox.
+  - The phone never fills up with downloads: below 5 GB free, the phone pauses its torrent and Real-Debrid downloads and holds new YouTube ones, and carries on once there's 7 GB free. Downloads says so at the top. Needs the phone helper updated: in Termux, kodi-share stop, then kodi-share.
 - **1.65.0**
   - Fixed: Kodi closed while unpacking a .rar from the phone. Kodi's archive reader can't read one straight off the phone, so each archive is now copied to the Xbox first and unpacked there.
   - Packed albums are unpacked one at a time on the Xbox, not all at once on the phone, so the phone no longer runs out of space. Once every file is out and checked, the archive is deleted from the phone; the songs leave the phone when they're in your library.

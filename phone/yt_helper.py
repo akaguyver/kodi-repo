@@ -469,6 +469,13 @@ def worker():
             WAKE.wait(30)
             WAKE.clear()
             continue
+        if space_low():  # wait for room: the phone is nearly full
+            with LOCK:
+                job["state"] = "queued"
+                job["error"] = "waiting - phone storage is nearly full"
+                save_jobs()
+            time.sleep(60)
+            continue
         try:
             run_job(job)
         except Exception as e:
@@ -888,13 +895,69 @@ def tor_auto_retry(now=None):
     return n
 
 
+# ---------- never fill the phone ----------
+GB = 1024 ** 3
+SPACE = {"paused": [], "low": False}  # downloads this paused for space (resumed when there's room again)
+
+
+def free_bytes():
+    try:
+        return shutil.disk_usage(SHARE).free
+    except OSError:
+        return -1
+
+
+def min_free():
+    """Free space to keep on the phone, in bytes: settings "min_free_gb" (default 5)."""
+    try:
+        return float(settings().get("min_free_gb", 5)) * GB
+    except (TypeError, ValueError):
+        return 5 * GB
+
+
+def space_low():
+    free = free_bytes()
+    return 0 <= free < min_free()
+
+
+def space_guard(free=None, call=None):
+    """Below the minimum: pause every running torrent and Real-Debrid download (the ones it paused are
+    remembered). With 2 GB more than the minimum free again, it carries those on. Paused-by-hand ones stay."""
+    call = call or aria
+    free = free_bytes() if free is None else free
+    if free < 0:
+        return
+    if free < min_free() or (SPACE["low"] and free < min_free() + 2 * GB):
+        busy = call("aria2.tellActive", ["gid"]) + call("aria2.tellWaiting", 0, 1000, ["gid", "status"])
+        gids = [d["gid"] for d in busy if d.get("status", "active") in ("active", "waiting")]
+        for g in gids:  # any that started meanwhile too
+            try:
+                call("aria2.forcePause", g)
+            except Exception:
+                pass
+        SPACE["paused"] += [g for g in gids if g not in SPACE["paused"]]
+        if gids or not SPACE["low"]:
+            log("phone storage low (%.1f GB free): paused %d download(s)" % (free / GB, len(gids)))
+        SPACE["low"] = True
+    elif SPACE["low"] and free >= min_free() + 2 * GB:
+        SPACE["low"] = False
+        for g in SPACE["paused"]:
+            try:
+                call("aria2.unpause", g)
+            except Exception:
+                pass
+        log("phone storage OK again (%.1f GB free): carried on with %d download(s)" % (free / GB, len(SPACE["paused"])))
+        SPACE["paused"] = []
+
+
 def tor_watch():
     """Moves finished torrents into the share even when nobody is looking, keeps the queue moving past
-    torrents with no peers, and tries again what failed when the connection dropped."""
+    torrents with no peers, tries again what failed when the connection dropped, and pauses everything
+    before the phone fills up."""
     while True:
         time.sleep(15)
         if TOR["proc"] and TOR["proc"].poll() is None:
-            for job in (tor_jobs, tor_rotate, tor_auto_retry):
+            for job in (tor_jobs, space_guard, tor_rotate, tor_auto_retry):
                 try:
                     job()
                 except Exception:
@@ -1025,7 +1088,8 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(dict(META_STATE, meta=META))
         if u.path == "/tor/jobs":
             try:
-                return self._send({"installed": bool(tool("aria2c")), "jobs": tor_jobs(), "folder": TOR_OUT})
+                return self._send({"installed": bool(tool("aria2c")), "jobs": tor_jobs(), "folder": TOR_OUT,
+                                   "space": {"free": free_bytes(), "min": min_free(), "low": SPACE["low"] or space_low()}})
             except Exception as e:
                 return self._send({"installed": bool(tool("aria2c")), "jobs": [], "error": str(e)})
         self._send({"error": "not found"}, 404)
