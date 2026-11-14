@@ -3,6 +3,8 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.61 – Real-Debrid for the queue, BiglyBT, several torrents at once
+- **1.61.1**
+  - A torrent client on the phone (such as BiglyBT) can have **phone** as its address, e.g. http://phone:9093/transmission/rpc. Sortovia fills in the phone's address each time, so it keeps working when the hotspot's address changes.
 - **1.61.0**
   - **Downloads** has **Real-Debrid takes the ones it already has**: it checks the torrents waiting on the phone, and the ones Real-Debrid already has download from Real-Debrid instead. The rest stay on the phone's queue.
   - **Real-Debrid > My torrents**: tick several and they all download at once, each in its own folder. Ones Real-Debrid hasn't finished download by themselves when they're ready.
