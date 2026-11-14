@@ -3,6 +3,11 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.64 – Finished downloads go to the Xbox even with Sortovia closed
+- **1.64.1**
+  - A torrent Real-Debrid has been fetching for 30 minutes with no progress is taken off Real-Debrid and downloaded as a torrent instead (BiglyBT or the phone), so it can't sit at "Real-Debrid is fetching it" for ever.
+  - Real-Debrid downloads going to the phone no longer wait behind one downloading on the Xbox: the phone runs several at once. The waiting line shows a download that's moving rather than a stuck one.
+  - Fixed: moving finished downloads to the Xbox by themselves couldn't find the phone (it looked for it by a placeholder name), so nothing was moved.
+  - Fixed: Sortovia stopped with an error when a torrent client's address pointed at something that isn't its web remote (for example BiglyBT's torrent port). It now says to check the port.
 - **1.64.0**
   - Moving finished downloads to the Xbox now runs as a Kodi background service: it starts with Kodi and keeps going while you watch something, with no need to open Sortovia. It looks at the phone every ten minutes, and every two minutes while something is downloading. If the phone isn't around, it waits and looks again later.
   - The switch is still **Downloads > Move finished downloads to the Xbox by themselves**.
