@@ -2,6 +2,12 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 1.62 – Torrents through BiglyBT on the phone
+- **1.62.0**
+  - With BiglyBT on the phone added as a torrent client (address http://phone:<its port>/transmission/rpc), it takes over the phone's torrents: **The phone** in every torrent choice, and Real-Debrid's fallback, now mean BiglyBT. Termux's own downloader keeps the Real-Debrid files. That way your VPN's split tunnelling can cover BiglyBT alone.
+  - **Downloads** lists BiglyBT's torrents with the rest, in the same groups, with Pause, Carry on and Remove. **Pause all** and **Real-Debrid takes the ones it already has** include them.
+  - A torrent BiglyBT has finished is moved from Download/BiglyBT into Download/Torrents and taken off BiglyBT, so **Sort the finished downloads** picks it up. A half-done one is never sorted.
+
 ## 1.61 – Real-Debrid for the queue, BiglyBT, several torrents at once
 - **1.61.1**
   - A torrent client on the phone (such as BiglyBT) can have **phone** as its address, e.g. http://phone:9093/transmission/rpc. Sortovia fills in the phone's address each time, so it keeps working when the hotspot's address changes.
