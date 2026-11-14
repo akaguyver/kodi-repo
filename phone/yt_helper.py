@@ -249,6 +249,8 @@ def sort_results(res, order):
 
 def search(q, n, order="best"):
     if not re.match(r"https?://", q):
+        if n > 20:  # "Show more results": past YouTube's first page, which is all the quick search gives
+            return sort_results(ytdlp_search(q, n), order)
         try:
             res = api_search(q, order)
             if res:

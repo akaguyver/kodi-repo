@@ -2,6 +2,16 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 1.65 – A downloads screen with buttons, and moving one download at a time
+- **1.65.0**
+  - Fixed: Kodi closed while unpacking a .rar from the phone. Kodi's archive reader can't read one straight off the phone, so each archive is now copied to the Xbox first and unpacked there.
+  - Packed albums are unpacked one at a time on the Xbox, not all at once on the phone, so the phone no longer runs out of space. Once every file is out and checked, the archive is deleted from the phone; the songs leave the phone when they're in your library.
+  - Downloads is a new screen. The filter buttons (All, Waiting, Downloading, Queued, Done ...) sit right above the list, downloading ones are at the top of the list, and Pause, Move to the Xbox, Clear finished and Refresh are buttons along the bottom.
+  - Move just one finished download: select it in Downloads and pick "Move just this to the Xbox". Or use Move to the Xbox > Pick which ones and tick several.
+  - My Real-Debrid torrents shows where each one is: downloading or queued on the phone or the Xbox, on the phone and not moved yet, or in your library.
+  - YouTube search has "Show more results" at the end of the list, and videos you've already downloaded say so. Torrent search results you've already downloaded say so too.
+  - "Show more results" needs the phone helper updated: in Termux, kodi-share stop, then kodi-share.
+
 ## 1.64 – Finished downloads go to the Xbox even with Sortovia closed
 - **1.64.4**
   - Album art an earlier sort left behind on the phone now goes to its album in your library: Sortovia reads the folder's "Artist - Album" name and finds the album (as cover.jpg, unless the album already has a cover). The emptied folder is then removed from the phone.
