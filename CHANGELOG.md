@@ -3,6 +3,10 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.65 – A downloads screen with buttons, and moving one download at a time
+- **1.65.4**
+  - Fixed: Downloads showed its buttons as rows in one long list. Kodi refused to build the screen, so the plain list was shown instead. Now the filters sit above the list and the buttons along the top and bottom, as intended.
+  - Downloads has separate Pause all and Resume all buttons, and Pick several: tick any downloads, then carry them on (a failed one is tried again), pause them or remove them.
+  - YouTube's Downloads is the same kind of screen, with the same buttons.
 - **1.65.3**
   - Fixed: Kodi closed while unpacking a .rar. The archive was saved on the Xbox under a garbled name ("%20" for spaces), so Kodi couldn't open it, and then Kodi crashed on a second, older way of opening it. The name is right now, and the older way isn't tried any more.
   - If Kodi ever closes while opening an archive, that archive is skipped from then on and left on the phone to unpack there, so one bad file can't keep crashing Kodi.
