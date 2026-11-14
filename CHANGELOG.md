@@ -2,6 +2,11 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 1.63 – Finished downloads go to the Xbox by themselves
+- **1.63.0**
+  - While Sortovia is open, the Xbox looks at the phone every two minutes. When a torrent or a Real-Debrid download has finished, it's sorted onto the Xbox with the settings of your last sort, in the background. A Real-Debrid album waits until all of its files are there. Anything already in your library is kept, never replaced. Each download is tried once, so something the sort leaves behind isn't tried over and over.
+  - Turn it off or on in **Downloads > Move finished downloads to the Xbox by themselves**.
+
 ## 1.62 – Torrents through BiglyBT on the phone
 - **1.62.0**
   - With BiglyBT on the phone added as a torrent client (address http://phone:<its port>/transmission/rpc), it takes over the phone's torrents: **The phone** in every torrent choice, and Real-Debrid's fallback, now mean BiglyBT. Termux's own downloader keeps the Real-Debrid files. That way your VPN's split tunnelling can cover BiglyBT alone.
