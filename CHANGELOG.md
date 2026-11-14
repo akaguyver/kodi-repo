@@ -3,6 +3,9 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.64 – Finished downloads go to the Xbox even with Sortovia closed
+- **1.64.4**
+  - Album art an earlier sort left behind on the phone now goes to its album in your library: Sortovia reads the folder's "Artist - Album" name and finds the album (as cover.jpg, unless the album already has a cover). The emptied folder is then removed from the phone.
+  - Moving finished downloads to the Xbox by themselves looks at everything in Download/Torrents and Download/Real-Debrid once more, so those leftovers are picked up without you doing anything.
 - **1.64.3**
   - Every picture in an album's folder now moves with the music, whatever it's called (before, only cover/folder/front/album.jpg did, so pictures like "cover (1).jpg" were left behind). When an album has no cover.jpg, its main picture becomes cover.jpg, so Kodi shows it as the album art.
 - **1.64.2**
