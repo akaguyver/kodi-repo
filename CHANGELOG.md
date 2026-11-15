@@ -3,6 +3,10 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.65 – A downloads screen with buttons, and moving one download at a time
+- **1.65.5**
+  - Downloads: a finished download now has DOWNLOADED in front of its name, and says whether it has been moved to your library yet. A download that is running always shows its percentage.
+  - "Failed - tried 3x" says when it was last tried and how many times it has been put aside (it counts from now on; older ones show once). This needs the phone's helper updated: in Termux, kodi-share stop, then kodi-share.
+  - "Move to the Xbox" is now "Move to G:/" (your library's folder), and Auto move names the folder the same way. "Real-Debrid takes what it has" is now "Get stuck torrents from Real-Debrid": it asks Real-Debrid which waiting torrents it already has, and downloads those from Real-Debrid instead.
 - **1.65.4**
   - Fixed: Downloads showed its buttons as rows in one long list. Kodi refused to build the screen, so the plain list was shown instead. Now the filters sit above the list and the buttons along the top and bottom, as intended.
   - Downloads has separate Pause all and Resume all buttons, and Pick several: tick any downloads, then carry them on (a failed one is tried again), pause them or remove them.

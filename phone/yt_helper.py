@@ -708,10 +708,12 @@ def tor_jobs():
                     "eta": int((total - done) / speed) if speed and total else 0,
                     "seeds": int(d.get("numSeeders") or 0), "peers": int(d.get("connections") or 0),
                     "error": d.get("errorMessage") or "", "uri": retry_uri(d) if d.get("infoHash") else ""})
-    for h, item in _gave_up()["items"].items():
+    put_aside = _gave_up()
+    for h, item in put_aside["items"].items():
         out.append({"id": "gaveup:" + h, "name": item["name"], "kind": "Torrents", "state": "gaveup", "size": 0,
                     "uri": item.get("uri") or "",
                     "pct": 0.0, "speed": 0, "eta": 0, "seeds": 0, "peers": 0, "when": item.get("when", 0),
+                    "times": put_aside["times"].get(h, 1),
                     "error": "no peers after %d tries" % (STALL_TRIES + 1)})
     return out
 
@@ -786,9 +788,9 @@ def _gave_up():
     try:
         with open(GAVE_UP) as f:
             st = json.load(f)
-        return {"tries": st.get("tries") or {}, "items": st.get("items") or {}}
+        return {"tries": st.get("tries") or {}, "items": st.get("items") or {}, "times": st.get("times") or {}}
     except (OSError, ValueError):
-        return {"tries": {}, "items": {}}
+        return {"tries": {}, "items": {}, "times": {}}
 
 
 def _gave_up_save(st):
@@ -803,6 +805,7 @@ def tor_give_up(gid, st):
     d = aria("aria2.tellStatus", gid, FIELDS)
     h = d["infoHash"]
     st["items"][h] = {"name": _tor_name(d), "uri": retry_uri(d), "dir": d.get("dir") or TOR_WORK, "when": int(time.time())}
+    st.setdefault("times", {})[h] = st["times"].get(h, 0) + 1  # how often it has been put aside, kept when tried again
     st["tries"].pop(h, None)
     aria("aria2.forceRemove", gid)
     for _ in range(10):  # off the list too, so it shows only under "tried 3x"
