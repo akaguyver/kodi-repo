@@ -3,6 +3,9 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.67 – A new Home: what you use most is one click away
+- **1.67.3**
+  - Episodes named with a show's short name, like "IASIP S14E07", go into the show's own folder (It's Always Sunny in Philadelphia), not a new "IASIP" folder. The full name comes from the download's folder, or from a show in your library whose words start with those letters.
+  - Episodes that already went to a short-name folder (TV/IASIP) are moved into the show's folder once, by Auto move.
 - **1.67.2**
   - Unfinished downloads are no longer copied to the Xbox. BiglyBT makes each file at its full size before downloading it, so a half-done episode looked finished. Sortovia now looks inside every video before copying it; one with empty parts stays on the phone until it's done.
   - An episode that finishes in a season still downloading is marked "Do not download" first and moved a couple of minutes later, after BiglyBT has written all of it.
