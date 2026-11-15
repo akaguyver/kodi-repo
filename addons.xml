@@ -14,7 +14,7 @@
     <platform>all</platform>
   </extension>
 </addon>
-<addon id="script.kodisorter" name="Sortovia" version="1.65.5" provider-name="akaguyver">
+<addon id="script.kodisorter" name="Sortovia" version="1.66.0" provider-name="akaguyver">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
   </requires>
@@ -35,6 +35,10 @@
       <item library="context_youtube.py">
         <label>32093</label>
         <visible>!ListItem.IsFolder + [String.Contains(ListItem.Path,Tutorials) | String.Contains(ListItem.Path,DJing) | String.Contains(ListItem.Path,YouTube)]</visible>
+      </item>
+      <item library="context_audio.py">
+        <label>32094</label>
+        <visible>!ListItem.IsFolder + [String.IsEqual(ListItem.FileExtension,mp4) | String.IsEqual(ListItem.FileExtension,mkv) | String.IsEqual(ListItem.FileExtension,webm) | String.IsEqual(ListItem.FileExtension,m4v) | String.IsEqual(ListItem.FileExtension,mov)]</visible>
       </item>
       <item library="context_mix.py">
         <label>32091</label>

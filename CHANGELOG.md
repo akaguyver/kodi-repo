@@ -2,6 +2,14 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 1.66 – Save the sound of a video, and YouTube downloads move by themselves
+- **1.66.0**
+  - Hold down a video (MP4, MKV, WebM, M4V, MOV) and choose "Save the sound (Sortovia)". The sound is copied out exactly as it is, so nothing is lost and the file is no bigger than the sound already in the video: AAC becomes an .m4a, MP3 an .mp3 and FLAC a .flac. Before saving you can fill in the artist, title, album artist, album and genre (guessed from the video's name), and choose the folder. Sound that would have to be converted (Opus, which most WebM videos use, or AC-3 and DTS) needs the Sortovia phone app, and Sortovia says so.
+  - Auto move now also moves finished YouTube downloads from the phone, to the same place YouTube's Sort uses. Videos that don't look like lessons or music stay on the phone until you sort them by hand.
+  - Auto move waits until a download has really finished: nothing empty, nothing still growing, and nothing BiglyBT is still downloading. Before, a torrent BiglyBT was downloading straight into Download/Torrents could be moved as a pile of empty files. A folder is moved once everything new in it is finished. Something that stays empty for half an hour is left on the phone.
+  - A season BiglyBT is still downloading: each episode that has finished is marked "Do not download" in BiglyBT and moved to the Xbox straight away, while the rest carries on. When the season finishes, what's left of those episodes isn't moved twice.
+  - A TV show with no episodes in your library (Kodi matched a folder's name to a show, but nothing in it was an episode) is now taken out by itself when Kodi starts, like the other shows that aren't real. The log names the folder it came from.
+
 ## 1.65 – A downloads screen with buttons, and moving one download at a time
 - **1.65.5**
   - Downloads: a finished download now has DOWNLOADED in front of its name, and says whether it has been moved to your library yet. A download that is running always shows its percentage.
