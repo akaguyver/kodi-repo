@@ -3,6 +3,13 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.67 – A new Home: what you use most is one click away
+- **1.67.6**
+  - Downloads: full file names, with a short status after each (Downloading 42%, Queued, Failed, Downloaded, Waiting for peers). The highlighted row is dark with a bright edge, so its text can be read.
+  - Downloads: from the list, Right jumps to the buttons along the bottom and Left to the filters, without scrolling the whole list.
+  - Drive names read "D:\\": "Move to D:\\", and "Auto move to D:\\ (Xbox): on".
+  - After Auto move, Kodi scans only the shows, movies and albums that got something new, not the whole library (which also went through every movie).
+  - Selecting "Real-Debrid fetching ..." on Home no longer stops anything. It lists everything Real-Debrid is fetching and what's downloading from it; pick one for its progress, seeders, speed, time left and when it was added.
+  - My Real-Debrid torrents: choose what to show (everything, not downloaded yet, not in the library yet, only 100% ready, only not ready), and each row says where it is (in your library, on the phone, not downloaded).
 - **1.67.5**
   - Kodi no longer scans the whole library after every single episode Auto move brings over. That kept Kodi scanning (and showing its busy wheel) nearly all the time. Auto move now updates the library once, when downloads have gone quiet for a couple of minutes, and never while a scan is already running. Sorts you start yourself still update the library straight away.
 - **1.67.4**
