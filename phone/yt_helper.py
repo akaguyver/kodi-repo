@@ -568,7 +568,7 @@ TOR_WORK = os.path.expanduser("~/.cache/xbox-share/torrents")  # half-done downl
 TOR_OUT = os.path.join(SHARE, "Torrents")  # (and Download/Real-Debrid for unlocked links)
 TOR_SESSION = os.path.join(CONF, "aria2-session.txt")
 TOR_PORT = 6801
-TOR = {"proc": None, "moved": set()}
+TOR = {"proc": None, "moved": set(), "later": {}}
 TOR_AT_ONCE = 12  # downloads running together; one with no peers can't hold up the rest
 # The steadiest free public trackers (ngosang/trackerslist "best", checked 2026-11-13), added to every torrent.
 TRACKERS = [
@@ -651,8 +651,34 @@ def _tor_rel(d):
     return rel if rel[0] in KINDS and len(rel) > 1 else ["Torrents"] + rel
 
 
+KEEP_FREE = 512 * 1024 * 1024  # a move into the share never leaves the phone with less than this
+
+
+def _free():
+    st = os.statvfs(SHARE)
+    return st.f_bavail * st.f_frsize
+
+
+def _move_file(a, b):
+    """One file into the share: checked for room first, and a half-made copy is deleted if it fails (a full
+    phone), so it never takes space twice. The source is deleted only once the copy is whole."""
+    size = os.path.getsize(a)
+    if _free() < size + KEEP_FREE:
+        raise OSError("the phone is too full to move %s (%d MB) - it moves when there's room" %
+                      (os.path.basename(a), size // 1048576))
+    os.makedirs(os.path.dirname(b), exist_ok=True)
+    try:
+        shutil.move(a, b)
+    except OSError:
+        if os.path.exists(a) and os.path.exists(b):
+            os.remove(b)
+        raise
+
+
 def _into_share(src, final):
-    """Move src to final through a hidden name, so Sortovia never sees half of it. Returns the name used."""
+    """Move src to final through a hidden name, so Sortovia never sees half of it. Returns the name used.
+    A folder goes one file at a time (only one file's worth of extra room needed); if it stops part way (a full
+    phone), the next try carries on into the same hidden folder."""
     base, n = final, 2
     stem, ext = os.path.splitext(base)
     while os.path.exists(final):
@@ -660,9 +686,48 @@ def _into_share(src, final):
         n += 1
     os.makedirs(os.path.dirname(final), exist_ok=True)
     hidden = os.path.join(os.path.dirname(final), "." + os.path.basename(final) + ".part")
-    shutil.move(src, hidden)
+    if os.path.isdir(src):
+        for root, dirs, files in os.walk(src):
+            for f in files:
+                a = os.path.join(root, f)
+                b = os.path.join(hidden, os.path.relpath(a, src))
+                if os.path.exists(b) and os.path.getsize(b) == os.path.getsize(a):
+                    os.remove(a)  # already copied on an earlier try
+                    continue
+                _move_file(a, b)
+        os.makedirs(hidden, exist_ok=True)
+        shutil.rmtree(src, ignore_errors=True)
+    else:
+        if os.path.isdir(hidden):  # what an older helper left of a failed move
+            shutil.rmtree(hidden, ignore_errors=True)
+        _move_file(src, hidden)
     os.replace(hidden, final)
     return final
+
+
+def tor_drop_part(gid):
+    """Delete what an unfinished download has on the phone (inside the work folder only). A finished one is
+    already in Download and stays."""
+    try:
+        d = aria("aria2.tellStatus", gid, ["status", "files", "dir"])
+    except Exception:
+        return
+    if d.get("status") == "complete":
+        return
+    root = os.path.realpath(TOR_WORK)
+    for f in d.get("files") or []:
+        p = os.path.realpath(f.get("path") or "")
+        if not p.startswith(root + os.sep):
+            continue
+        for q in (p, p + ".aria2"):
+            if os.path.isfile(q):
+                os.remove(q)
+        rel = os.path.relpath(p, root).split(os.sep)  # Torrents/<torrent folder>/...: the folder's control file too
+        if len(rel) > 2:
+            top = os.path.join(root, rel[0], rel[1])
+            if os.path.isfile(top + ".aria2"):
+                os.remove(top + ".aria2")
+    log("removed the part downloaded of %s" % gid)
 
 
 def tor_publish(d):
@@ -696,12 +761,14 @@ def tor_jobs():
         total, done = int(d.get("totalLength") or 0), int(d.get("completedLength") or 0)
         speed = int(d.get("downloadSpeed") or 0)
         state = d["status"]
-        if state == "complete" and d["gid"] not in TOR["moved"]:
+        if state == "complete" and d["gid"] not in TOR["moved"] and time.time() >= TOR["later"].get(d["gid"], 0):
             TOR["moved"].add(d["gid"])
             try:
                 tor_publish(d)
-            except OSError as e:
-                log("couldn't move a finished torrent into Download/Torrents: %s" % e)
+            except OSError as e:  # e.g. a full phone: tried again in 5 minutes, carrying on where it stopped
+                log("couldn't move a finished download into Download: %s" % e)
+                TOR["moved"].discard(d["gid"])
+                TOR["later"][d["gid"]] = time.time() + 300
         rel = _tor_rel(d)
         out.append({"id": d["gid"], "name": _tor_name(d), "kind": rel[0] if rel else "Torrents", "state": state, "size": total,
                     "pct": round(100.0 * done / total, 1) if total else 0.0, "speed": speed,
@@ -1183,6 +1250,11 @@ class Handler(BaseHTTPRequestHandler):
                     opts = {"dir": os.path.join(TOR_WORK, kind, sub) if sub else os.path.join(TOR_WORK, kind)}
                     if b.get("out"):
                         opts["out"] = re.sub(r'[\\/:*?"<>|]+', " ", b["out"]).strip()
+                    want = (opts.get("out") or b.get("name") or "").lower()
+                    if kind == "Real-Debrid" and want:  # already queued under that name: not a second copy
+                        for d in aria("aria2.tellActive", ["gid", "files"]) + aria("aria2.tellWaiting", 0, 1000, ["gid", "files"]):
+                            if os.path.basename((d.get("files") or [{}])[0].get("path") or "").lower() == want:
+                                return self._send({"id": d["gid"], "already": True})
                     if kind == "Real-Debrid":  # a plain file from a server: never waits behind torrents with no peers
                         gid = aria("aria2.addUri", [uri], opts, 0)  # front of the queue
                     else:
@@ -1208,6 +1280,9 @@ class Handler(BaseHTTPRequestHandler):
                 if not method:
                     return self._send({"error": "not found"}, 404)
                 done = 0
+                if u.path == "/tor/remove":  # an unfinished one's part goes too: it would take space for ever
+                    for g in gids:
+                        tor_drop_part(g)
                 for g in gids:
                     try:
                         aria(method, g)
@@ -1224,12 +1299,124 @@ class Handler(BaseHTTPRequestHandler):
         if u.path == "/phone/music":
             # Sortovia moving music off the phone: keep a copy in the phone's own Music folder first
             return self._send(copy_to_music(b.get("files") or []))
+        if u.path == "/files/unpack":
+            return self._send(unpack_music(b.get("src") or ""))
+        if u.path == "/files/move":
+            # a finished torrent's folder into Download/Torrents, done here on the phone (the share's own move
+            # can't handle some names, like ones with @ in them)
+            return self._send(move_in_share(b.get("src") or "", b.get("dst") or ""))
         if u.path == "/yt/clear":
             with LOCK:
                 JOBS[:] = [j for j in JOBS if j["state"] in ("queued", "downloading", "paused")]
                 save_jobs()
             return self._send({"ok": True})
         self._send({"error": "not found"}, 404)
+
+
+def move_in_share(src, dst):
+    """Move a file or folder inside the shared Download folder (both paths relative to it). Never outside it,
+    never over something that's already there."""
+    root = os.path.realpath(SHARE)
+    a = os.path.realpath(os.path.join(root, src.strip("/")))
+    b = os.path.realpath(os.path.join(root, dst.strip("/")))
+    if not src.strip("/") or not dst.strip("/") or not a.startswith(root + os.sep) or not b.startswith(root + os.sep):
+        return {"error": "only inside Download"}
+    if not os.path.exists(a):
+        return {"error": "not there: " + src}
+    if os.path.exists(b):
+        return {"error": "already there: " + dst}
+    try:
+        os.makedirs(os.path.dirname(b), exist_ok=True)
+        shutil.move(a, b)
+    except OSError as e:
+        return {"error": str(e)}
+    log("moved %s -> %s" % (src, dst))
+    return {"ok": True}
+
+
+MUSIC_EXTS = (".mp3", ".flac", ".m4a", ".aac", ".ogg", ".opus", ".wav", ".aiff", ".aif", ".alac", ".wma")
+LATER_VOL = re.compile(r"(?i)\.(part0*[2-9]\d*\.rar|r\d\d|z\d\d)$")
+
+
+def _archive_list(path):
+    """[(name, size)] inside a .zip or .rar, or None when it can't be read here (no unrar/bsdtar for a .rar)."""
+    import zipfile
+    if path.lower().endswith(".zip"):
+        with zipfile.ZipFile(path) as z:
+            return [(i.filename, i.file_size) for i in z.infolist() if not i.is_dir()]
+    env = dict(os.environ, LANG="C.UTF-8", LC_ALL="C.UTF-8")  # names like "Future’s" need a UTF-8 locale
+    if tool("unrar"):
+        out = subprocess.run([tool("unrar"), "lt", "-c-", path], capture_output=True, text=True, env=env).stdout
+        names, sizes = re.findall(r"(?m)^\s*Name: (.*)$", out), re.findall(r"(?m)^\s*Size: (\d+)", out)
+        types = re.findall(r"(?m)^\s*Type: (\S+)", out)
+        return [(n, int(z)) for n, z, t in zip(names, sizes, types) if t.lower() == "file"]
+    if tool("bsdtar"):
+        out = subprocess.run([tool("bsdtar"), "-tvf", path], capture_output=True, text=True, env=env).stdout
+        rows = []
+        for line in out.splitlines():
+            m = re.match(r"^(\S)\S+\s+\S+\s+\S+\s+\S+\s+(\d+)\s+\S+\s+\S+\s+\S+\s+(.*)$", line)
+            if m and m.group(1) == "-":
+                rows.append((m.group(3), int(m.group(2))))
+        return rows
+    return None
+
+
+def unpack_music(rel):
+    """Unpack a music archive in the share (rel: its path inside Download) into a folder of the same name next
+    to it, through a hidden name. Every file's size is checked, then the archive (all its volumes) is deleted.
+    Only archives with music in them, and only when the phone has room. {"ok": folder} or {"error": why}."""
+    import zipfile
+    root = os.path.realpath(SHARE)
+    path = os.path.realpath(os.path.join(root, rel.strip("/")))
+    if not path.startswith(root + os.sep) or not os.path.isfile(path):
+        return {"error": "not there: " + rel}
+    try:
+        items = _archive_list(path)
+    except Exception as e:
+        return {"error": "can't read it: %s" % e}
+    if items is None:
+        return {"error": "no-tool", "help": "In Termux: pkg install unrar"}
+    if not any(n.lower().endswith(MUSIC_EXTS) for n, _ in items):
+        return {"error": "no music inside"}
+    total = sum(z for _, z in items)
+    if _free() < total + KEEP_FREE:
+        return {"error": "the phone is too full to unpack it (%d MB)" % (total // 1048576)}
+    stem = re.sub(r"(?i)(\.part0*1)?\.(rar|zip)$", "", os.path.basename(path))
+    final = os.path.join(os.path.dirname(path), stem)
+    if os.path.exists(final):
+        return {"error": "a folder with its name is already there"}
+    hidden = os.path.join(os.path.dirname(path), "." + stem + ".unpacking")
+    shutil.rmtree(hidden, ignore_errors=True)
+    os.makedirs(hidden)
+    env = dict(os.environ, LANG="C.UTF-8", LC_ALL="C.UTF-8")
+    try:
+        if path.lower().endswith(".zip"):
+            with zipfile.ZipFile(path) as z:
+                z.extractall(hidden)
+        elif tool("unrar"):
+            r = subprocess.run([tool("unrar"), "x", "-o+", "-y", "-c-", path, hidden + os.sep], capture_output=True,
+                               text=True, env=env)
+            if r.returncode:
+                raise OSError((r.stdout + r.stderr).strip().splitlines()[-1:] or "unrar failed")
+        else:
+            r = subprocess.run([tool("bsdtar"), "-xf", path, "-C", hidden], capture_output=True, text=True, env=env)
+            if r.returncode:
+                raise OSError(r.stderr.strip() or "bsdtar failed")
+        for n, z in items:
+            got = os.path.join(hidden, n.replace("\\", "/"))
+            if not os.path.isfile(got) or os.path.getsize(got) != z:
+                raise OSError("%s didn't come out whole" % n)
+    except Exception as e:
+        shutil.rmtree(hidden, ignore_errors=True)
+        return {"error": "couldn't unpack it: %s" % e}
+    os.replace(hidden, final)
+    head = re.sub(r"(?i)(\.part0*1)?\.(rar|zip)$", "", path)
+    for f in os.listdir(os.path.dirname(path)):
+        p = os.path.join(os.path.dirname(path), f)
+        if p == path or (p.startswith(head) and LATER_VOL.search(f)):
+            os.remove(p)
+    log("unpacked %s (%d files)" % (rel, len(items)))
+    return {"ok": os.path.relpath(final, root)}
 
 
 def main():

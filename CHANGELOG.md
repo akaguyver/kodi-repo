@@ -3,6 +3,15 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.67 – A new Home: what you use most is one click away
+- **1.67.7**
+  - Tag Studio, Tools, and Settings and Help on Home open their menus right away (Tag Studio did nothing before).
+  - Downloads: each one's status sits in its own column on the right.
+  - Downloads: "Resume" for paused ones and "Retry" for failed ones, instead of "Carry on" and "Try again".
+  - Downloads > Pick several: move the finished ones you ticked to your drive, or resume, retry or pause just those.
+  - Finished BiglyBT torrents whose names have characters the share can't move (like @) are moved by the phone itself, so they reach your drive.
+  - Every torrent's magnet link is saved (BiglyBT ones are made from their hash), so a stuck torrent can always be fetched again.
+  - Music packed in a .rar or .zip is unpacked on the phone before it's sorted, so the songs come out whole and land in the right album folder. For .rar, type pkg install unrar in Termux once.
+  - Phone space: finished downloads move into Download one file at a time and only when there's room; a move a full phone stopped carries on later instead of leaving a half copy behind. Removing an unfinished download deletes its part too, and the same Real-Debrid file is never queued twice.
 - **1.67.6**
   - Downloads: full file names, with a short status after each (Downloading 42%, Queued, Failed, Downloaded, Waiting for peers). The highlighted row is dark with a bright edge, so its text can be read.
   - Downloads: from the list, Right jumps to the buttons along the bottom and Left to the filters, without scrolling the whole list.
