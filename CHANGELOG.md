@@ -3,6 +3,9 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.67 – A new Home: what you use most is one click away
+- **1.67.4**
+  - No more "Couldn't save progress - Resume won't be offered" pop-up every time Auto move sorts something. Auto move never offers Resume (it simply tries again later), so there was nothing wrong.
+  - Fixed a crash when taking torrents from the queue (Downloads > Torrents).
 - **1.67.3**
   - Episodes named with a show's short name, like "IASIP S14E07", go into the show's own folder (It's Always Sunny in Philadelphia), not a new "IASIP" folder. The full name comes from the download's folder, or from a show in your library whose words start with those letters.
   - Episodes that already went to a short-name folder (TV/IASIP) are moved into the show's folder once, by Auto move.
