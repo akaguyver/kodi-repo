@@ -3,6 +3,11 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.67 – A new Home: what you use most is one click away
+- **1.67.1**
+  - Auto move works again after an update. The watcher kept running the old version until Kodi was closed, so the fixes in 1.66.0 never ran. It now restarts itself within ten minutes of an update.
+  - Courses go to **Tutorials** as a whole: Lynda, Udemy and folders like "Electronic Music Production in Ableton Live (Level I)" land in Tutorials/<program>/<course>/ with their lessons, exercise files, loops and project files, keeping their own sub-folders. Short lesson videos are no longer skipped as "too small".
+  - A packed course with music in it (exercise loops) is no longer unpacked as an album. The course left in the work folder by that mistake is sorted to Tutorials once.
+  - Downloads Auto move had already tried once are looked at again with the new rules.
 - **1.67.0**
   - Home is six big tiles: **YouTube**, **Torrents** and **Downloads** (the search or the screen opens straight away), **Tag Studio**, **Tools**, and **Settings and Help**. They work with a controller (D-pad, A, B), a mouse (point and click) and a keyboard (arrows, Enter, Backspace). What's running (a move, a Real-Debrid download, Auto move) shows in a strip above the tiles; select it to open it. Back leaves Sortovia.
   - Tag Studio holds the music tools that were spread over File and Library: Find genres, Fix music tags, Undo, Get tags from the phone, Check music art, and Save the sound of a video (you can now pick the video from here too).
