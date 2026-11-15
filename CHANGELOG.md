@@ -2,6 +2,13 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 1.67 – A new Home: what you use most is one click away
+- **1.67.0**
+  - Home is six big tiles: **YouTube**, **Torrents** and **Downloads** (the search or the screen opens straight away), **Tag Studio**, **Tools**, and **Settings and Help**. They work with a controller (D-pad, A, B), a mouse (point and click) and a keyboard (arrows, Enter, Backspace). What's running (a move, a Real-Debrid download, Auto move) shows in a strip above the tiles; select it to open it. Back leaves Sortovia.
+  - Tag Studio holds the music tools that were spread over File and Library: Find genres, Fix music tags, Undo, Get tags from the phone, Check music art, and Save the sound of a video (you can now pick the video from here too).
+  - Tools holds Sort a folder, Library, Files, Backups and DJ and playlists. "Drive letter changed? Fix the library" is here on an Xbox only. Settings and Help holds Settings, Real-Debrid, the YouTube choices and Help.
+  - Prefer Kodi's plain list? Settings and Help > Home: a list. If the tiles can't open, the same six entries show as a list.
+
 ## 1.66 – Save the sound of a video, and YouTube downloads move by themselves
 - **1.66.1**
   - Torrent search results can be sorted: most seeders, most leechers, newest or oldest, name, biggest or smallest (the order you pick is kept for next time). Each result shows its leechers and the date it was added, where the index says.
