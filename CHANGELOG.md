@@ -3,6 +3,9 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.66 – Save the sound of a video, and YouTube downloads move by themselves
+- **1.66.1**
+  - Torrent search results can be sorted: most seeders, most leechers, newest or oldest, name, biggest or smallest (the order you pick is kept for next time). Each result shows its leechers and the date it was added, where the index says.
+  - More than 100 results: the list shows 100 at a time with Next and Previous, and "Search further" at the end asks the indexes for their next page. Pick a result to tick it (or untick it). Ticks stay as you change page or order, and "Send N ticked to Real-Debrid" is at the top.
 - **1.66.0**
   - Hold down a video (MP4, MKV, WebM, M4V, MOV) and choose "Save the sound (Sortovia)". The sound is copied out exactly as it is, so nothing is lost and the file is no bigger than the sound already in the video: AAC becomes an .m4a, MP3 an .mp3 and FLAC a .flac. Before saving you can fill in the artist, title, album artist, album and genre (guessed from the video's name), and choose the folder. Sound that would have to be converted (Opus, which most WebM videos use, or AC-3 and DTS) needs the Sortovia phone app, and Sortovia says so.
   - Auto move now also moves finished YouTube downloads from the phone, to the same place YouTube's Sort uses. Videos that don't look like lessons or music stay on the phone until you sort them by hand.
