@@ -3,6 +3,11 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.67 – A new Home: what you use most is one click away
+- **1.67.2**
+  - Unfinished downloads are no longer copied to the Xbox. BiglyBT makes each file at its full size before downloading it, so a half-done episode looked finished. Sortovia now looks inside every video before copying it; one with empty parts stays on the phone until it's done.
+  - An episode that finishes in a season still downloading is marked "Do not download" first and moved a couple of minutes later, after BiglyBT has written all of it.
+  - A copy that comes out empty (0 bytes) no longer counts as done, and the original is kept. Empty episodes left on the Xbox by earlier failed copies are replaced the next time that episode is sorted.
+  - Auto move tries again what it left behind (album covers, episodes that failed to copy): up to three times, half an hour apart. Everything left on the phone so far gets a fresh try.
 - **1.67.1**
   - Auto move works again after an update. The watcher kept running the old version until Kodi was closed, so the fixes in 1.66.0 never ran. It now restarts itself within ten minutes of an update.
   - Courses go to **Tutorials** as a whole: Lynda, Udemy and folders like "Electronic Music Production in Ableton Live (Level I)" land in Tutorials/<program>/<course>/ with their lessons, exercise files, loops and project files, keeping their own sub-folders. Short lesson videos are no longer skipped as "too small".
