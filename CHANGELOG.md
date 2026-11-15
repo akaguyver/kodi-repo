@@ -3,6 +3,8 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.67 – A new Home: what you use most is one click away
+- **1.67.5**
+  - Kodi no longer scans the whole library after every single episode Auto move brings over. That kept Kodi scanning (and showing its busy wheel) nearly all the time. Auto move now updates the library once, when downloads have gone quiet for a couple of minutes, and never while a scan is already running. Sorts you start yourself still update the library straight away.
 - **1.67.4**
   - No more "Couldn't save progress - Resume won't be offered" pop-up every time Auto move sorts something. Auto move never offers Resume (it simply tries again later), so there was nothing wrong.
   - Fixed a crash when taking torrents from the queue (Downloads > Torrents).
