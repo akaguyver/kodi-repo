@@ -3,6 +3,9 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.68 – Edit tags, and quiet while you watch
+- **1.68.3**
+  - Anime named like "[Group]_Show_Ep15_(...)" or "Show Episode 15" is sorted as an episode (it was skipped as "can't tell TV vs movie").
+  - A finished BiglyBT torrent whose files were already moved out is taken off BiglyBT's list, instead of being tried every two minutes.
 - **1.68.2**
   - The spinning wheel that kept coming back: Sortovia was scanning the whole TV folder under a spelling Kodi has no TV setting for, so Kodi made "shows" out of Season folders, Sortovia took them out and scanned again, over and over. Scans now use the TV folder exactly as Kodi has it, and that clean-up scan runs at most once every 12 hours.
   - Finished BiglyBT torrents whose folder name differs from the torrent's ([Exiled-Destiny] Parasyte) move to Download/Torrents again.
