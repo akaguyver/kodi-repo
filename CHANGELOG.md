@@ -3,6 +3,14 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.0 – A new look
+- **2.0.7**
+  - Sortovia opens straight to its window. The empty old-style list no longer shows while it starts.
+  - Picking a download on Home opens the same menu as on Downloads.
+  - "Carry on" is now called "Resume" everywhere.
+  - Downloads has an "At once" button that sets how many download on the phone at the same time.
+  - "Move to D:\" is one list: everything finished, only Real-Debrid, Torrents or YouTube, or pick which ones. YouTube downloads are included, and the extra "Sort which?" step is gone.
+  - Search has a "Missing episodes" button. It scans your TV library, then lists each missing episode in its own search box with a Search button.
+  - Tries more ways to read the free space on D:\ and writes what worked to the log.
 - **2.0.1**
   - The cursor stays where you put it. It used to jump back to the top every few seconds while a page refreshed.
   - On Downloads, Right from any download goes to the buttons along the bottom (Move finished and the rest).
