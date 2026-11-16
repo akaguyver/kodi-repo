@@ -3,6 +3,8 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.67 – A new Home: what you use most is one click away
+- **1.67.8**
+  - BiglyBT: every unfinished torrent gets the same 12 extra public trackers the phone's own downloader uses (more trackers, more peers), once each, by itself.
 - **1.67.7**
   - Tag Studio, Tools, and Settings and Help on Home open their menus right away (Tag Studio did nothing before).
   - Downloads: each one's status sits in its own column on the right.
