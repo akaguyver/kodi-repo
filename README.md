@@ -58,11 +58,16 @@ From then on, Sortovia offers its own updates when it opens. You can turn that o
 
 The first time it opens, a welcome screen asks a few short questions: what device this is, what you want to sort, your
 language, whether you already have library folders, and whether you want to use a phone. You can change every answer later
-in **Help**.
+in **Settings → Help → Welcome screen**.
+
+**Getting around.** A side bar on the left is always there: **Home**, **Search**, **Downloads**, **Transfer / sort**,
+**Music**, **Library** and **Settings**. Press Left to reach it and Right to go back to the page. **Y** opens Search and
+**X** opens Downloads from anywhere; **B** goes back. A mouse and keyboard work too. Home shows the search box, what's
+downloading, what just arrived in your library, and the switch that moves finished downloads by themselves.
 
 Then:
 
-1. Open **Downloads → Transfer and sort → Choose folders and choices**.
+1. Open **Transfer / sort → Choose folders and choices**.
 2. **Where are the downloads?** Pick a folder or drive.
 3. **Where do they go?** Pick the drive that holds your library (for example `E:\`), or your Movies or TV folder.
 4. Answer the questions about better copies, audio language, NFOs, subtitles and leftovers. If you're unsure, the first
@@ -224,8 +229,10 @@ creator permits. YouTube only allows downloads from a signed-in browser, so this
 
 Repeat this export if downloads start failing.
 
-**Download.** In Sortovia, open **YouTube**. You can search or type a link, follow **Downloads**, choose the quality and result order, then choose
-**Sort the finished downloads**.
+**Download.** In Sortovia, open **Search**, choose **YouTube** or **Both**, and tick the videos you want, then **Download the
+ticked**. A YouTube link or playlist works too: paste it in the search box or use **Paste a link**. Follow them in
+**Downloads**. Quality and cookies are in **Settings → YouTube**. Finished videos move into your library by themselves when
+**Move finished downloads** is on, or choose **Downloads → Move finished to library**.
 
 ---
 
@@ -289,10 +296,10 @@ saved details and enter them again, and your files aren't affected. Without a pa
   language can be renamed to your language, including Russian titles written in Latin letters. You can turn this off in Settings.
 - OVAs, specials, and opening/ending credits clips go to Season 00, which is Kodi's Specials.
 - Music (`.mp3`, `.flac`, `.m4a`, `.ogg`, `.opus` and more) goes to `Music\Artist\Album\`, named from the file's tags, then its folders. Albums by several artists go under `Various Artists`, and cover art moves with the album. Songs already in folders inside an artist's folder, podcasts, audiobooks, recordings and songs with no artist are left alone. Add `Music` to Kodi under **Music → Files → Add music**.
-- **Fix music tags (MP3)**, in *File*, updates tags to ID3v2.4 and gives each album one album artist and each collaboration an `ARTISTS` tag. Then Kodi shows one album, listed under each artist if **Settings → Media → Music → Show song and album artists** is on. You see every change first, and can undo it. **Set album art from folders** uses the picture in an album's folder when Kodi shows no art.
-- **Find genres (dry run)**, in *File*, looks up tracks on Discogs and Last.fm, then lets you choose from your own genre list for each artist or single track. Orange came from Discogs, teal from Last.fm, and half of each from both, which start on. Your choices are saved and the report shows what each track would get. It changes no music files. Add your Discogs token, Last.fm key and genre list in Settings > Music genres.
+- **Fix music tags (MP3)**, in **Music**, updates tags to ID3v2.4 and gives each album one album artist and each collaboration an `ARTISTS` tag. Then Kodi shows one album, listed under each artist if **Settings → Media → Music → Show song and album artists** is on. You see every change first, and can undo it. **Music → Cover and artist art → Set album art from folders** uses the picture in an album's folder when Kodi shows no art.
+- **Find genres (dry run)**, in **Music**, looks up tracks on Discogs and Last.fm, then lets you choose from your own genre list for each artist or single track. Orange came from Discogs, teal from Last.fm, and half of each from both, which start on. Your choices are saved and the report shows what each track would get. It changes no music files. Add your Discogs token, Last.fm key and genre list in Settings > Music genres.
 - Comics (`.cbz/.cbr/.cb7/.cbt`, plus PDFs/EPUBs inside a "Comics" or "Manga" folder) go to `Comics\Series\`.
-  `.cbr` comics become `.cbz`, which Kodi opens much faster. The Comics menu also tidies an existing Comics folder and
+  `.cbr` comics become `.cbz`, which Kodi opens much faster. **Library → Comics** converts the ones already there and
   can turn pages for a monitor stood on its side.
 - **Tutorials** go to `Tutorials\<program>\` and keep their original names. A video counts as a tutorial when its name says so
   ("tutorial", "full course", "for beginners" and similar), when it sits in a `Tutorials\<program>` folder, or when it comes
@@ -319,24 +326,26 @@ saved details and enter them again, and your files aren't affected. Without a pa
 - It can sort a drive in place, leaving files already in their place untouched.
 
 **Real-Debrid** (optional, needs a premium account)
-- Sign in with a QR code or a code on your phone. Pick from your Real-Debrid torrents, add a magnet link, or unlock a file-host
-  link. Files download to `Downloads\Real-Debrid` on the library drive, then *Sort the Real-Debrid downloads* files them.
+- Sign in with a QR code or a code on your phone. **Search** finds torrents and YouTube together; ticked torrents go to
+  Real-Debrid. **Paste a link** takes a magnet link, a file-host link or a web page of links. Your Real-Debrid torrents, feeds and
+  recent downloads are in **Downloads → Real-Debrid lists**. Finished files move into your library by themselves, or with
+  **Downloads → Move finished to library**.
 - **Automatic downloads:** anything you send to Real-Debrid downloads by itself as soon as it's ready. It works in the
-  background, and carries on the next time you open Sortovia if Kodi was closed. The top of the menu shows progress and Stop.
+  background, and carries on the next time you open Sortovia if Kodi was closed. Home and Downloads show its progress; select it there to pause or stop.
 - **My releases:** add the RSS, Atom or JSON feed of your own uploads from any site you use, then tick releases to get them.
   Sortovia includes no sites and sends no searches: it reads only the feeds you add and filters them on your device. Feed
   addresses often contain a private key, so treat them like passwords. Only fetch what you have the right to download, and check
   your site's rules, because some private trackers don't allow debrid services.
 
 **Library extras**
-- *Library → Backups → Back up the library now*: Kodi's library export (with watched marks) plus its database file, saved on the library drive
-  (`_Kodi library backups`) and your phone if you use one. Sortovia only backs up the library when changes have been made to it. It warns you if the library suddenly shrinks. *Restore a backup* gets one
+- *Library → Maintenance → Back up now*: Kodi's library export (with watched marks) plus its database file, saved on the library drive
+  (`_Kodi library backups`) and your phone if you use one. Sortovia only backs up the library when changes have been made to it. It warns you if the library suddenly shrinks. *Restore the video library* gets one
   ready for Kodi's Import library.
-- *Clean TV library / Clean movie library*: removes entries that are in the wrong library, never files.
+- *Library → Clean the library* (TV, Movies or Music): removes entries that are in the wrong library, never files.
 - *Find missing episodes*: compares your TV library with TVmaze and lists aired episodes you don't have.
 - *Where to watch*: says per season whether a show is on your services, free with ads, on another subscription, or available to
   buy or rent. It uses TMDb's data and needs a free TMDb key.
-- *Free up space*: shows what's using the device's storage and clears leftovers.
+- *Transfer / sort → Free up space*: shows what's using the device's storage and clears leftovers.
 - *View a text / NFO file*: reads old DOS-style NFO art correctly.
 
 ---

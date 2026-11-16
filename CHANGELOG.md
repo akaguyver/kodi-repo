@@ -2,6 +2,16 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 2.0 – A new look
+- **2.0.0**
+  - A new window: a side bar that's always there (Home, Search, Downloads, Transfer / sort, Music, Library, Settings) and one page beside it. Left reaches the side bar, Right goes back to the page. Y opens Search and X opens Downloads from anywhere. A mouse and keyboard work on everything.
+  - Home shows what's going on: the search box, what's downloading with its progress, what just arrived in your library, and the switch that moves finished downloads by themselves.
+  - One Search for torrents and YouTube: tick TV, Movies, Music, Tutorials or Comics, pick Torrents, YouTube or Both, and re-sort the results with one press (best match, seeders, newest, largest, views, name). Every result says where it's from, and "In your library" when you have it. Paste a link takes a YouTube video or playlist, a magnet, a file-host link or a web page of links.
+  - One Downloads list for the phone's torrents, BiglyBT, Real-Debrid and YouTube, with All, Downloading, Waiting, Finished and Failed. A pauses or carries on (or retries a failed one), X has everything else for that download. Your Real-Debrid torrents, feeds and recent downloads are under Real-Debrid lists.
+  - Music, Library and Settings are pages of cards, eight at most, so nothing scrolls. Backups and the drive letter fix are under Library > Maintenance, with Restore the video library.
+  - Settings > Look makes the text bigger.
+  - The old home (tiles or a list) and the separate YouTube and Real-Debrid menus are gone; everything they had is in the new pages.
+
 ## 1.68 – Edit tags, and quiet while you watch
 - **1.68.6**
   - Find missing episodes also saves its list as Download/missing-episodes.txt on the phone, replaced each time, so you don't have to dig through the logs folder for it.
