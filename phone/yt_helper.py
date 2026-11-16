@@ -780,6 +780,7 @@ def tor_jobs():
                 TOR["later"][d["gid"]] = time.time() + 300
         rel = _tor_rel(d)
         out.append({"id": d["gid"], "name": _tor_name(d), "kind": rel[0] if rel else "Torrents", "state": state, "size": total,
+                    "folder": rel[1] if rel and len(rel) > 1 and rel[1] != ".." else "",  # top-level name under Download/<kind>
                     "pct": round(100.0 * done / total, 1) if total else 0.0, "speed": speed,
                     "eta": int((total - done) / speed) if speed and total else 0,
                     "seeds": int(d.get("numSeeders") or 0), "peers": int(d.get("connections") or 0),
