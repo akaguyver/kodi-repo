@@ -3,6 +3,10 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.68 – Edit tags, and quiet while you watch
+- **1.68.2**
+  - The spinning wheel that kept coming back: Sortovia was scanning the whole TV folder under a spelling Kodi has no TV setting for, so Kodi made "shows" out of Season folders, Sortovia took them out and scanned again, over and over. Scans now use the TV folder exactly as Kodi has it, and that clean-up scan runs at most once every 12 hours.
+  - Finished BiglyBT torrents whose folder name differs from the torrent's ([Exiled-Destiny] Parasyte) move to Download/Torrents again.
+  - Downloads: "Delete it" on a download removes it and its part files from the phone (BiglyBT downloads, and finished phone downloads). It asks first.
 - **1.68.1**
   - Downloads: a waiting download can go to the top of the phone's queue (next to start) or the bottom; Pick several does it for many at once.
 - **1.68.0**

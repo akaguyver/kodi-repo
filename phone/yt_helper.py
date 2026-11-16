@@ -1330,6 +1330,8 @@ class Handler(BaseHTTPRequestHandler):
             # a finished torrent's folder into Download/Torrents, done here on the phone (the share's own move
             # can't handle some names, like ones with @ in them)
             return self._send(move_in_share(b.get("src") or "", b.get("dst") or ""))
+        if u.path == "/files/delete":  # a download the user deleted from the Xbox's list, with its part files
+            return self._send(delete_in_share(b.get("path") or ""))
         if u.path == "/yt/clear":
             with LOCK:
                 JOBS[:] = [j for j in JOBS if j["state"] in ("queued", "downloading", "paused")]
@@ -1357,6 +1359,36 @@ def move_in_share(src, dst):
         return {"error": str(e)}
     log("moved %s -> %s" % (src, dst))
     return {"ok": True}
+
+
+DELETE_ROOTS = ("Torrents", "Real-Debrid", "BiglyBT")
+
+
+def delete_in_share(rel):
+    """Delete a download (file or folder) under Download/Torrents, Real-Debrid or BiglyBT, plus its part files
+    (.part, .aria2, BiglyBT's .dnd_az! copies). Nothing else in the share can be deleted this way."""
+    root = os.path.realpath(SHARE)
+    a = os.path.realpath(os.path.join(root, rel.strip("/")))
+    top = os.path.relpath(a, root).split(os.sep)
+    if len(top) < 2 or top[0] not in DELETE_ROOTS or top[0] == os.pardir:
+        return {"error": "only downloads can be deleted"}
+    gone = 0
+    parent, name = os.path.dirname(a), os.path.basename(a)
+    for p in (a, a + ".part", a + ".aria2", os.path.join(parent, ".dnd_az!", name)):
+        try:
+            if os.path.isdir(p) and not os.path.islink(p):
+                shutil.rmtree(p)
+            elif os.path.lexists(p):
+                os.remove(p)
+            else:
+                continue
+            gone += 1
+        except OSError as e:
+            return {"error": str(e)}
+    if not gone:
+        return {"error": "not there: " + rel}
+    log("deleted %s (%d item(s))" % (rel, gone))
+    return {"ok": gone}
 
 
 MUSIC_EXTS = (".mp3", ".flac", ".m4a", ".aac", ".ogg", ".opus", ".wav", ".aiff", ".aif", ".alac", ".wma")
