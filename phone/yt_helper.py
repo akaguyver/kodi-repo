@@ -1362,11 +1362,11 @@ def move_in_share(src, dst):
     return {"ok": True}
 
 
-DELETE_ROOTS = ("Torrents", "Real-Debrid", "BiglyBT")
+DELETE_ROOTS = ("Torrents", "Real-Debrid", "BiglyBT", "YouTube")  # (YouTube: 2.0.4)
 
 
 def delete_in_share(rel):
-    """Delete a download (file or folder) under Download/Torrents, Real-Debrid or BiglyBT, plus its part files
+    """Delete a download (file or folder) under Download/Torrents, Real-Debrid, BiglyBT or YouTube, plus its part files
     (.part, .aria2, BiglyBT's .dnd_az! copies). Nothing else in the share can be deleted this way."""
     root = os.path.realpath(SHARE)
     a = os.path.realpath(os.path.join(root, rel.strip("/")))
