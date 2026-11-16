@@ -3,6 +3,11 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.68 – Edit tags, and quiet while you watch
+- **1.68.5**
+  - Duplicate songs are deleted when the copy already in your library is the same size or bigger. Duplicate videos are never deleted: they're moved to _Unpacked, in case their audio is the right one.
+  - Cover pictures left in a music download's folder go into the album in your library as cover.jpg, which Kodi shows as the album's art. If the album has its art already, the picture goes to _Unpacked instead.
+  - Music download folders that only have leftovers (pictures, .nfo, .txt) are tidied into _Unpacked, and the folders left empty are removed. Before, only TV and movie folders were tidied.
+  - Album folders on the phone are matched to your library again (their names came over the share with %20 in place of spaces, so nothing matched).
 - **1.68.4**
   - Release leftovers on the phone (.txt files, empty placeholder videos BiglyBT leaves behind) are tidied again: the phone moves them into _Unpacked itself (Kodi can't make folders there), and empty placeholders are deleted. The error no longer says "drive full?" when the real problem was a folder that couldn't be made.
 - **1.68.3**
