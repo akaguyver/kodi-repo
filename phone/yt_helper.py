@@ -1246,6 +1246,16 @@ class Handler(BaseHTTPRequestHandler):
                 threading.Thread(target=look_up, args=(sorted(set(names)),), daemon=True).start()
                 META_STATE["busy"] = True
             return self._send(dict(META_STATE, meta=META))
+        if u.path == "/tor/limit":  # how many download at once: {"n": 1-20} sets it, {} just asks
+            n = b.get("n")
+            if n:
+                n = max(1, min(20, int(n)))
+                with open(TOR_LIMIT_FILE, "w") as f:
+                    f.write(str(n))
+                if aria_start():
+                    aria("aria2.changeGlobalOption", {"max-concurrent-downloads": str(n)})
+                log("downloads at once: %d" % n)
+            return self._send({"n": tor_at_once()})
         if u.path.startswith("/tor/"):
             if not aria_start():
                 return self._send({"error": "aria2 isn't installed on the phone: in Termux type  pkg install aria2"}, 400)
@@ -1308,16 +1318,6 @@ class Handler(BaseHTTPRequestHandler):
         if u.path == "/phone/music":
             # Sortovia moving music off the phone: keep a copy in the phone's own Music folder first
             return self._send(copy_to_music(b.get("files") or []))
-        if u.path == "/tor/limit":  # how many download at once: {"n": 1-20} sets it, {} just asks
-            n = b.get("n")
-            if n:
-                n = max(1, min(20, int(n)))
-                with open(TOR_LIMIT_FILE, "w") as f:
-                    f.write(str(n))
-                if aria_start():
-                    aria("aria2.changeGlobalOption", {"max-concurrent-downloads": str(n)})
-                log("downloads at once: %d" % n)
-            return self._send({"n": tor_at_once()})
         if u.path == "/files/unpack":
             return self._send(unpack_music(b.get("src") or ""))
         if u.path == "/files/move":
