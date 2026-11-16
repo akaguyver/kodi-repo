@@ -1256,6 +1256,12 @@ class Handler(BaseHTTPRequestHandler):
                     aria("aria2.changeGlobalOption", {"max-concurrent-downloads": str(n)})
                 log("downloads at once: %d" % n)
             return self._send({"n": tor_at_once()})
+        if u.path == "/tor/position":  # {"id", "to": "top" | "bottom"}: where a waiting download is in the queue
+            try:
+                how = "POS_SET" if b.get("to") == "top" else "POS_END"
+                return self._send({"ok": aria("aria2.changePosition", b.get("id") or "", 0, how)})
+            except Exception as e:
+                return self._send({"error": str(e)}, 502)
         if u.path.startswith("/tor/"):
             if not aria_start():
                 return self._send({"error": "aria2 isn't installed on the phone: in Termux type  pkg install aria2"}, 400)

@@ -3,6 +3,8 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.68 – Edit tags, and quiet while you watch
+- **1.68.1**
+  - Downloads: a waiting download can go to the top of the phone's queue (next to start) or the bottom; Pick several does it for many at once.
 - **1.68.0**
   - Tag Studio > Edit tags: pick a song, or several (an album), and change any tag by typing: title, artists, album artist, genre, key, tempo, year, track, composer, label and more. MP3, FLAC and M4A. Undo the last tag edit puts the old tags back.
   - While you watch a video, Auto move works out of sight: no corner bars or notes, and library scans wait until the video ends. Kodi's own "Scanning for new content" bar is turned off for these scans. Background work no longer refreshes the screen behind it (that showed the spinning wheel over and over).
