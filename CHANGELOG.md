@@ -3,6 +3,8 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.68 – Edit tags, and quiet while you watch
+- **1.68.6**
+  - Find missing episodes also saves its list as Download/missing-episodes.txt on the phone, replaced each time, so you don't have to dig through the logs folder for it.
 - **1.68.5**
   - Duplicate songs are deleted when the copy already in your library is the same size or bigger. Duplicate videos are never deleted: they're moved to _Unpacked, in case their audio is the right one.
   - Cover pictures left in a music download's folder go into the album in your library as cover.jpg, which Kodi shows as the album's art. If the album has its art already, the picture goes to _Unpacked instead.
