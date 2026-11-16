@@ -3,6 +3,10 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.0 – A new look
+- **2.0.1**
+  - The cursor stays where you put it. It used to jump back to the top every few seconds while a page refreshed.
+  - On Downloads, Right from any download goes to the buttons along the bottom (Move finished and the rest).
+  - Moving finished downloads finds the phone again. "Move finished", "Move just this" and unpacking music on the phone were looking at the wrong address and found nothing.
 - **2.0.0**
   - A new window: a side bar that's always there (Home, Search, Downloads, Transfer / sort, Music, Library, Settings) and one page beside it. Left reaches the side bar, Right goes back to the page. Y opens Search and X opens Downloads from anywhere. A mouse and keyboard work on everything.
   - Home shows what's going on: the search box, what's downloading with its progress, what just arrived in your library, and the switch that moves finished downloads by themselves.
