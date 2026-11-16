@@ -3,6 +3,8 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.68 – Edit tags, and quiet while you watch
+- **1.68.4**
+  - Release leftovers on the phone (.txt files, empty placeholder videos BiglyBT leaves behind) are tidied again: the phone moves them into _Unpacked itself (Kodi can't make folders there), and empty placeholders are deleted. The error no longer says "drive full?" when the real problem was a folder that couldn't be made.
 - **1.68.3**
   - Anime named like "[Group]_Show_Ep15_(...)" or "Show Episode 15" is sorted as an episode (it was skipped as "can't tell TV vs movie").
   - A finished BiglyBT torrent whose files were already moved out is taken off BiglyBT's list, instead of being tried every two minutes.
