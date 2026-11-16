@@ -569,7 +569,16 @@ TOR_OUT = os.path.join(SHARE, "Torrents")  # (and Download/Real-Debrid for unloc
 TOR_SESSION = os.path.join(CONF, "aria2-session.txt")
 TOR_PORT = 6801
 TOR = {"proc": None, "moved": set(), "later": {}}
-TOR_AT_ONCE = 12  # downloads running together; one with no peers can't hold up the rest
+TOR_AT_ONCE = 12  # downloads running together by default; one with no peers can't hold up the rest
+TOR_LIMIT_FILE = os.path.join(CONF, "tor-at-once")  # the person's own choice (Sortovia > Downloads > At once)
+
+
+def tor_at_once():
+    try:
+        with open(TOR_LIMIT_FILE) as f:
+            return max(1, min(20, int(f.read().strip())))
+    except (OSError, ValueError):
+        return TOR_AT_ONCE
 # The steadiest free public trackers (ngosang/trackerslist "best", checked 2026-11-13), added to every torrent.
 TRACKERS = [
     "udp://tracker.opentrackr.org:1337/announce", "udp://open.stealth.si:80/announce",
@@ -608,7 +617,7 @@ def aria_start():
     TOR["proc"] = subprocess.Popen([
         exe, "--enable-rpc", "--rpc-listen-all=false", "--rpc-listen-port=%d" % TOR_PORT,
         "--rpc-secret=" + password(), "--dir=" + TOR_WORK, "--seed-time=0", "--continue=true",
-        "--max-concurrent-downloads=%d" % TOR_AT_ONCE, "--bt-save-metadata=false", "--follow-torrent=mem",
+        "--max-concurrent-downloads=%d" % tor_at_once(), "--bt-save-metadata=false", "--follow-torrent=mem",
         # Space is used as the data arrives, not reserved up front: many downloads at once can't fill the phone.
         "--file-allocation=none",
         # More places to find peers: public trackers on top of each torrent's own, DHT and the local network.
@@ -623,9 +632,9 @@ def aria_start():
             aria("aria2.getVersion")
             # An aria2 left running by an older helper holds the port, so the one above can't start and
             # the old settings (e.g. 2 at a time) would stay. Set them on whichever aria2 answered.
-            aria("aria2.changeGlobalOption", {"max-concurrent-downloads": str(TOR_AT_ONCE),
+            aria("aria2.changeGlobalOption", {"max-concurrent-downloads": str(tor_at_once()),
                                               "bt-tracker": ",".join(TRACKERS), "file-allocation": "none"})
-            log("torrent downloads ready (aria2, %d at a time), saving into %s" % (TOR_AT_ONCE, TOR_OUT))
+            log("torrent downloads ready (aria2, %d at a time), saving into %s" % (tor_at_once(), TOR_OUT))
             return True
         except Exception:
             time.sleep(0.3)
@@ -1299,6 +1308,16 @@ class Handler(BaseHTTPRequestHandler):
         if u.path == "/phone/music":
             # Sortovia moving music off the phone: keep a copy in the phone's own Music folder first
             return self._send(copy_to_music(b.get("files") or []))
+        if u.path == "/tor/limit":  # how many download at once: {"n": 1-20} sets it, {} just asks
+            n = b.get("n")
+            if n:
+                n = max(1, min(20, int(n)))
+                with open(TOR_LIMIT_FILE, "w") as f:
+                    f.write(str(n))
+                if aria_start():
+                    aria("aria2.changeGlobalOption", {"max-concurrent-downloads": str(n)})
+                log("downloads at once: %d" % n)
+            return self._send({"n": tor_at_once()})
         if u.path == "/files/unpack":
             return self._send(unpack_music(b.get("src") or ""))
         if u.path == "/files/move":

@@ -2,6 +2,17 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 1.68 – Edit tags, and quiet while you watch
+- **1.68.0**
+  - Tag Studio > Edit tags: pick a song, or several (an album), and change any tag by typing: title, artists, album artist, genre, key, tempo, year, track, composer, label and more. MP3, FLAC and M4A. Undo the last tag edit puts the old tags back.
+  - While you watch a video, Auto move works out of sight: no corner bars or notes, and library scans wait until the video ends. Kodi's own "Scanning for new content" bar is turned off for these scans. Background work no longer refreshes the screen behind it (that showed the spinning wheel over and over).
+  - Finished BiglyBT torrents with several files (a season, Parasyte) now leave BiglyBT's folder and reach your drive: BiglyBT names the torrent's own folder as its download folder, so Sortovia was looking one folder too deep. "Move to D:\\" finds them again.
+  - Downloads: a finished BiglyBT download has "Move it to D:\\ now". The top row has "At once: N" to choose how many download together on the phone (1 to 16).
+  - YouTube search: Cancel works while it searches.
+  - Real-Debrid fetching list opens much faster (all asked at once) and tries a failed look again.
+  - The highlighted row's edge is a thin line again; it had been stretched over the start of the text.
+  - Check for updates now is under Settings and Help, next to Settings.
+
 ## 1.67 – A new Home: what you use most is one click away
 - **1.67.9**
   - Fixed: a show (It's Always Sunny) kept leaving the library, while made-up shows (Club Friday, America's Funniest Home Videos...) appeared holding its episodes. Auto move asked Kodi to scan the show's folder under a spelling Kodi didn't know, so Kodi turned each Season folder into a "show"; the clean-up then took the real show out for holding them. Scans now use Kodi's own spelling, a new show is filed by scanning the TV folder, a "show" made from a Season folder is always removed (even one with episodes), and the real show is never removed for holding them. After a clean-up the TV folder is scanned once, so the real shows come back.
