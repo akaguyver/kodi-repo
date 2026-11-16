@@ -3,6 +3,8 @@
 Newest first. Each line says what the update changed for you.
 
 ## 1.67 – A new Home: what you use most is one click away
+- **1.67.9**
+  - Fixed: a show (It's Always Sunny) kept leaving the library, while made-up shows (Club Friday, America's Funniest Home Videos...) appeared holding its episodes. Auto move asked Kodi to scan the show's folder under a spelling Kodi didn't know, so Kodi turned each Season folder into a "show"; the clean-up then took the real show out for holding them. Scans now use Kodi's own spelling, a new show is filed by scanning the TV folder, a "show" made from a Season folder is always removed (even one with episodes), and the real show is never removed for holding them. After a clean-up the TV folder is scanned once, so the real shows come back.
 - **1.67.8**
   - BiglyBT: every unfinished torrent gets the same 12 extra public trackers the phone's own downloader uses (more trackers, more peers), once each, by itself.
 - **1.67.7**
