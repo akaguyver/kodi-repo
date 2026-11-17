@@ -579,14 +579,18 @@ def tor_at_once():
             return max(1, min(20, int(f.read().strip())))
     except (OSError, ValueError):
         return TOR_AT_ONCE
-# The steadiest free public trackers (ngosang/trackerslist "best"; 2026-11-17: desync + tryhackx dropped, no answer), added to every torrent.
+# The steadiest free public trackers (ngosang/trackerslist "best", 19 of 20 answered from the phone on 2026-11-17), added to every torrent.
 TRACKERS = [
     "udp://tracker.opentrackr.org:1337/announce", "udp://open.stealth.si:80/announce",
-    "udp://tracker.torrent.eu.org:451/announce", "udp://open.demonii.com:1337/announce",
-    "udp://open.tracker.cl:1337/announce",
-    "udp://explodie.org:6969/announce", "udp://tracker.qu.ax:6969/announce",
-    "udp://tracker-udp.gbitt.info:80/announce",
-    "http://tracker.renfei.net:8080/announce", "http://tracker.dler.org:6969/announce",
+    "udp://tracker.torrent.eu.org:451/announce", "udp://open.tracker.cl:1337/announce",
+    "udp://open.demonii.com:1337/announce", "udp://exodus.desync.com:6969/announce",
+    "udp://tracker.qu.ax:6969/announce", "udp://tracker.ducks.party:1984/announce",
+    "udp://tracker.bittor.pw:1337/announce", "udp://tracker-udp.gbitt.info:80/announce",
+    "udp://tracker.corpscorp.online:80/announce", "udp://tracker.nyaa.vc:6969/announce",
+    "udp://tracker2.dler.org:80/announce", "http://tracker.dler.org:6969/announce",
+    "http://tracker.dler.com:6969/announce", "udp://explodie.org:6969/announce",
+    "udp://tracker.gmi.gd:6969/announce", "http://tracker.renfei.net:8080/announce",
+    "udp://tracker.peerfect.org:6969/announce",
 ]
 
 

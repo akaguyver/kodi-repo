@@ -3,6 +3,13 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.0 – A new look
+- **2.0.10**
+  - The side bar no longer shows D:\'s free space. The Xbox never lets an add-on read it, so it was always empty.
+  - The time shows at the top of Downloads (left of Auto move) and at the bottom of the side bar on every page.
+  - Missing episodes scrolls with Down on the last row's Search button too (it was stuck there).
+  - Missing episodes can leave out episodes that are already downloading or in the queue (the Missing episodes button > Leave out ones downloading).
+  - Finished downloads that were already moved to your library now say "In your library" instead of "Not moved yet".
+  - The public trackers added to every torrent were updated to 19 that answer, and BiglyBT torrents get the new list too.
 - **2.0.9**
   - When the phone stops answering, Downloads says so and tells you what to type in Termux (kodi-share restart), instead of showing an empty list.
   - Two public trackers that no longer answer were removed from the ones added to every torrent.
