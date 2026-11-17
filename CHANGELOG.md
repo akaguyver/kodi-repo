@@ -3,6 +3,13 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.0 – A new look
+- **2.0.11**
+  - Every question, message and list now uses Sortovia's new look: OK and yes/no boxes, lists to pick one or tick several, progress boxes with a Cancel button, and the reader for the guide, reports and long messages (Up and Down page through it). Only Kodi's keyboard and file browser stay Kodi's.
+  - Sortovia opens straight to its window. The update check runs in the background, and a new version shows as a banner at the top of Home. Select it to update.
+  - The welcome screen is a new page with the logo, the example folders and one Get started button.
+  - The music genre picker is a new grid: chips coloured by where the genre came from, ticks kept when you change pages, and Previous, Next, Change one track, Skip and Save buttons.
+  - The Real-Debrid sign-in QR code and the problem-report QR code use the new look.
+  - The old downloads list window is gone. Its two extra checks (Real-Debrid files that arrived short, and saved magnet links) now happen on the Downloads page.
 - **2.0.10**
   - The side bar no longer shows D:\'s free space. The Xbox never lets an add-on read it, so it was always empty.
   - The time shows at the top of Downloads (left of Auto move) and at the bottom of the side bar on every page.
