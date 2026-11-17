@@ -2,6 +2,21 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 2.1 – One window, same menus everywhere
+- **2.1.0**
+  - Sortovia is one window now: menus and messages open on top of the page, and when a video starts Sortovia closes without knocking the video out of full screen.
+  - If a page hits an error, you get a message and Home instead of Sortovia closing.
+  - Every download has the same menu on A and on X, whichever source it's from: phone, BiglyBT, YouTube, Xbox or library. Queued YouTube downloads can be paused, and torrents with no peers can be paused too.
+  - Torrent controls work the same for the phone and BiglyBT: pause, resume, start now, move up or down the queue, check the files again, look for more sources, pick files, speed limits and Show details (files, peers, trackers, ratio).
+  - "N of M done" messages count what really worked. If the phone can't be found you get one clear message.
+  - Y ticks search results. A on a row you haven't ticked opens that row's menu.
+  - Missing episodes: A searches straight away, X lets you change the search words, Y ticks episodes so you can search for several at once, and Back returns to the list. The list can be sorted and can leave out ones already downloading.
+  - Torrents sent from Search can go to the same place every time: say yes to "Every time?" once. Reset it in Settings > Torrent clients.
+  - Damaged archives show as failed instead of being tried again and again.
+  - BiglyBT downloads with odd file names move into your library properly.
+  - Finished downloads whose files are gone no longer show.
+  - Downloads opens faster, Clear finished is quicker, and text size changes right away.
+
 ## 2.0 – A new look
 - **2.0.11**
   - Every question, message and list now uses Sortovia's new look: OK and yes/no boxes, lists to pick one or tick several, progress boxes with a Cancel button, and the reader for the guide, reports and long messages (Up and Down page through it). Only Kodi's keyboard and file browser stay Kodi's.

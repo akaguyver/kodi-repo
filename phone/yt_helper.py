@@ -789,6 +789,9 @@ def tor_jobs():
                     "eta": int((total - done) / speed) if speed and total else 0,
                     "seeds": int(d.get("numSeeders") or 0), "peers": int(d.get("connections") or 0),
                     "error": d.get("errorMessage") or "", "uri": retry_uri(d) if d.get("infoHash") else ""})
+        if state == "complete" and rel and d["gid"] in TOR["moved"] and \
+                not os.path.exists(os.path.join(SHARE, *[x for x in rel[:2] if x and x != ".."])):
+            out[-1]["gone"] = True  # 2.1.0: published into Download, then moved to the Xbox or deleted
     put_aside = _gave_up()
     for h, item in put_aside["items"].items():
         out.append({"id": "gaveup:" + h, "name": item["name"], "kind": "Torrents", "state": "gaveup", "size": 0,
@@ -1166,8 +1169,10 @@ class Handler(BaseHTTPRequestHandler):
             except Exception as e:
                 return self._send({"error": str(e)}, 502)
         if u.path == "/yt/jobs":
-            with LOCK:
-                return self._send({"jobs": JOBS})
+            with LOCK:  # 2.1.0: a done one whose file has gone (moved to the Xbox, deleted) says so
+                jobs = [dict(j, gone=True) if j.get("state") == "done" and j.get("file")
+                        and not os.path.exists(j["file"]) else j for j in JOBS]
+                return self._send({"jobs": jobs})
         if u.path == "/yt/meta":
             return self._send(dict(META_STATE, meta=META))
         if u.path == "/tor/jobs":
@@ -1261,10 +1266,11 @@ class Handler(BaseHTTPRequestHandler):
                     aria("aria2.changeGlobalOption", {"max-concurrent-downloads": str(n)})
                 log("downloads at once: %d" % n)
             return self._send({"n": tor_at_once()})
-        if u.path == "/tor/position":  # {"id", "to": "top" | "bottom"}: where a waiting download is in the queue
+        if u.path == "/tor/position":  # {"id", "to": "top" | "up" | "down" | "bottom"}: where it is in the queue
             try:
-                how = "POS_SET" if b.get("to") == "top" else "POS_END"
-                return self._send({"ok": aria("aria2.changePosition", b.get("id") or "", 0, how)})
+                how, n = {"top": ("POS_SET", 0), "up": ("POS_CUR", -1), "down": ("POS_CUR", 1)}.get(
+                    b.get("to"), ("POS_END", 0))
+                return self._send({"ok": aria("aria2.changePosition", b.get("id") or "", n, how)})
             except Exception as e:
                 return self._send({"error": str(e)}, 502)
         if u.path.startswith("/tor/"):
@@ -1304,13 +1310,64 @@ class Handler(BaseHTTPRequestHandler):
                         return self._send({"ok": n})
                 if u.path == "/tor/retry":  # failed downloads again, from the part already on the phone
                     return self._send({"ok": tor_retry_all() if b.get("all") else int(bool(tor_retry(b.get("id"))))})
+                kb = lambda n: "%dK" % max(0, int(n or 0))  # aria2 speeds; 0 = no limit
+                if u.path == "/tor/option":  # {"id", "down", "up"} KB/s for one download
+                    return self._send({"ok": aria("aria2.changeOption", b.get("id") or "", {
+                        "max-download-limit": kb(b.get("down")), "max-upload-limit": kb(b.get("up"))})})
+                if u.path == "/tor/global":  # {"down"?, "up"?} KB/s for everything
+                    opts = {}
+                    if "down" in b:
+                        opts["max-overall-download-limit"] = kb(b["down"])
+                    if "up" in b:
+                        opts["max-overall-upload-limit"] = kb(b["up"])
+                    return self._send({"ok": aria("aria2.changeGlobalOption", opts) if opts else "OK"})
+                if u.path == "/tor/files":  # {"id", "indices" (0-based), "wanted"}: which files to download
+                    gid = b.get("id") or ""
+                    fs = aria("aria2.getFiles", gid)
+                    want = set(int(f["index"]) - 1 for f in fs if f.get("selected") == "true")
+                    idx = set(int(i) for i in b.get("indices") or [])
+                    want = (want | idx) if b.get("wanted", True) else (want - idx)
+                    if not want:
+                        return self._send({"error": "at least one file has to stay"}, 400)
+                    running = aria("aria2.tellStatus", gid, ["status"]).get("status") == "active"
+                    if running:  # aria2 only changes the files of a paused or waiting download
+                        aria("aria2.forcePause", gid)
+                        for _ in range(20):
+                            if aria("aria2.tellStatus", gid, ["status"]).get("status") != "active":
+                                break
+                            time.sleep(0.25)
+                    try:
+                        ok = aria("aria2.changeOption", gid, {"select-file": ",".join(str(i + 1) for i in sorted(want))})
+                    finally:
+                        if running:
+                            aria("aria2.unpause", gid)
+                    return self._send({"ok": ok})
+                if u.path == "/tor/details":  # {"id"}: files, peers, limits for one download
+                    gid = b.get("id") or ""
+                    st = aria("aria2.tellStatus", gid, ["files", "status"])
+                    try:
+                        opt = aria("aria2.getOption", gid)
+                    except Exception:
+                        opt = {}
+                    try:
+                        peers = aria("aria2.getPeers", gid)
+                    except Exception:
+                        peers = []
+                    root = os.path.commonpath([os.path.dirname(f["path"]) for f in st.get("files") or [] if f.get("path")] or ["/"])
+                    files = [{"index": int(f["index"]) - 1, "name": os.path.relpath(f["path"], root) if f.get("path") else "?",
+                              "length": int(f.get("length") or 0), "done": int(f.get("completedLength") or 0),
+                              "wanted": f.get("selected") == "true"} for f in st.get("files") or []]
+                    return self._send({"files": files, "peers": [
+                        {"ip": p.get("ip", "?"), "client": "seed" if p.get("seeder") == "true" else "",
+                         "down": int(p.get("downloadSpeed") or 0)} for p in peers],
+                        "down_limit": opt.get("max-download-limit", "0"), "up_limit": opt.get("max-upload-limit", "0")})
                 gids = [j["id"] for j in tor_jobs() if j["state"] != "gaveup"] if b.get("all") else [b.get("id")]
                 method = {"/tor/pause": "aria2.forcePause", "/tor/resume": "aria2.unpause",
                           "/tor/remove": "aria2.forceRemove"}.get(u.path)
                 if not method:
                     return self._send({"error": "not found"}, 404)
                 done = 0
-                if u.path == "/tor/remove":  # an unfinished one's part goes too: it would take space for ever
+                if u.path == "/tor/remove" and not b.get("keep"):  # an unfinished one's part goes too, unless kept
                     for g in gids:
                         tor_drop_part(g)
                 for g in gids:
@@ -1339,7 +1396,8 @@ class Handler(BaseHTTPRequestHandler):
             return self._send(delete_in_share(b.get("path") or ""))
         if u.path == "/yt/clear":
             with LOCK:
-                JOBS[:] = [j for j in JOBS if j["state"] in ("queued", "downloading", "paused")]
+                drop = set(b.get("states") or ("done", "failed", "cancelled"))  # 2.1.0: {"states": ["done"]}
+                JOBS[:] = [j for j in JOBS if j["state"] in ("queued", "downloading", "paused") or j["state"] not in drop]
                 save_jobs()
             return self._send({"ok": True})
         self._send({"error": "not found"}, 404)
