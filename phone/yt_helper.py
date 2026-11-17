@@ -416,6 +416,7 @@ def run_job(job):
             name = publish(job["file"])
             with LOCK:
                 job["state"], job["pct"], job["file"] = "done", 100.0, name
+                job["finished"] = time.strftime("%Y-%m-%d %H:%M")  # 2.1.2: shown in its details
                 if job.get("meta"):
                     remember_meta(name, job["meta"])
             log("done: %s" % name)
@@ -763,10 +764,56 @@ FIELDS = ["gid", "status", "totalLength", "completedLength", "downloadSpeed", "f
           "errorMessage", "errorCode", "followedBy", "numSeeders", "connections", "infoHash"]
 
 
+TOR_TIMES_FILE = os.path.join(CONF, "tor_times.json")
+TOR_TIMES = {}
+SAVE_TIMES = False  # set when the helper runs (tests import it and mustn't write the real file)
+
+
+def _tor_times():
+    """{infoHash or gid: {"added": t, "done": t}}: aria2 keeps neither (2.1.2: a download's details show them).
+    "added" is when the helper first saw it, so a download from before this is dated from the first look."""
+    if not TOR_TIMES:
+        try:
+            with open(TOR_TIMES_FILE) as f:
+                TOR_TIMES.update(json.load(f))
+        except (OSError, ValueError):
+            pass
+        TOR_TIMES.setdefault("_", {})
+    return TOR_TIMES
+
+
+def _tor_times_save():
+    if not SAVE_TIMES:
+        return
+    try:
+        now = time.time()
+        for k in [k for k, v in TOR_TIMES.items() if k != "_" and now - v.get("added", now) > 90 * 86400]:
+            del TOR_TIMES[k]
+        os.makedirs(CONF, exist_ok=True)
+        with open(TOR_TIMES_FILE + ".tmp", "w") as f:
+            json.dump(TOR_TIMES, f)
+        os.replace(TOR_TIMES_FILE + ".tmp", TOR_TIMES_FILE)
+    except OSError as e:
+        log("couldn't save download times: %s" % e)
+
+
+def _tor_time(d, state):
+    times, changed = _tor_times(), False
+    t = times.get(d.get("infoHash") or d["gid"])
+    if t is None:
+        t = times[d.get("infoHash") or d["gid"]] = {"added": int(time.time())}
+        changed = True
+    if state == "complete" and not t.get("done"):
+        t["done"] = int(time.time())
+        changed = True
+    return t, changed
+
+
 def tor_jobs():
     if not aria_start():
         return []
     out = []
+    changed = False
     for d in (aria("aria2.tellActive", FIELDS) + aria("aria2.tellWaiting", 0, 1000, FIELDS) +
               aria("aria2.tellStopped", 0, 100, FIELDS)):
         if d.get("followedBy"):
@@ -789,6 +836,11 @@ def tor_jobs():
                     "eta": int((total - done) / speed) if speed and total else 0,
                     "seeds": int(d.get("numSeeders") or 0), "peers": int(d.get("connections") or 0),
                     "error": d.get("errorMessage") or "", "uri": retry_uri(d) if d.get("infoHash") else ""})
+        t, new = _tor_time(d, state)
+        changed = changed or new
+        out[-1]["added"] = t.get("added", 0)
+        if t.get("done"):
+            out[-1]["finished"] = t["done"]
         if state == "complete" and rel and d["gid"] in TOR["moved"] and \
                 not os.path.exists(os.path.join(SHARE, *[x for x in rel[:2] if x and x != ".."])):
             out[-1]["gone"] = True  # 2.1.0: published into Download, then moved to the Xbox or deleted
@@ -799,6 +851,8 @@ def tor_jobs():
                     "pct": 0.0, "speed": 0, "eta": 0, "seeds": 0, "peers": 0, "when": item.get("when", 0),
                     "times": put_aside["times"].get(h, 1),
                     "error": "no peers after %d tries" % (STALL_TRIES + 1)})
+    if changed:
+        _tor_times_save()
     return out
 
 
@@ -1559,4 +1613,5 @@ def main():
 
 
 if __name__ == "__main__":
+    SAVE_TIMES = True
     main()

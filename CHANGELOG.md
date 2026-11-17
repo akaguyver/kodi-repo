@@ -3,6 +3,11 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.1 – One window, same menus everywhere
+- **2.1.2**
+  - Show details is first on every download's menu: where it came from, size, state, when it was added and finished, where the files are, whether it's in your library, and for a season pack every file and whether it's done or already in your library.
+  - Missing episodes lists whole missing seasons too, and sorts single episodes first and whole seasons last; the other sorts are A-Z, Newest and Oldest.
+  - Fake shows (a show's Season folders looked up as shows of their own, e.g. "Club Friday Season 12") stop coming back: Sortovia clears the setting in Kodi's library that made Kodi treat those show folders as TV folders.
+  - The Downloads header no longer writes the phone message over the clock and the auto-move line.
 - **2.1.1**
   - Missing episodes scrolls: Down moves through the whole list (it went back to the top every time), from a row's Search button too.
   - The hints at the bottom of Missing episodes no longer cover the Scan again button.
