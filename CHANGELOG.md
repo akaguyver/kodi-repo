@@ -2,6 +2,12 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 2.2 – Discover and tidy YouTube folders
+- **2.2.0**
+  - Search > Discover: popular, top rated and new shows and movies from TMDb, by genre (the TV and Movies boxes say which). Each row shows the year, rating, genres and a line of the story, and says when it's already in your library. A searches for it, X changes the words first, Y ticks several to search at once, Show more lists more, and Back returns to the list. It uses the free TMDb key from Where to watch (it asks once if there isn't one).
+  - Settings > YouTube > Tidy YouTube folders: lessons in YouTube videos move into Tutorials, the old Music and DJing folder moves into Tutorials, and folders with nearly the same name are merged. It shows the list first and asks; nothing is deleted.
+  - Search: the Tick and Back hints no longer cover Paste a link; shorter sort names leave room for Discover.
+
 ## 2.1 – One window, same menus everywhere
 - **2.1.2**
   - Show details is first on every download's menu: where it came from, size, state, when it was added and finished, where the files are, whether it's in your library, and for a season pack every file and whether it's done or already in your library.
