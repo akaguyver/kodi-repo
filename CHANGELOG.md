@@ -3,6 +3,17 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.0 – A new look
+- **2.0.8**
+  - Moving around is easier: Left and Right go to the nearest thing on that side. The left stick jumps to the top row and the right stick to the bottom row, with hints for both next to B Back.
+  - The Downloads list no longer flashes or empties when the phone is slow to answer. The last list stays up for a few minutes.
+  - Downloads shows when Auto move last moved something and when it looks next.
+  - Y ticks downloads on the Downloads page. A on a ticked one moves, removes or deletes all the ticked ones together.
+  - "Move everything" counts folders and files on the phone (a season counts once). It shows one message at the end, not one per folder.
+  - Moving a YouTube video whose name has # or unusual symbols works.
+  - The YOUTUBE, REAL-DEBRID and other tags keep their own colour and fit their text.
+  - The side bar shows the real Sortovia logo.
+  - Extras in a folder called "Videos" no longer turn into America's Funniest Home Videos. The wrong show is removed and its files are moved to _Unpacked\TV extras.
+  - The Real-Debrid watcher restarts after an update (the old version kept running until Kodi restarted).
 - **2.0.7**
   - Sortovia opens straight to its window. The empty old-style list no longer shows while it starts.
   - Picking a download on Home opens the same menu as on Downloads.
