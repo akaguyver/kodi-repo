@@ -3,6 +3,15 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.1 – One window, same menus everywhere
+- **2.1.1**
+  - Missing episodes scrolls: Down moves through the whole list (it went back to the top every time), from a row's Search button too.
+  - The hints at the bottom of Missing episodes no longer cover the Scan again button.
+  - One Sortovia icon again (2.1.0 showed two).
+  - Opening is quicker: the library check and the picture folder check run in the background.
+  - Downloads opens quicker: the phone, BiglyBT and YouTube are asked at the same time.
+  - Pick several downloads (X away from the rows) works, for every kind of download, with the same menu as ticked rows.
+  - When an action for several downloads partly fails, one message says what worked and why the rest didn't.
+  - Updating shows its progress on Sortovia's screen.
 - **2.1.0**
   - Sortovia is one window now: menus and messages open on top of the page, and when a video starts Sortovia closes without knocking the video out of full screen.
   - If a page hits an error, you get a message and Home instead of Sortovia closing.

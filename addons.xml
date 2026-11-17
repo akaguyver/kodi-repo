@@ -14,7 +14,7 @@
     <platform>all</platform>
   </extension>
 </addon>
-<addon id="script.kodisorter" name="Sortovia" version="2.1.0" provider-name="akaguyver">
+<addon id="script.kodisorter" name="Sortovia" version="2.1.1" provider-name="akaguyver">
   <requires>
     <import addon="xbmc.python" version="3.0.0"/>
   </requires>
@@ -22,7 +22,6 @@
     <provides>executable</provides>
   </extension>
   <extension point="xbmc.python.pluginsource" library="default.py">
-    <provides>executable</provides>
   </extension>
   <extension point="xbmc.service" library="service.py" start="login"/>
   <extension point="kodi.context.item">
