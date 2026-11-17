@@ -3,6 +3,9 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.0 – A new look
+- **2.0.9**
+  - When the phone stops answering, Downloads says so and tells you what to type in Termux (kodi-share restart), instead of showing an empty list.
+  - Two public trackers that no longer answer were removed from the ones added to every torrent.
 - **2.0.8**
   - Moving around is easier: Left and Right go to the nearest thing on that side. The left stick jumps to the top row and the right stick to the bottom row, with hints for both next to B Back.
   - The Downloads list no longer flashes or empties when the phone is slow to answer. The last list stays up for a few minutes.

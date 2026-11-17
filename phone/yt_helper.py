@@ -579,13 +579,13 @@ def tor_at_once():
             return max(1, min(20, int(f.read().strip())))
     except (OSError, ValueError):
         return TOR_AT_ONCE
-# The steadiest free public trackers (ngosang/trackerslist "best", checked 2026-11-13), added to every torrent.
+# The steadiest free public trackers (ngosang/trackerslist "best"; 2026-11-17: desync + tryhackx dropped, no answer), added to every torrent.
 TRACKERS = [
     "udp://tracker.opentrackr.org:1337/announce", "udp://open.stealth.si:80/announce",
     "udp://tracker.torrent.eu.org:451/announce", "udp://open.demonii.com:1337/announce",
-    "udp://open.tracker.cl:1337/announce", "udp://exodus.desync.com:6969/announce",
+    "udp://open.tracker.cl:1337/announce",
     "udp://explodie.org:6969/announce", "udp://tracker.qu.ax:6969/announce",
-    "udp://tracker-udp.gbitt.info:80/announce", "udp://tracker.tryhackx.org:6969/announce",
+    "udp://tracker-udp.gbitt.info:80/announce",
     "http://tracker.renfei.net:8080/announce", "http://tracker.dler.org:6969/announce",
 ]
 
