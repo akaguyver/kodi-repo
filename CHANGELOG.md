@@ -3,6 +3,16 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.2 – Discover and tidy YouTube folders
+- **2.2.2**
+  - The "update is ready" banner on Home shows each step while it updates (downloading, then the new files going in). It used to sit for up to half a minute with nothing on screen.
+  - While a progress screen or a menu is open, the page under it can't take the cursor any more. Before, the cursor could wander onto the hidden page, where pressing A did nothing (Downloads in the side bar "not opening").
+  - Picking a page in the side bar keeps the cursor where it belongs (Downloads lit up Library).
+  - The Downloads number in the side bar keeps up on every page (it stayed at 3 after several downloads were picked on Search).
+  - Sending to Real-Debrid says how many were sent.
+  - Search hides torrents with 0 seeds and says how many it hid. Settings > General settings > Search and missing episodes switches this off.
+  - Missing episodes: episodes that are downloading get a green DOWNLOADING label. Shows you have every aired episode of aren't looked up again until their next episode airs (or once a week when no date is known yet). Where to watch is off unless you switch it on under Settings > General settings > Search and missing episodes; when it's on, it runs after the check.
+  - Searching several episodes: "Searching for..." shows at the top, not on top of the results already listed.
+  - The Top row / Bottom row hints show a D-pad with the side to press lit up, marked L or R.
 - **2.2.1**
   - Missing episodes: an episode that's downloading says "Downloading" on its row, also when the show's name has an apostrophe ("It's Always Sunny" downloads as "Its.Always.Sunny"); whole missing seasons count a season pack.
   - Search the ticked: every episode's results stay on one list, grouped, each saying which episode it's for (the list was replaced by each search).
