@@ -3,6 +3,9 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.2 – Discover and tidy YouTube folders
+- **2.2.6**
+  - A finished BiglyBT download saved under a different name than BiglyBT shows is found and moved.
+  - A finished download that can't be moved waits 10 minutes before the next try, instead of trying every 2 seconds.
 - **2.2.5**
   - Updates install by themselves while Sortovia is open, and the new version opens next time. Settings > General > Updates and backup > "Install updates by themselves" turns it off.
 - **2.2.4**
