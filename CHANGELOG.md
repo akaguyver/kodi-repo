@@ -3,6 +3,13 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.2 – Discover and tidy YouTube folders
+- **2.2.3**
+  - A download that came down damaged (a .rar that's only zeros, like one Zeds Dead album) is now spotted the first time. It shows as Failed in Downloads and Auto move stops trying it. Before, it was copied to the Xbox and tried again every run and every time Kodi started.
+  - Auto move's progress stays in the small bar in the corner, and nothing shows while a video plays. Before, a full-screen "Looking inside packed albums" or "Listing files" screen could pop up over a show.
+  - Downloads: Down from the end of the list, and Right from a row, reach the buttons under the list again. The list's refresh every second no longer puts the cursor back where it was a moment before.
+  - Search: after you pick a missing episode, the Missing episodes tab goes straight back to the list.
+  - YouTube videos in Finished show their own title, not their folder ("YouTube videos", "Other"). Details shows the video's channel, upload date, length and link.
+  - B gets you out of Sortovia without going round pages you already visited.
 - **2.2.2**
   - The "update is ready" banner on Home shows each step while it updates (downloading, then the new files going in). It used to sit for up to half a minute with nothing on screen.
   - While a progress screen or a menu is open, the page under it can't take the cursor any more. Before, the cursor could wander onto the hidden page, where pressing A did nothing (Downloads in the side bar "not opening").
