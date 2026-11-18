@@ -3,6 +3,11 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.2 – Discover and tidy YouTube folders
+- **2.2.1**
+  - Missing episodes: an episode that's downloading says "Downloading" on its row, also when the show's name has an apostrophe ("It's Always Sunny" downloads as "Its.Always.Sunny"); whole missing seasons count a season pack.
+  - Search the ticked: every episode's results stay on one list, grouped, each saying which episode it's for (the list was replaced by each search).
+  - Torrent searches leave out a leading "It's" and apostrophes ("Greys Anatomy"), as file names write them. Put the words in "quotes" to search exactly.
+  - Missing episodes skips shows that have ended and that you have every episode of. It asks the first time; Settings > Library changes it.
 - **2.2.0**
   - Search > Discover: popular, top rated and new shows and movies from TMDb, by genre (the TV and Movies boxes say which). Each row shows the year, rating, genres and a line of the story, and says when it's already in your library. A searches for it, X changes the words first, Y ticks several to search at once, Show more lists more, and Back returns to the list. It uses the free TMDb key from Where to watch (it asks once if there isn't one).
   - Settings > YouTube > Tidy YouTube folders: lessons in YouTube videos move into Tutorials, the old Music and DJing folder moves into Tutorials, and folders with nearly the same name are merged. It shows the list first and asks; nothing is deleted.
