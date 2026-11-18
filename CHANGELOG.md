@@ -3,6 +3,8 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.2 – Discover and tidy YouTube folders
+- **2.2.8**
+  - The log notes where each press moves the cursor, to track down the Downloads buttons problem.
 - **2.2.7**
   - Downloads: Down from the last download and Right from any download now always reach the buttons under the list (Pause all, Clear finished and the rest). Before, the screen was often being redrawn while you pressed, and the press was lost.
   - Downloads redraws without rebuilding the whole screen when a download starts or a number changes, so the cursor is never lost.
