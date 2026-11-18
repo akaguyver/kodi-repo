@@ -3,6 +3,9 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.2 – Discover and tidy YouTube folders
+- **2.2.9**
+  - Downloads: the buttons under the list (Pause all, Clear finished...) now show their box, and the cursor shows on them. The cursor did reach them, but their pictures were missing for the sizes your labels made, so it looked like the cursor vanished. They are all one size now, and anywhere else a size has no picture of its own, the nearest one is used.
+  - "Real-Debrid lists" is now just "Real-Debrid", so it fits.
 - **2.2.8**
   - The log notes where each press moves the cursor, to track down the Downloads buttons problem.
 - **2.2.7**
