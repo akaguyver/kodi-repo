@@ -3,6 +3,12 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.2 – Discover and tidy YouTube folders
+- **2.2.4**
+  - Moving around goes 1 place per press again. In 2.2.3 a press could move the cursor 2 places.
+  - The cursor is easy to see: a button it's on is a clearly lighter colour, and a chosen one (like Movies) gets a white edge.
+  - Season packs download in episode order, so the first episodes are ready first. This works with BiglyBT, qBittorrent and Transmission, and it's on by default. Settings > General settings > Search and missing episodes switches it off. The phone's own downloader (aria2) can't download in order.
+  - Discover: ticking TV or Movies while the list is still loading now loads the new list (the change was dropped).
+  - The Downloads number in the side bar counts downloads waiting their turn too, and updates by itself on every page within a few seconds.
 - **2.2.3**
   - A download that came down damaged (a .rar that's only zeros, like one Zeds Dead album) is now spotted the first time. It shows as Failed in Downloads and Auto move stops trying it. Before, it was copied to the Xbox and tried again every run and every time Kodi started.
   - Auto move's progress stays in the small bar in the corner, and nothing shows while a video plays. Before, a full-screen "Looking inside packed albums" or "Listing files" screen could pop up over a show.
