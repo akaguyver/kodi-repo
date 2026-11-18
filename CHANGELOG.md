@@ -3,6 +3,8 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.2 – Discover and tidy YouTube folders
+- **2.2.5**
+  - Updates install by themselves while Sortovia is open, and the new version opens next time. Settings > General > Updates and backup > "Install updates by themselves" turns it off.
 - **2.2.4**
   - Moving around goes 1 place per press again. In 2.2.3 a press could move the cursor 2 places.
   - The cursor is easy to see: a button it's on is a clearly lighter colour, and a chosen one (like Movies) gets a white edge.
