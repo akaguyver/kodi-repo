@@ -3,6 +3,9 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.2 – Discover and tidy YouTube folders
+- **2.2.7**
+  - Downloads: Down from the last download and Right from any download now always reach the buttons under the list (Pause all, Clear finished and the rest). Before, the screen was often being redrawn while you pressed, and the press was lost.
+  - Downloads redraws without rebuilding the whole screen when a download starts or a number changes, so the cursor is never lost.
 - **2.2.6**
   - A finished BiglyBT download saved under a different name than BiglyBT shows is found and moved.
   - A finished download that can't be moved waits 10 minutes before the next try, instead of trying every 2 seconds.
