@@ -3,6 +3,10 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.3 – Real-Debrid without the VPN
+- **2.3.2**
+  - With Sortovia Helper 0.1.9 on the phone, the app also does the phone's file jobs: moving finished downloads, deleting ones you remove, unpacking music .zip files, and keeping copies in the phone's Music folder. Music in a .rar still goes to Termux for now.
+  - Sending a torrent to Real-Debrid shows a "Sending..." window with Cancel, and gives up on one after 45 seconds (it then goes to BiglyBT). Before, a Real-Debrid that didn't answer froze the screen for minutes: the cursor moved, but nothing could be picked.
+  - The Downloads number in the side bar no longer disappears when the phone misses one check.
 - **2.3.1**
   - Real-Debrid downloads can now go through the new Sortovia Helper phone app instead of Termux. When the app is running, new downloads go to it, and the Downloads list shows the app's downloads and Termux's together. YouTube stays in Termux for now. Without the app, nothing changes.
   - Downloads > Limits > How many download at once is now one total for Real-Debrid and torrents together. Real-Debrid gets 1 or 2 of them (its speed is shared between its files, so more doesn't help), and BiglyBT gets the rest. With 6, that's 2 Real-Debrid and 4 torrents. Before, each got 6, so 10 or more ran at once.
