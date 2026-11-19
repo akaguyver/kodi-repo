@@ -3,6 +3,9 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.3 – Real-Debrid without the VPN
+- **2.3.1**
+  - Real-Debrid downloads can now go through the new Sortovia Helper phone app instead of Termux. When the app is running, new downloads go to it, and the Downloads list shows the app's downloads and Termux's together. YouTube stays in Termux for now. Without the app, nothing changes.
+  - Downloads > Limits > How many download at once is now one total for Real-Debrid and torrents together. Real-Debrid gets 1 or 2 of them (its speed is shared between its files, so more doesn't help), and BiglyBT gets the rest. With 6, that's 2 Real-Debrid and 4 torrents. Before, each got 6, so 10 or more ran at once.
 - **2.3.0**
   - New switch: Settings > General settings > Phone and privacy > Phone downloader: Real-Debrid only (on). The phone's own downloader then takes Real-Debrid and direct downloads only, and doesn't look for other people's computers, so Termux can stay out of your VPN for full Real-Debrid speed. Torrents go to BiglyBT, which stays in the VPN.
   - What's new shows the first time you open a new version (it waited for the second time, or didn't show), and the update check no longer offers the version you already have.
