@@ -3,6 +3,12 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.3 – Real-Debrid without the VPN
+- **2.3.3**
+  - New movies show up in the library again. Kodi's movie source is the whole drive, so Sortovia couldn't match the movie's folder and asked for a full library update that never reached it. It now scans the movie's own folder. On the first start, movies already on the drive but missing from the library (The Odyssey, A Story of Derry) are scanned once.
+  - The Downloads number in the side bar stays after changing pages. The Downloads button was redrawn on top of it.
+  - Season packs really download in order on BiglyBT. BiglyBT uses a different name for this setting, so it was ignored before. Each BiglyBT download's menu can turn it on or off, and Show details says whether it's on.
+  - Move to the top of the queue on a paused torrent also resumes it ("Resume, at the top of the queue"). Torrents waiting for sources can be moved to the top or bottom too.
+  - With Sortovia Helper 0.1.10, music in a .rar is unpacked by the app as well, so Termux isn't needed for it.
 - **2.3.2**
   - With Sortovia Helper 0.1.9 on the phone, the app also does the phone's file jobs: moving finished downloads, deleting ones you remove, unpacking music .zip files, and keeping copies in the phone's Music folder. Music in a .rar still goes to Termux for now.
   - Sending a torrent to Real-Debrid shows a "Sending..." window with Cancel, and gives up on one after 45 seconds (it then goes to BiglyBT). Before, a Real-Debrid that didn't answer froze the screen for minutes: the cursor moved, but nothing could be picked.
