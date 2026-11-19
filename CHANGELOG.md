@@ -2,6 +2,11 @@
 
 Newest first. Each line says what the update changed for you.
 
+## 2.3 – Real-Debrid without the VPN
+- **2.3.0**
+  - New switch: Settings > General settings > Phone and privacy > Phone downloader: Real-Debrid only (on). The phone's own downloader then takes Real-Debrid and direct downloads only, and doesn't look for other people's computers, so Termux can stay out of your VPN for full Real-Debrid speed. Torrents go to BiglyBT, which stays in the VPN.
+  - What's new shows the first time you open a new version (it waited for the second time, or didn't show), and the update check no longer offers the version you already have.
+
 ## 2.2 – Discover and tidy YouTube folders
 - **2.2.9**
   - Downloads: the buttons under the list (Pause all, Clear finished...) now show their box, and the cursor shows on them. The cursor did reach them, but their pictures were missing for the sizes your labels made, so it looked like the cursor vanished. They are all one size now, and anywhere else a size has no picture of its own, the nearest one is used.

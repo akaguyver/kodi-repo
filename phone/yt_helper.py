@@ -571,7 +571,40 @@ TOR_SESSION = os.path.join(CONF, "aria2-session.txt")
 TOR_PORT = 6801
 TOR = {"proc": None, "moved": set(), "later": {}}
 TOR_AT_ONCE = 12  # downloads running together by default; one with no peers can't hold up the rest
+TOR_RD_ONLY_FILE = os.path.join(CONF, "rd-only")  # Sortovia 2.3.0: "1": Real-Debrid and direct downloads only
 TOR_LIMIT_FILE = os.path.join(CONF, "tor-at-once")  # the person's own choice (Sortovia > Downloads > At once)
+
+
+def rd_only():
+    """Sortovia 2.3.0: the phone's own downloader takes Real-Debrid and direct downloads only, never a plain
+    torrent, and doesn't look for peers (DHT, local peers, peer exchange): Termux can be left out of the VPN, with
+    BiglyBT (in the VPN) doing the torrents. On unless Sortovia turned it off."""
+    try:
+        with open(TOR_RD_ONLY_FILE) as f:
+            return f.read().strip() != "0"
+    except OSError:
+        return True
+
+
+def _p2p_flags():
+    on = "false" if rd_only() else "true"
+    return ["--enable-dht=" + on, "--enable-dht6=" + on, "--bt-enable-lpd=" + on, "--enable-peer-exchange=" + on]
+
+
+def _pause_torrents():
+    """Real-Debrid only: every plain torrent in aria2 paused (they'd go out without the VPN). Returns how many."""
+    n = 0
+    try:
+        for d in aria("aria2.tellActive", ["gid", "bittorrent", "status"]) + \
+                aria("aria2.tellWaiting", 0, 1000, ["gid", "bittorrent", "status"]):
+            if d.get("bittorrent") and d.get("status") != "paused":
+                aria("aria2.forcePause", d["gid"])
+                n += 1
+    except Exception as e:
+        log("couldn't pause the torrents: %s" % e)
+    if n:
+        log("Real-Debrid only: paused %d torrent(s) - BiglyBT does torrents" % n)
+    return n
 
 
 def tor_at_once():
@@ -612,6 +645,8 @@ def aria_start():
     """aria2 running in the background, started the first time it's needed. False when it isn't installed."""
     if TOR["proc"] and TOR["proc"].poll() is None:
         return True
+    if TOR.get("ready") and _aria_up():  # 2.3.0: one started before (or by an older helper) still answers
+        return True
     exe = tool("aria2c")
     if not exe:
         return False
@@ -626,7 +661,7 @@ def aria_start():
         # Space is used as the data arrives, not reserved up front: many downloads at once can't fill the phone.
         "--file-allocation=none",
         # More places to find peers: public trackers on top of each torrent's own, DHT and the local network.
-        "--bt-tracker=" + ",".join(TRACKERS), "--enable-dht=true", "--bt-enable-lpd=true", "--enable-peer-exchange=true",
+        "--bt-tracker=" + ",".join(TRACKERS)] + _p2p_flags() + [  # 2.3.0: off when Real-Debrid only
         "--input-file=" + TOR_SESSION, "--save-session=" + TOR_SESSION, "--save-session-interval=20",
         # The hotspot / mobile data drops out now and then: keep trying for about ten minutes before a
         # download counts as failed (the part on the phone is kept either way, for Try again).
@@ -639,11 +674,61 @@ def aria_start():
             # the old settings (e.g. 2 at a time) would stay. Set them on whichever aria2 answered.
             aria("aria2.changeGlobalOption", {"max-concurrent-downloads": str(tor_at_once()),
                                               "bt-tracker": ",".join(TRACKERS), "file-allocation": "none"})
-            log("torrent downloads ready (aria2, %d at a time), saving into %s" % (tor_at_once(), TOR_OUT))
+            log("torrent downloads ready (aria2, %d at a time%s), saving into %s"
+                % (tor_at_once(), ", Real-Debrid only" if rd_only() else "", TOR_OUT))
+            TOR["ready"] = True
+            if rd_only():
+                _pause_torrents()
+                # an aria2 left running from before (it held the port) may still look for peers: start it again
+                if aria("aria2.getGlobalOption").get("enable-dht") == "true" and not TOR.get("again"):
+                    TOR["again"] = True
+                    try:
+                        return aria_restart()
+                    finally:
+                        TOR["again"] = False
             return True
         except Exception:
             time.sleep(0.3)
     return False
+
+
+def _aria_up():
+    try:
+        aria("aria2.getVersion")
+        return True
+    except Exception:
+        TOR["ready"] = False
+        return False
+
+
+def aria_restart():
+    """aria2 stopped (its list saved) and started again, so the peer settings (DHT...) take effect."""
+    if _aria_up():
+        try:
+            aria("aria2.saveSession")
+            aria("aria2.shutdown")
+        except Exception as e:
+            log("aria2 didn't stop: %s" % e)
+        for _ in range(50):
+            if not _aria_up():
+                break
+            time.sleep(0.2)
+    if TOR["proc"]:
+        try:
+            TOR["proc"].wait(5)
+        except Exception:
+            pass
+    TOR["proc"], TOR["ready"] = None, False
+    return aria_start()
+
+
+def set_rd_only(on):
+    with open(TOR_RD_ONLY_FILE, "w") as f:
+        f.write("1" if on else "0")
+    log("phone downloader: %s" % ("Real-Debrid and direct downloads only" if on else "torrents too"))
+    if on:
+        _pause_torrents() if _aria_up() else None
+    return aria_restart() if tool("aria2c") else False
 
 
 def _tor_name(d):
@@ -1320,6 +1405,10 @@ class Handler(BaseHTTPRequestHandler):
                     aria("aria2.changeGlobalOption", {"max-concurrent-downloads": str(n)})
                 log("downloads at once: %d" % n)
             return self._send({"n": tor_at_once()})
+        if u.path == "/tor/mode":  # 2.3.0: {"rd_only": bool} sets it, {} just asks
+            if "rd_only" in b and bool(b["rd_only"]) != rd_only():
+                set_rd_only(bool(b["rd_only"]))
+            return self._send({"rd_only": rd_only()})
         if u.path == "/tor/position":  # {"id", "to": "top" | "up" | "down" | "bottom"}: where it is in the queue
             try:
                 how, n = {"top": ("POS_SET", 0), "up": ("POS_CUR", -1), "down": ("POS_CUR", 1)}.get(
@@ -1336,8 +1425,13 @@ class Handler(BaseHTTPRequestHandler):
                     if not re.match(r"^(magnet:\?|https?://)", uri):
                         return self._send({"error": "that isn't a magnet link or a torrent address"}, 400)
                     kind = "Real-Debrid" if b.get("kind") == "Real-Debrid" else "Torrents"
+                    if rd_only() and (kind != "Real-Debrid" or uri.startswith("magnet:")):
+                        return self._send({"error": "the phone's own downloader does Real-Debrid only (it's outside "
+                                                    "your VPN): torrents go to BiglyBT", "rd_only": True}, 409)
                     sub = re.sub(r'[\\/:*?"<>|]+', " ", b.get("group") or "").strip()
                     opts = {"dir": os.path.join(TOR_WORK, kind, sub) if sub else os.path.join(TOR_WORK, kind)}
+                    if rd_only():
+                        opts["follow-torrent"] = "false"  # a link that turns out to be a .torrent isn't started
                     if b.get("out"):
                         opts["out"] = re.sub(r'[\\/:*?"<>|]+', " ", b["out"]).strip()
                     want = (opts.get("out") or b.get("name") or "").lower()
