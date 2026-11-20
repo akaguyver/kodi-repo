@@ -3,6 +3,8 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.3 – Real-Debrid without the VPN
+- **2.3.4**
+  - Searching for an 11-letter word such as "mandalorian" searches again. Sortovia took it for a YouTube video's code and looked it up on YouTube, even with only Torrents picked.
 - **2.3.3**
   - New movies show up in the library again. Kodi's movie source is the whole drive, so Sortovia couldn't match the movie's folder and asked for a full library update that never reached it. It now scans the movie's own folder. On the first start, movies already on the drive but missing from the library (The Odyssey, A Story of Derry) are scanned once.
   - The Downloads number in the side bar stays after changing pages. The Downloads button was redrawn on top of it.
