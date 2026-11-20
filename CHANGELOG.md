@@ -3,6 +3,9 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.3 – Real-Debrid without the VPN
+- **2.3.9**
+  - Movies in Kodi is now just your Movies folder, not the whole drive, so Kodi stops trying to file TV, Music Videos and Tutorials as movies. Restart Kodi once after the update to see the change under Videos > Files.
+  - Kodi had saved many TV and movie folders twice, under two spellings, with leftover entries that weren't linked to any movie or episode. Sortovia merges each folder into one spelling and removes the leftovers, once, after a library backup. Watched marks and resume points on the leftover copies are kept, so some episodes you watched from Videos > Files now show as watched. No files on the drive are touched.
 - **2.3.8**
   - Fake shows made from Season folders ("Club Friday Season 12", "Digimon Tamers" inside Always Sunny, Rick and Morty and others) stop coming back. Sortovia asked Kodi to scan the whole TV folder, which Kodi can't open under the name it has for it, so Kodi scanned every folder it knew inside it on its own, and each Season folder became a "show". A new show is now scanned as its own folder, and sorting never starts a whole video library update. After the fakes are removed, only the shows they came from are scanned again.
 - **2.3.7**
