@@ -3,6 +3,8 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.3 – Real-Debrid without the VPN
+- **2.3.7**
+  - When Real-Debrid won't take a torrent, the log now says why (it only said "RDError").
 - **2.3.6**
   - A torrent Real-Debrid couldn't get is no longer lost when your torrent app (BiglyBT) isn't answering. It's kept under Downloads > Real-Debrid lists > Couldn't get, so you can send it again once BiglyBT is open.
   - Leftover folders from Kodi's library export are deleted from the drive's _Sortovia temp folder when Sortovia starts. Kodi couldn't remove the one from Nov 19 by itself.
