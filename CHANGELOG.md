@@ -3,6 +3,9 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.3 – Real-Debrid without the VPN
+- **2.3.6**
+  - A torrent Real-Debrid couldn't get is no longer lost when your torrent app (BiglyBT) isn't answering. It's kept under Downloads > Real-Debrid lists > Couldn't get, so you can send it again once BiglyBT is open.
+  - Leftover folders from Kodi's library export are deleted from the drive's _Sortovia temp folder when Sortovia starts. Kodi couldn't remove the one from Nov 19 by itself.
 - **2.3.5**
   - The weekly full library backup no longer brings up Kodi's "Exporting" window. Kodi's export took over the screen and could take more than ten minutes, so the backup gave up. The full backup now saves a list of every movie, show and episode, with watched marks and resume points, together with the library database, in the background in seconds. Kodi's own export is still in the backup menu for when you want a backup that Kodi's Import can restore.
 - **2.3.4**
