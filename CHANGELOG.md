@@ -3,6 +3,8 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.3 – Real-Debrid without the VPN
+- **2.3.5**
+  - The weekly full library backup no longer brings up Kodi's "Exporting" window. Kodi's export took over the screen and could take more than ten minutes, so the backup gave up. The full backup now saves a list of every movie, show and episode, with watched marks and resume points, together with the library database, in the background in seconds. Kodi's own export is still in the backup menu for when you want a backup that Kodi's Import can restore.
 - **2.3.4**
   - Searching for an 11-letter word such as "mandalorian" searches again. Sortovia took it for a YouTube video's code and looked it up on YouTube, even with only Torrents picked.
 - **2.3.3**
