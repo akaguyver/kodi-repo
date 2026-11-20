@@ -19,6 +19,11 @@ HTTP on port 8081, same user/password as kodi-share (Basic auth):
   POST /yt/pause  {"id"} or {"all": true}   pause (the part downloaded is kept)
   POST /yt/resume {"id"} or {"all": true}   carry on
   POST /yt/clear             remove finished and failed
+
+The Sortovia Helper app runs this same file for YouTube (no Termux): it starts it with its own Python and sets
+YT_ONLY=1 (YouTube only, no torrents), YT_HOST=127.0.0.1 and YT_HELPER_PORT (the app passes /yt/* calls on from
+port 8082), YT_CONF / YT_TMP (its own folders), YT_DLP_CMD (a JSON list, e.g. [python, yt-dlp]),
+YT_JS_RUNTIME (e.g. "quickjs:/path/libqjs.so") and YT_FFMPEG.
 """
 import base64
 import glob
@@ -27,6 +32,7 @@ import urllib.request
 import os
 import re
 import shutil
+import signal
 import subprocess
 import sys
 import threading
@@ -35,10 +41,12 @@ from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from urllib.parse import parse_qs, urlparse
 
 PORT = int(os.environ.get("YT_HELPER_PORT", "8081"))
-CONF = os.path.expanduser("~/.config/xbox-share")
+HOST = os.environ.get("YT_HOST", "0.0.0.0")
+YT_ONLY = os.environ.get("YT_ONLY") == "1"  # the Sortovia Helper app: YouTube only (it does the rest itself)
+CONF = os.environ.get("YT_CONF") or os.path.expanduser("~/.config/xbox-share")
 SHARE = os.environ.get("YT_SHARE", "/storage/emulated/0/Download")
 OUT = os.path.join(SHARE, "YouTube")
-TMP = os.path.expanduser("~/.cache/xbox-share/yt")  # half-done files stay out of the share
+TMP = os.environ.get("YT_TMP") or os.path.expanduser("~/.cache/xbox-share/yt")  # half-done files stay out of the share
 COOKIES = os.path.join(CONF, "youtube-cookies.txt")
 JOBS_FILE = os.path.join(CONF, "yt-jobs.json")
 SETTINGS_FILE = os.path.join(CONF, "yt-settings.json")
@@ -135,12 +143,36 @@ def cookies_status():
             "last_import": LAST_IMPORT["name"], "last_import_ago_s": int(time.time() - LAST_IMPORT["when"]) if LAST_IMPORT["when"] else None}
 
 
-def base_cmd():
-    cmd = [tool("yt-dlp") or "yt-dlp", "--no-warnings"]
+def ytdlp_cmd():
+    """How to run yt-dlp: Termux's yt-dlp, or what the app says (YT_DLP_CMD, e.g. its Python and yt-dlp)."""
+    try:
+        cmd = json.loads(os.environ.get("YT_DLP_CMD") or "null")
+    except ValueError:
+        cmd = None
+    if isinstance(cmd, list) and cmd and all(isinstance(c, str) for c in cmd):
+        return cmd
+    return [tool("yt-dlp") or "yt-dlp"]
+
+
+def js_runtime():
+    """yt-dlp needs a JavaScript runtime for YouTube: "runtime:path" (Termux: node; the app: QuickJS)."""
+    rt = os.environ.get("YT_JS_RUNTIME")
+    if rt:
+        return rt
     node = tool("node")
-    if node:
-        cmd += ["--js-runtimes", "node:" + node]
-    ff = tool("ffmpeg")
+    return "node:" + node if node else None
+
+
+def ffmpeg():
+    return os.environ.get("YT_FFMPEG") or tool("ffmpeg")
+
+
+def base_cmd():
+    cmd = ytdlp_cmd() + ["--no-warnings"]
+    js = js_runtime()
+    if js:
+        cmd += ["--js-runtimes", js]
+    ff = ffmpeg()
     if ff:
         cmd += ["--ffmpeg-location", ff]  # joins the video and sound tracks
     if os.path.exists(COOKIES):
@@ -1291,15 +1323,27 @@ class Handler(BaseHTTPRequestHandler):
         except ValueError:
             return {}
 
+    def _yt_only(self, path):
+        """The app's copy answers only /yt/*: the app does downloads, files and Music itself."""
+        if YT_ONLY and not path.startswith("/yt/"):
+            self._send({"error": "not found"}, 404)
+            return True
+        return False
+
     def do_GET(self):
         if not self._authed():
             return
         u = urlparse(self.path)
+        if self._yt_only(u.path):
+            return
         q = parse_qs(u.query)
         if u.path == "/yt/ping":
-            ver = subprocess.run([tool("yt-dlp") or "yt-dlp", "--version"], capture_output=True, text=True).stdout.strip()
+            try:
+                ver = subprocess.run(ytdlp_cmd() + ["--version"], capture_output=True, text=True, timeout=60).stdout.strip()
+            except (OSError, subprocess.TimeoutExpired):
+                ver = ""
             return self._send({"ok": True, "cookies": cookies_status(), "yt_dlp": ver,
-                               "node": bool(tool("node")), "folder": OUT})
+                               "node": bool(js_runtime()), "folder": OUT, "by": "app" if YT_ONLY else "termux"})
         if u.path == "/yt/search":
             cookies_status()
             try:
@@ -1326,6 +1370,8 @@ class Handler(BaseHTTPRequestHandler):
         if not self._authed():
             return
         u = urlparse(self.path)
+        if self._yt_only(u.path):
+            return
         if u.path == "/phone/music/file":
             rel = parse_qs(u.query).get("to", [""])[0]
             return self._send(save_to_music(rel, int(self.headers.get("Content-Length") or 0), self.rfile))
@@ -1335,6 +1381,8 @@ class Handler(BaseHTTPRequestHandler):
         if not self._authed():
             return
         u = urlparse(self.path)
+        if self._yt_only(u.path):
+            return
         b = self._body()
         if u.path == "/yt/add":
             url = (b.get("url") or "").strip()
@@ -1687,10 +1735,21 @@ def unpack_music(rel):
     return {"ok": os.path.relpath(final, root)}
 
 
+def _stop_now(sig, frame):
+    p = CURRENT.get("proc")
+    if p:
+        try:
+            p.terminate()
+            p.wait(5)
+        except Exception:
+            pass
+    os._exit(0)
+
+
 def main():
     if not os.path.exists(os.path.join(CONF, "password")):
         sys.exit("no kodi-share password yet - start kodi-share once first")
-    if not tool("yt-dlp"):
+    if not YT_ONLY and not tool("yt-dlp"):
         log("yt-dlp is missing: in plain Termux run  pkg install yt-dlp ffmpeg nodejs")
     load_jobs()
     load_meta()
@@ -1698,12 +1757,15 @@ def main():
     log("YouTube downloads on port %d -> %s (cookies: %s)" % (
         PORT, OUT, "OK" if st.get("present") else "none yet - export cookies.txt into Download"))
     threading.Thread(target=worker, daemon=True).start()
-    if os.path.getsize(TOR_SESSION) if os.path.exists(TOR_SESSION) else 0:
-        aria_start()  # torrents that were going when the phone stopped carry on
-    threading.Thread(target=tor_watch, daemon=True).start()
-    for kind in KINDS:  # so Sortovia can open them before anything has finished downloading
-        os.makedirs(os.path.join(SHARE, kind), exist_ok=True)
-    ThreadingHTTPServer(("0.0.0.0", PORT), Handler).serve_forever()
+    if YT_ONLY:
+        signal.signal(signal.SIGTERM, _stop_now)  # the app stopping: yt-dlp stops too (its part file is kept)
+    else:
+        if os.path.getsize(TOR_SESSION) if os.path.exists(TOR_SESSION) else 0:
+            aria_start()  # torrents that were going when the phone stopped carry on
+        threading.Thread(target=tor_watch, daemon=True).start()
+        for kind in KINDS:  # so Sortovia can open them before anything has finished downloading
+            os.makedirs(os.path.join(SHARE, kind), exist_ok=True)
+    ThreadingHTTPServer((HOST, PORT), Handler).serve_forever()
 
 
 if __name__ == "__main__":
