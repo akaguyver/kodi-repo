@@ -3,6 +3,13 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.3 – Real-Debrid without the VPN
+- **2.3.11**
+  - Episodes named like "The Altruists (2026) Season 1 Episode 1" go to TV. Episode 1 had been sorted as a movie.
+  - AI music videos (Suno, Udio, Sonauto, AI music generators) get their own folder: Tutorials/AI Music.
+  - Videos about Claude's models (Fable, Opus, Sonnet, Haiku) go to the Claude folder instead of Other.
+  - "Learn Ableton Live from Scratch" goes to Making music. "Scratch" there isn't DJ scratching.
+  - Settings > YouTube > Tidy YouTube folders also moves lessons that older versions left in Tutorials/Other or in the wrong Music and DJing folder. It shows the list and asks before moving anything.
+  - Newest and Largest now sort YouTube results in search. Largest puts the longest videos first, after torrents.
 - **2.3.10**
   - YouTube downloads can run in the Sortovia Helper app (0.1.11 or newer), with no Termux needed. Sortovia uses the app when it says it can, and the Termux helper while the app's YouTube part is starting or when the app isn't running.
 - **2.3.9**
