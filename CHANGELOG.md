@@ -3,6 +3,8 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.3 – Real-Debrid without the VPN
+- **2.3.13**
+  - Tidy YouTube folders shows a progress window while it looks through your folders (how many it has read and which one it's in), and Cancel stops it.
 - **2.3.12**
   - Crypto and trading videos (crypto, Bitcoin, Coinbase, TradingView, trading bots, day trading) get their own folder: Tutorials/Crypto Trading, even when the title also names Claude, ChatGPT or Python.
   - Settings > YouTube > Tidy YouTube folders now checks the loose videos in every Tutorials folder, so the crypto videos already sorted into Claude, Python or Other move to Crypto Trading. It shows the list and asks first.
