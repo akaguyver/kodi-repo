@@ -3,6 +3,9 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.3 – Real-Debrid without the VPN
+- **2.3.14**
+  - Holding down a YouTube or Tutorials video now shows Details (Sortovia), renamed from YouTube video (Sortovia).
+  - New: Settings > YouTube > Set file dates to upload dates. Each video's file date becomes the day it went up on YouTube, so Sort by: Date in Files puts them in upload order. It uses the upload date from Look up channel and upload date. If the device doesn't allow changing dates on the drive, it says so.
 - **2.3.13**
   - Tidy YouTube folders shows a progress window while it looks through your folders (how many it has read and which one it's in), and Cancel stops it.
 - **2.3.12**
