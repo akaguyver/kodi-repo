@@ -96,8 +96,27 @@ def log(msg):
 
 
 # ---------- cookies ----------
+SIGNED_IN = ("\tSAPISID\t", "\tLOGIN_INFO\t", "\t__Secure-3PSID\t")
+
+
+def signed_in(text):
+    return any(n in text for n in SIGNED_IN)
+
+
+def _have_signed_in():
+    try:
+        with open(COOKIES, encoding="utf-8", errors="replace") as f:
+            return signed_in(f.read())
+    except OSError:
+        return False
+
+
 def import_cookies():
-    """Move the newest exported cookies file (with YouTube cookies) out of Download."""
+    """Move the newest exported cookies file (with YouTube cookies) out of Download.
+
+    A file that isn't signed in to YouTube never replaces cookies that are: it's refused and taken out of
+    Download, so a signed-out export (a private tab exported before signing in) can't break working downloads,
+    and the next check doesn't fall back to it either."""
     found = []
     for pat in ("*cookie*.txt", "*Cookie*.txt", "*.cookies"):
         found += glob.glob(os.path.join(SHARE, pat))
@@ -111,6 +130,15 @@ def import_cookies():
             continue
         if not text.lstrip().startswith("# Netscape") and "\tTRUE\t" not in text and "\tFALSE\t" not in text:
             continue  # not a cookies.txt (Netscape format) file
+        name = os.path.basename(path)
+        if not signed_in(text) and _have_signed_in():
+            try:
+                os.remove(path)
+            except OSError:
+                pass
+            log("cookies in %s refused: not signed in to YouTube; kept the signed-in ones" % name)
+            LAST_REFUSED["name"], LAST_REFUSED["when"] = name, time.time()
+            continue
         os.makedirs(CONF, exist_ok=True)
         with open(COOKIES, "w", encoding="utf-8") as f:
             f.write(text)
@@ -119,12 +147,13 @@ def import_cookies():
             os.remove(path)  # don't leave sign-in cookies in the shared folder
         except OSError:
             pass
-        log("cookies imported from %s" % os.path.basename(path))
-        LAST_IMPORT["name"], LAST_IMPORT["when"] = os.path.basename(path), time.time()
-        return os.path.basename(path)
+        log("cookies imported from %s" % name)
+        LAST_IMPORT["name"], LAST_IMPORT["when"] = name, time.time()
+        return name
     return None
 
 
+LAST_REFUSED = {"name": None, "when": 0}
 LAST_IMPORT = {"name": None, "when": 0}
 
 
@@ -133,13 +162,9 @@ def cookies_status():
     if not os.path.exists(COOKIES):
         return {"present": False, "imported": None}
     age = (time.time() - os.path.getmtime(COOKIES)) / 86400
-    signed_in = False
-    try:
-        with open(COOKIES, encoding="utf-8", errors="replace") as f:
-            signed_in = any(n in f.read() for n in ("\tSAPISID\t", "\tLOGIN_INFO\t", "\t__Secure-3PSID\t"))
-    except OSError:
-        pass
-    return {"present": True, "age_days": round(age, 1), "signed_in": signed_in, "imported": just,
+    refused = LAST_REFUSED["name"] if LAST_REFUSED["when"] and time.time() - LAST_REFUSED["when"] < 120 else None
+    return {"present": True, "age_days": round(age, 1), "signed_in": _have_signed_in(), "imported": just,
+            "refused": refused,
             "last_import": LAST_IMPORT["name"], "last_import_ago_s": int(time.time() - LAST_IMPORT["when"]) if LAST_IMPORT["when"] else None}
 
 

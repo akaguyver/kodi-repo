@@ -3,6 +3,10 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.3 – Real-Debrid without the VPN
+- **2.3.12**
+  - Crypto and trading videos (crypto, Bitcoin, Coinbase, TradingView, trading bots, day trading) get their own folder: Tutorials/Crypto Trading, even when the title also names Claude, ChatGPT or Python.
+  - Settings > YouTube > Tidy YouTube folders now checks the loose videos in every Tutorials folder, so the crypto videos already sorted into Claude, Python or Other move to Crypto Trading. It shows the list and asks first.
+  - A cookies file that isn't signed in to YouTube no longer replaces cookies that are. The phone refuses it, takes it out of Download, and the Xbox says so. Before, a private-tab export saved before signing in could break YouTube downloads.
 - **2.3.11**
   - Episodes named like "The Altruists (2026) Season 1 Episode 1" go to TV. Episode 1 had been sorted as a movie.
   - AI music videos (Suno, Udio, Sonauto, AI music generators) get their own folder: Tutorials/AI Music.
