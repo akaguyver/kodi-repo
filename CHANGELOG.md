@@ -3,6 +3,8 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.3 – Real-Debrid without the VPN
+- **2.3.16**
+  - Fixed: Settings > YouTube > Look up channel and upload date did nothing (it failed straight away). It works again, and then Set file dates to upload dates has dates to use.
 - **2.3.15**
   - Download from YouTube no longer says it can't reach the phone when the Sortovia Helper app was only starting up: it asks the app again first.
 - **2.3.14**
