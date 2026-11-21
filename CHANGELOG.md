@@ -3,6 +3,8 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.3 – Real-Debrid without the VPN
+- **2.3.17**
+  - Look up channel and upload date shows its progress in the corner straight away, and only looks up videos that don't have details yet. Videos YouTube has no match for aren't searched again for 30 days, so later runs are quick.
 - **2.3.16**
   - Fixed: Settings > YouTube > Look up channel and upload date did nothing (it failed straight away). It works again, and then Set file dates to upload dates has dates to use.
 - **2.3.15**
