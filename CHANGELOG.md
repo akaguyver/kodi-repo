@@ -3,6 +3,8 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.3 – Real-Debrid without the VPN
+- **2.3.15**
+  - Download from YouTube no longer says it can't reach the phone when the Sortovia Helper app was only starting up: it asks the app again first.
 - **2.3.14**
   - Holding down a YouTube or Tutorials video now shows Details (Sortovia), renamed from YouTube video (Sortovia).
   - New: Settings > YouTube > Set file dates to upload dates. Each video's file date becomes the day it went up on YouTube, so Sort by: Date in Files puts them in upload order. It uses the upload date from Look up channel and upload date. If the device doesn't allow changing dates on the drive, it says so.
