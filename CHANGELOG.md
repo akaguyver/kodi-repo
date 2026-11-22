@@ -3,6 +3,8 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.3 – Real-Debrid without the VPN
+- **2.3.21**
+  - The version history uses made-up example names instead of real show and download names.
 - **2.3.20**
   - Easier first start for someone new: the welcome screen explains the controller and what comes next, saying yes to a phone shows a QR code and the address for the free Sortovia Helper app plus how to connect it, and the last step says how to do your first sort. The QR code is also in Settings > Help > Get the phone app. The guide has step-by-step Xbox install and Helper app install steps.
 - **2.3.19**
@@ -25,7 +27,7 @@ Newest first. Each line says what the update changed for you.
   - Settings > YouTube > Tidy YouTube folders now checks the loose videos in every Tutorials folder, so the crypto videos already sorted into Claude, Python or Other move to Crypto Trading. It shows the list and asks first.
   - A cookies file that isn't signed in to YouTube no longer replaces cookies that are. The phone refuses it, takes it out of Download, and the Xbox says so. Before, a private-tab export saved before signing in could break YouTube downloads.
 - **2.3.11**
-  - Episodes named like "The Altruists (2026) Season 1 Episode 1" go to TV. Episode 1 had been sorted as a movie.
+  - Episodes named like "Show Name (2026) Season 1 Episode 1" go to TV. Episode 1 had been sorted as a movie.
   - AI music videos (Suno, Udio, Sonauto, AI music generators) get their own folder: Tutorials/AI Music.
   - Videos about Claude's models (Fable, Opus, Sonnet, Haiku) go to the Claude folder instead of Other.
   - "Learn Ableton Live from Scratch" goes to Making music. "Scratch" there isn't DJ scratching.
@@ -37,7 +39,7 @@ Newest first. Each line says what the update changed for you.
   - Movies in Kodi is now just your Movies folder, not the whole drive, so Kodi stops trying to file TV, Music Videos and Tutorials as movies. Restart Kodi once after the update to see the change under Videos > Files.
   - Kodi had saved many TV and movie folders twice, under two spellings, with leftover entries that weren't linked to any movie or episode. Sortovia merges each folder into one spelling and removes the leftovers, once, after a library backup. Watched marks and resume points on the leftover copies are kept, so some episodes you watched from Videos > Files now show as watched. No files on the drive are touched.
 - **2.3.8**
-  - Fake shows made from Season folders ("Club Friday Season 12", "Digimon Tamers" inside Always Sunny, Rick and Morty and others) stop coming back. Sortovia asked Kodi to scan the whole TV folder, which Kodi can't open under the name it has for it, so Kodi scanned every folder it knew inside it on its own, and each Season folder became a "show". A new show is now scanned as its own folder, and sorting never starts a whole video library update. After the fakes are removed, only the shows they came from are scanned again.
+  - Fake shows made from Season folders ("Club Friday Season 12", a cartoon inside a sitcom's folder and others) stop coming back. Sortovia asked Kodi to scan the whole TV folder, which Kodi can't open under the name it has for it, so Kodi scanned every folder it knew inside it on its own, and each Season folder became a "show". A new show is now scanned as its own folder, and sorting never starts a whole video library update. After the fakes are removed, only the shows they came from are scanned again.
 - **2.3.7**
   - When Real-Debrid won't take a torrent, the log now says why (it only said "RDError").
 - **2.3.6**
@@ -102,7 +104,7 @@ Newest first. Each line says what the update changed for you.
   - Searching several episodes: "Searching for..." shows at the top, not on top of the results already listed.
   - The Top row / Bottom row hints show a D-pad with the side to press lit up, marked L or R.
 - **2.2.1**
-  - Missing episodes: an episode that's downloading says "Downloading" on its row, also when the show's name has an apostrophe ("It's Always Sunny" downloads as "Its.Always.Sunny"); whole missing seasons count a season pack.
+  - Missing episodes: an episode that's downloading says "Downloading" on its row, also when the show's name has an apostrophe ("Sam's Sandwiches" downloads as "Sams.Sandwiches"); whole missing seasons count a season pack.
   - Search the ticked: every episode's results stay on one list, grouped, each saying which episode it's for (the list was replaced by each search).
   - Torrent searches leave out a leading "It's" and apostrophes ("Greys Anatomy"), as file names write them. Put the words in "quotes" to search exactly.
   - Missing episodes skips shows that have ended and that you have every episode of. It asks the first time; Settings > Library changes it.
@@ -205,14 +207,14 @@ Newest first. Each line says what the update changed for you.
   - A finished BiglyBT torrent whose files were already moved out is taken off BiglyBT's list, instead of being tried every two minutes.
 - **1.68.2**
   - The spinning wheel that kept coming back: Sortovia was scanning the whole TV folder under a spelling Kodi has no TV setting for, so Kodi made "shows" out of Season folders, Sortovia took them out and scanned again, over and over. Scans now use the TV folder exactly as Kodi has it, and that clean-up scan runs at most once every 12 hours.
-  - Finished BiglyBT torrents whose folder name differs from the torrent's ([Exiled-Destiny] Parasyte) move to Download/Torrents again.
+  - Finished BiglyBT torrents whose folder name differs from the torrent's ([Exiled-Destiny] Paragon) move to Download/Torrents again.
   - Downloads: "Delete it" on a download removes it and its part files from the phone (BiglyBT downloads, and finished phone downloads). It asks first.
 - **1.68.1**
   - Downloads: a waiting download can go to the top of the phone's queue (next to start) or the bottom; Pick several does it for many at once.
 - **1.68.0**
   - Tag Studio > Edit tags: pick a song, or several (an album), and change any tag by typing: title, artists, album artist, genre, key, tempo, year, track, composer, label and more. MP3, FLAC and M4A. Undo the last tag edit puts the old tags back.
   - While you watch a video, Auto move works out of sight: no corner bars or notes, and library scans wait until the video ends. Kodi's own "Scanning for new content" bar is turned off for these scans. Background work no longer refreshes the screen behind it (that showed the spinning wheel over and over).
-  - Finished BiglyBT torrents with several files (a season, Parasyte) now leave BiglyBT's folder and reach your drive: BiglyBT names the torrent's own folder as its download folder, so Sortovia was looking one folder too deep. "Move to D:\\" finds them again.
+  - Finished BiglyBT torrents with several files (a season, Paragon) now leave BiglyBT's folder and reach your drive: BiglyBT names the torrent's own folder as its download folder, so Sortovia was looking one folder too deep. "Move to D:\\" finds them again.
   - Downloads: a finished BiglyBT download has "Move it to D:\\ now". The top row has "At once: N" to choose how many download together on the phone (1 to 16).
   - YouTube search: Cancel works while it searches.
   - Real-Debrid fetching list opens much faster (all asked at once) and tries a failed look again.
@@ -221,7 +223,7 @@ Newest first. Each line says what the update changed for you.
 
 ## 1.67 – A new Home: what you use most is one click away
 - **1.67.9**
-  - Fixed: a show (It's Always Sunny) kept leaving the library, while made-up shows (Club Friday, America's Funniest Home Videos...) appeared holding its episodes. Auto move asked Kodi to scan the show's folder under a spelling Kodi didn't know, so Kodi turned each Season folder into a "show"; the clean-up then took the real show out for holding them. Scans now use Kodi's own spelling, a new show is filed by scanning the TV folder, a "show" made from a Season folder is always removed (even one with episodes), and the real show is never removed for holding them. After a clean-up the TV folder is scanned once, so the real shows come back.
+  - Fixed: a show kept leaving the library, while made-up shows (Club Friday, America's Funniest Home Videos...) appeared holding its episodes. Auto move asked Kodi to scan the show's folder under a spelling Kodi didn't know, so Kodi turned each Season folder into a "show"; the clean-up then took the real show out for holding them. Scans now use Kodi's own spelling, a new show is filed by scanning the TV folder, a "show" made from a Season folder is always removed (even one with episodes), and the real show is never removed for holding them. After a clean-up the TV folder is scanned once, so the real shows come back.
 - **1.67.8**
   - BiglyBT: every unfinished torrent gets the same 12 extra public trackers the phone's own downloader uses (more trackers, more peers), once each, by itself.
 - **1.67.7**
@@ -246,8 +248,8 @@ Newest first. Each line says what the update changed for you.
   - No more "Couldn't save progress - Resume won't be offered" pop-up every time Auto move sorts something. Auto move never offers Resume (it simply tries again later), so there was nothing wrong.
   - Fixed a crash when taking torrents from the queue (Downloads > Torrents).
 - **1.67.3**
-  - Episodes named with a show's short name, like "IASIP S14E07", go into the show's own folder (It's Always Sunny in Philadelphia), not a new "IASIP" folder. The full name comes from the download's folder, or from a show in your library whose words start with those letters.
-  - Episodes that already went to a short-name folder (TV/IASIP) are moved into the show's folder once, by Auto move.
+  - Episodes named with a show's short name, like "SS S14E07", go into the show's own folder (Sam's Sandwiches Shop), not a new "SS" folder. The full name comes from the download's folder, or from a show in your library whose words start with those letters.
+  - Episodes that already went to a short-name folder (TV/SS) are moved into the show's folder once, by Auto move.
 - **1.67.2**
   - Unfinished downloads are no longer copied to the Xbox. BiglyBT makes each file at its full size before downloading it, so a half-done episode looked finished. Sortovia now looks inside every video before copying it; one with empty parts stays on the phone until it's done.
   - An episode that finishes in a season still downloading is marked "Do not download" first and moved a couple of minutes later, after BiglyBT has written all of it.
