@@ -3,6 +3,8 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.3 – Real-Debrid without the VPN
+- **2.3.19**
+  - The Xbox doesn't let add-ons change file dates, so Set file dates to upload dates is now Put upload dates in names: each YouTube video (with its .nfo and picture) becomes 2024-12-22 - Title.mp4, so Sort by: Name in Files goes in upload order. Watched ticks come along. New YouTube downloads get the date in front when they're sorted.
 - **2.3.18**
   - Watched marks follow your YouTube and Tutorials videos. Kodi keeps a video's tick under the exact folder it was played from, so videos moved by Tidy YouTube folders lost theirs, and Kodi sometimes writes one folder two ways. New: Settings > YouTube > Bring back watched marks puts the ticks and resume points back, and Tidy YouTube folders now moves them with the files.
 - **2.3.17**
