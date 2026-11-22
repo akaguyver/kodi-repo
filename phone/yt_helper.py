@@ -1508,10 +1508,15 @@ class Handler(BaseHTTPRequestHandler):
                     if b.get("out"):
                         opts["out"] = re.sub(r'[\\/:*?"<>|]+', " ", b["out"]).strip()
                     want = (opts.get("out") or b.get("name") or "").lower()
-                    if kind == "Real-Debrid" and want:  # already queued under that name: not a second copy
-                        for d in aria("aria2.tellActive", ["gid", "files"]) + aria("aria2.tellWaiting", 0, 1000, ["gid", "files"]):
-                            if os.path.basename((d.get("files") or [{}])[0].get("path") or "").lower() == want:
+                    if kind == "Real-Debrid" and want:  # already queued in that folder under that name: not a second copy
+                        for d in aria("aria2.tellActive", ["gid", "files", "dir"]) + aria("aria2.tellWaiting", 0, 1000, ["gid", "files", "dir"]):
+                            if os.path.basename((d.get("files") or [{}])[0].get("path") or "").lower() == want and \
+                                    os.path.normcase(d.get("dir") or opts["dir"]) == os.path.normcase(opts["dir"]):
                                 return self._send({"id": d["gid"], "already": True})
+                        # 2.3.22: finished and still in Download (a whole season sent twice made a second copy of each)
+                        done = os.path.join(SHARE, kind, sub, opts.get("out") or b.get("name") or "")
+                        if opts.get("out") and os.path.isfile(done) and os.path.getsize(done) > 0:
+                            return self._send({"id": "", "already": True, "done": True})
                     if kind == "Real-Debrid":  # a plain file from a server: never waits behind torrents with no peers
                         gid = aria("aria2.addUri", [uri], opts, 0)  # front of the queue
                     else:

@@ -3,6 +3,12 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.3 – Real-Debrid without the VPN
+- **2.3.22**
+  - Fixed: a whole season could download to the phone twice. A slow send to Real-Debrid wrote back an old copy of the waiting list, so a season already sent came back on it and was sent again the next time Kodi started. Now a sent torrent is never sent again, and the Sortovia Helper app (and the Termux helper) won't download a file that is already in Download or on its list.
+  - Fixed: the auto move didn't move that season, because the second copy was still downloading into its folder. When the auto move waits for a folder, Downloads now says so (for example "Prairie Kings waits for 8 still downloading").
+  - Fixed: pressing Waiting (or any filter) on Downloads sometimes did nothing. It jumped back to All whenever its count was 0 for a moment. The filter you pick now stays picked, and an empty one says "Nothing waiting right now."
+  - Fixed: after Sortovia updated itself while open, the screen kept running the old version and could stop responding. It now reopens on the same page with the new version.
+  - Every button now answers a press: Download the ticked with nothing ticked, and Next 100 with no more results, say why instead of doing nothing. A new check presses every button on every page before each release.
 - **2.3.21**
   - The version history uses made-up example names instead of real show and download names.
 - **2.3.20**
