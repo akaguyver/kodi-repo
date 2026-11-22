@@ -3,6 +3,8 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.3 – Real-Debrid without the VPN
+- **2.3.18**
+  - Watched marks follow your YouTube and Tutorials videos. Kodi keeps a video's tick under the exact folder it was played from, so videos moved by Tidy YouTube folders lost theirs, and Kodi sometimes writes one folder two ways. New: Settings > YouTube > Bring back watched marks puts the ticks and resume points back, and Tidy YouTube folders now moves them with the files.
 - **2.3.17**
   - Look up channel and upload date shows its progress in the corner straight away, and only looks up videos that don't have details yet. Videos YouTube has no match for aren't searched again for 30 days, so later runs are quick.
 - **2.3.16**
