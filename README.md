@@ -31,6 +31,14 @@ You need:
 
 That's all. A phone, a TMDb key and Real-Debrid are optional extras, and you can ignore them to begin with.
 
+**New to Kodi on an Xbox?**
+- Kodi is free in the **Microsoft Store** on the Xbox. Install it and open it once before you start.
+- Plug your USB drive into the Xbox. Use a drive formatted as **exFAT** or **NTFS**. Kodi can't see a drive the Xbox
+  wants to format for games, so if the Xbox offers to format it, say no.
+- On the controller: **A** selects, **B** goes back, and the **Menu** button (three lines) opens extra options on the
+  highlighted item. When Kodi asks you to type, an on-screen keyboard appears; a USB keyboard plugged into the Xbox works too.
+- Kodi's **Settings** is the gear icon at the top left of Kodi's home screen.
+
 Sortovia is built and tested on **Kodi 21 on an Xbox One S**. It uses Kodi's own file functions, so it should work on
 other devices, but they haven't been tested yet. Try it on a few files first.
 
@@ -39,16 +47,21 @@ other devices, but they haven't been tested yet. Try it on a few files first.
 ## Install it (about 5 minutes)
 
 1. In Kodi, go to **Settings → System → Add-ons** and turn on **Unknown sources**. Choose **Yes** at the warning.
-2. Go to **Settings → File manager → Add source**. Select the box that says `<None>`, type this address, and name it `kodirepo`:
+   (If you only see a few settings, change the level at the bottom left of that screen from *Basic* to *Standard*.)
+2. Go back to **Settings → File manager → Add source**. Select the box that says `<None>`, type this address exactly,
+   and choose **OK**:
 
    ```
    https://akaguyver.github.io/kodi-repo/
    ```
 
-3. Go to **Settings → Add-ons → Install from zip file → kodirepo** and pick **`script.kodisorter-x.y.z.zip`**.
-4. Recommended: go to **Add-ons → Install from repository → Kodi Add-on repository → VFS add-ons → Archive support**.
-   Without it, `.rar` and `.7z` files can't be unpacked.
-5. Open **Sortovia** from **Add-ons → Program add-ons**.
+   In the box below it, name it `kodirepo`, then choose **OK** again.
+3. Go back to **Settings → Add-ons → Install from zip file**. If a warning appears, choose **Yes**. Pick **kodirepo**, then
+   the file that starts with **`script.kodisorter-`** (for example `script.kodisorter-2.3.20.zip`). Wait for the
+   "Add-on installed" message in the top right.
+4. Recommended: in the same Add-ons screen, choose **Install from repository → Kodi Add-on repository → VFS add-ons →
+   Archive support → Install**. Without it, `.rar` and `.7z` files can't be unpacked.
+5. Go back to Kodi's home screen and open **Add-ons → Program add-ons → Sortovia**. The welcome screen starts.
 
 From then on, Sortovia offers its own updates when it opens. You can turn that off in its settings.
 
@@ -57,8 +70,9 @@ From then on, Sortovia offers its own updates when it opens. You can turn that o
 ## Your first sort
 
 The first time it opens, a welcome screen asks a few short questions: what device this is, what you want to sort, your
-language, whether you already have library folders, and whether you want to use a phone. You can change every answer later
-in **Settings → Help → Welcome screen**.
+language, whether you already have library folders, and whether you want to use a phone. If you say yes to the phone, it
+shows a QR code for the free **Sortovia Helper** phone app (see *Optional: use a phone* below). You can change every answer
+later in **Settings → Help → Welcome screen**, and the QR code is in **Settings → Help → Get the phone app**.
 
 **Getting around.** A side bar on the left is always there: **Home**, **Search**, **Downloads**, **Transfer / sort**,
 **Music**, **Library** and **Settings**. Press Left to reach it and Right to go back to the page. **Y** opens Search and
@@ -78,7 +92,7 @@ Then:
 ### Then show Kodi the new folders
 
 Kodi only lists folders you've added as sources. Add **each folder on its own**. In Sortovia,
-**Help → How to add your folders to Kodi** has the steps for your device.
+**Settings → Help → Add your folders to Kodi** has the steps for your device.
 
 | Folder | Where to add it | "This directory contains" |
 |---|---|---|
@@ -144,17 +158,43 @@ password once.
 |---|---|---|---|
 | Import files from the phone | Yes | Yes | Experimental |
 | Copy logs to the phone | Yes | Yes | Experimental |
-| Download from YouTube | No | Yes | No |
+| Download from YouTube | Yes | Yes | No |
 | Setup | Install one app | Paste one command | Terminal app |
 
-### Android: the companion app (easiest)
+### Android: the Sortovia Helper app (easiest)
 
-The Sortovia companion app sets up Kodi Share for you, with no commands to type.
+Sortovia Helper is a free Android app. It shares the phone's **Download** folder with Kodi, with no commands to type.
+It isn't on the Play Store, so Android asks you to allow it once.
 
-1. On the phone, open **akaguyver.github.io/kodi-repo/app** and follow the steps to install it.
-2. Open it and allow the **Phone settings** it asks for.
-3. Tap **Start sharing**. That's all it takes to start the share, and the app shows the password.
-4. In Sortovia, choose **Downloads → Transfer and sort → Choose folders and choices → My phone over Wi-Fi**, and type the password.
+**Install it**
+
+1. On the phone, open this address in the browser (or, in Sortovia, open **Settings → Help → Get the phone app** and
+   point the phone's camera at the QR code on the TV):
+
+   ```
+   akaguyver.github.io/kodi-repo/app
+   ```
+
+2. Tap **Download the app**. When it finishes, tap the downloaded file (or find it in **My Files → Downloads**).
+3. If Android says it can't install apps from this source, tap **Settings**, turn on **Allow from this source**, then go back
+   and tap **Install**.
+4. On a **Samsung** phone, if it's blocked by **Auto Blocker**, turn that off in **Settings → Security and privacy → Auto
+   Blocker**, install, then turn it back on.
+5. If **Play Protect** warns about an unknown app, tap **More details → Install anyway**. It warns because the app isn't
+   from the Play Store.
+
+**Use it**
+
+1. Open **Sortovia Helper**. Under **Phone settings**, tap each one and allow it: access to all files (so Kodi can see your
+   Download folder), notifications, and running in the background (so copies don't stop).
+2. Put the Xbox and the phone on the **same Wi-Fi**. Or turn on the phone's **Mobile hotspot** and connect the Xbox to it
+   (Xbox **Settings → General → Network settings**).
+3. Tap **Start sharing**. The app shows a password. The user name is always `kodi`.
+4. In Sortovia, choose **Transfer / sort → Choose folders and choices**. At *Where are the downloads?* choose
+   **My phone over Wi-Fi**, and type the password from the app. Sortovia finds the phone by itself and remembers the password.
+
+Anything you put in the phone's **Download** folder can now be sorted straight into your library. Leave the app sharing
+while files copy. The app updates itself: it offers new versions when they come out.
 
 ### Android: Termux (also gives you YouTube downloads)
 
@@ -176,7 +216,7 @@ The Sortovia companion app sets up Kodi Share for you, with no commands to type.
 4. In Sortovia, choose **My phone over Wi-Fi** and type the password.
 
 To stop it, type `kodi-share stop` in Termux. To see the password again, type `kodi-share password`. Use only one share at a time:
-stop `kodi-share` before using the companion app.
+stop `kodi-share` before using the Sortovia Helper app.
 
 For a USB drive plugged into an Android phone, use the *primitive ftpd* app from F-Droid, and choose "USB drive on the phone" in Sortovia.
 
@@ -206,7 +246,7 @@ If it doesn't work, please send a problem report so it can be fixed.
 
 ### Download from YouTube
 
-For now, YouTube downloads need the Android Termux setup above. Only download videos you're allowed to keep: your own, or ones the
+YouTube downloads work with the Sortovia Helper app or the Android Termux setup above. Only download videos you're allowed to keep: your own, or ones the
 creator permits. YouTube only allows downloads from a signed-in browser, so this needs your browser's cookies.
 
 > **Your cookies file works like a password for your Google account.** Consider using a spare account. Automated downloading
@@ -224,8 +264,9 @@ creator permits. YouTube only allows downloads from a signed-in browser, so this
 
 1. Open a **private tab**, sign in to youtube.com, and use the extension to export the cookies for that site, in Netscape format, into **Download**.
 2. Close the tab without signing out.
-3. In Termux, start Kodi Share by typing `kodi-share`. If it's already running, type `kodi-share stop` first. It finds the cookies file and
-   moves it out of the shared folder to keep it private.
+3. **With Sortovia Helper:** keep sharing on. The app finds the cookies file the next time Sortovia talks to it, and moves it
+   out of the shared folder to keep it private. **With Termux:** start Kodi Share by typing `kodi-share`. If it's already
+   running, type `kodi-share stop` first.
 
 Repeat this export if downloads start failing.
 
@@ -250,6 +291,10 @@ TV episodes wrongly listed as movies. Sortovia never deletes your video files fo
 
 **Kodi closed in the middle of a sort.** Open Sortovia and choose **Resume**.
 
+**The Sortovia Helper app won't install.** Follow the steps under *Install it* in the phone section: allow installing from
+your browser (or My Files), turn off Samsung's Auto Blocker for a moment, and choose **More details → Install anyway** if Play
+Protect warns.
+
 **Sortovia can't find the phone.** Check the share is running on the phone and that both devices are on the same Wi-Fi or
 hotspot. A VPN on the phone can get in the way. If it still can't find it, type the phone's address when asked.
 
@@ -259,7 +304,7 @@ it has no audio in your language, or a better copy already exists.
 **The Firefox extension won't install.** Use the exact steps under *Download from YouTube*, including **Download link** and
 **Install extension from file**.
 
-**Something else.** Use **Help → Send a problem report to the developer**. Sortovia removes passwords, keys and addresses from
+**Something else.** Use **Settings → Help → Send a problem report**. Sortovia removes passwords, keys and addresses from
 Kodi's log, shows you exactly what's in it, and only sends it if you agree. It goes on paste.kodi.tv, Kodi's public log site, and can include
 file and folder names. Then scan the QR code with your phone to send the developer the link, which needs a free GitHub account.
 
@@ -352,7 +397,7 @@ saved details and enter them again, and your files aren't affected. Without a pa
 
 ## Version history
 
-In Sortovia: **Help → Version history**.
+In Sortovia: **Settings → Help → Version history**.
 
 ## How it's built
 

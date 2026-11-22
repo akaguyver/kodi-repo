@@ -3,6 +3,8 @@
 Newest first. Each line says what the update changed for you.
 
 ## 2.3 – Real-Debrid without the VPN
+- **2.3.20**
+  - Easier first start for someone new: the welcome screen explains the controller and what comes next, saying yes to a phone shows a QR code and the address for the free Sortovia Helper app plus how to connect it, and the last step says how to do your first sort. The QR code is also in Settings > Help > Get the phone app. The guide has step-by-step Xbox install and Helper app install steps.
 - **2.3.19**
   - The Xbox doesn't let add-ons change file dates, so Set file dates to upload dates is now Put upload dates in names: each YouTube video (with its .nfo and picture) becomes 2024-12-22 - Title.mp4, so Sort by: Name in Files goes in upload order. Watched ticks come along. New YouTube downloads get the date in front when they're sorted.
 - **2.3.18**
